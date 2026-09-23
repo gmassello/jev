@@ -5,15 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jev Playground</title>
 <style>
-  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
-  body { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f7f8; --card: #fff; --text: #1a1a1a; --muted: #666; --line: #ddd;
+    --accent: #2f6fed; --accent-soft: #2f6fed22; --ok: #1a8f4c; --bad: #c62828; --bad-soft: #c6282815;
+    font-family: system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #151517; --card: #202024; --text: #eee; --muted: #999; --line: #333; --accent: #6b9bff; --accent-soft: #6b9bff26; --ok: #4cc27f; --bad: #ff6b6b; --bad-soft: #ff6b6b1a; }
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); max-width: 820px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
   header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-  label { display: block; font-weight: 600; margin: 1rem 0 .3rem; }
-  textarea, pre { width: 100%; box-sizing: border-box; font: 13px/1.4 ui-monospace, monospace; }
-  textarea { padding: .5rem; }
-  pre { padding: .75rem; background: #8881; border-radius: 6px; overflow: auto; min-height: 4rem; }
-  button { margin-top: 1rem; padding: .5rem 1.5rem; font-size: 1rem; cursor: pointer; }
-  select { font-size: 1rem; padding: .25rem; }
+  h1 { margin: 0; font-size: 1.6rem; }
+  .intro { color: var(--muted); margin: .4rem 0 1.5rem; }
+  h2 { font-size: 1.1rem; margin: 1.8rem 0 .6rem; }
+  h2 small { color: var(--muted); font-weight: 400; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; margin-bottom: .8rem; }
+  textarea, input, select { font: inherit; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .5rem; }
+  textarea, input.q-text { width: 100%; }
+  textarea { resize: vertical; min-height: 5rem; }
+  button { font: inherit; cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: inherit; padding: .4rem .8rem; }
+  button:hover { border-color: var(--accent); }
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; align-items: center; }
+  .chips span { color: var(--muted); }
+  .q-head { display: flex; gap: .5rem; align-items: center; margin-bottom: .6rem; }
+  .q-head .num { font-weight: 700; color: var(--accent); }
+  .q-head select { margin-left: auto; }
+  .opts { display: grid; gap: .4rem; margin-top: .4rem; }
+  .opt { display: flex; gap: .4rem; align-items: center; }
+  .opt input { flex: 1; }
+  .opt .idx { color: var(--muted); min-width: 1.5rem; text-align: right; font-size: .85rem; }
+  .hint { color: var(--muted); font-size: .85rem; margin: .3rem 0 0; }
+  .error { color: var(--bad); font-size: .9rem; margin: .4rem 0 0; }
+  .link { border: 0; background: none; color: var(--accent); padding: .2rem 0; }
+  .x { border: 0; background: none; color: var(--muted); font-size: 1.1rem; padding: 0 .4rem; }
+  .x:hover { color: var(--bad); }
+  #run { display: block; width: 100%; margin-top: 1.2rem; padding: .8rem; font-size: 1.1rem; font-weight: 600; background: var(--accent); color: #fff; border: 0; }
+  #run:disabled { opacity: .6; cursor: wait; }
+  .answer h3 { margin: 0 0 .3rem; font-size: 1rem; }
+  .verdict { font-size: 1.4rem; font-weight: 700; margin: .2rem 0 .6rem; }
+  .verdict.yes { color: var(--ok); } .verdict.no { color: var(--bad); }
+  .bar-row { display: grid; grid-template-columns: minmax(6rem, 30%) 1fr 3.2rem; gap: .5rem; align-items: center; margin: .25rem 0; font-size: .9rem; }
+  .bar { height: .7rem; background: var(--accent-soft); border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+  .bar-row.win { font-weight: 700; }
+  .pct { text-align: right; font-variant-numeric: tabular-nums; }
+  .fail { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+  .meta { color: var(--muted); font-size: .85rem; }
+  details { margin-top: 2rem; }
+  summary { cursor: pointer; color: var(--muted); }
+  pre { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .75rem; overflow: auto; font: 12px/1.4 ui-monospace, monospace; }
+  @media (max-width: 520px) { .q-head { flex-wrap: wrap; } .q-head select { margin-left: 0; width: 100%; } }
 </style>
 </head>
 <body>
@@ -24,110 +67,323 @@
     <option value="en">English</option>
   </select>
 </header>
+<p class="intro" data-i18n="intro"></p>
 
-<label for="state" data-i18n="state"></label>
+<h2 data-i18n="step1"></h2>
+<div class="chips" id="examples"></div>
 <textarea id="state" rows="4"></textarea>
 
-<label for="questions" data-i18n="questions"></label>
-<textarea id="questions" rows="18"></textarea>
+<h2 data-i18n="step2"></h2>
+<div id="questions"></div>
+<button class="link" id="add-q" data-i18n="addQuestion"></button>
 
 <button id="run" data-i18n="run"></button>
 
-<label data-i18n="result"></label>
-<pre id="out"></pre>
+<h2 id="results-title" data-i18n="step3" hidden></h2>
+<div id="results"></div>
+
+<details id="advanced">
+  <summary data-i18n="advanced"></summary>
+  <p class="hint" data-i18n="advancedHint"></p>
+  <pre id="req"></pre>
+  <pre id="res"></pre>
+</details>
 
 <script>
   const I18N = {
     es: {
-      state: 'State (texto o JSON)',
-      questions: 'Preguntas (JSON)',
-      run: 'Evaluar',
-      result: 'Resultado',
-      exampleState: 'El cliente mandó tres mails enojado por una entrega demorada. El agente de soporte pidió disculpas y le devolvió todo el dinero.',
-      exampleQuestions: {
-        refunded: { type: 'boolean', instructions: '¿Se hizo un reembolso?' },
-        topic: {
-          type: 'choice',
-          instructions: '¿Cuál es el tema principal del ticket?',
-          criteria: {
-            envio: 'Problemas de entrega o logística',
-            facturacion: 'Cobros, facturas o pagos',
-            producto: 'Defectos o consultas del producto',
-          },
+      intro: 'Jev lee una situación y responde preguntas cerradas con probabilidades. Elegí un ejemplo o escribí el tuyo.',
+      step1: '1 · La situación',
+      step2: '2 · Las preguntas',
+      step3: '3 · Lo que respondió Jev',
+      examples: 'Ejemplos:',
+      statePlaceholder: 'Escribí acá lo que pasó: un mail, un comentario, una conversación…',
+      questionPlaceholder: '¿Qué querés saber?',
+      types: { boolean: 'Sí / No', choice: 'Elegir una opción', score: 'Puntaje en escala' },
+      hints: {
+        boolean: 'Jev dice qué tan probable es que la respuesta sea "sí".',
+        choice: 'Jev elige la opción que mejor encaja.',
+        score: 'Ordená los niveles de menor a mayor. Jev elige en cuál cae.',
+      },
+      optionPlaceholder: 'Opción',
+      levelPlaceholder: 'Nivel',
+      addOption: '+ agregar opción',
+      addLevel: '+ agregar nivel',
+      addQuestion: '+ Nueva pregunta',
+      remove: 'Quitar',
+      run: 'Preguntarle a Jev',
+      running: 'Pensando…',
+      yes: 'Sí', no: 'No',
+      sure: (p) => `${p}% de seguridad`,
+      meta: (ms, t) => `Respondió en ${ms} ms · ${t} tokens`,
+      errNoState: 'Escribí una situación primero.',
+      errNoText: 'Falta escribir la pregunta.',
+      errOptions: 'Necesita al menos 2 opciones con texto.',
+      errNoQuestions: 'Agregá al menos una pregunta.',
+      errServer: 'Jev no pudo responder',
+      advanced: 'Modo avanzado',
+      advancedHint: 'Lo que se envía al modelo y la respuesta cruda.',
+      presets: {
+        support: {
+          label: 'Soporte',
+          state: 'El cliente mandó tres mails enojado por una entrega demorada. El agente de soporte pidió disculpas y le devolvió todo el dinero.',
+          questions: [
+            { text: '¿Se hizo un reembolso?', type: 'boolean', options: [] },
+            { text: '¿Cuál es el tema principal del ticket?', type: 'choice', options: ['Envío', 'Facturación', 'Producto'] },
+            { text: '¿Qué tan enojado está el cliente?', type: 'score', options: ['Tranquilo', 'Molesto', 'Enojado', 'Furioso'] },
+          ],
         },
-        anger: {
-          type: 'score',
-          instructions: '¿Qué tan enojado está el cliente?',
-          criteria: ['tranquilo', 'molesto', 'enojado', 'furioso'],
+        review: {
+          label: 'Reseña',
+          state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
+          questions: [
+            { text: '¿El cliente recomendaría el producto?', type: 'boolean', options: [] },
+            { text: '¿De qué se queja?', type: 'choice', options: ['Sonido', 'Batería', 'Precio', 'Envío'] },
+            { text: '¿Cuántas estrellas le daría?', type: 'score', options: ['1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'] },
+          ],
+        },
+        email: {
+          label: 'Email',
+          state: '¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya',
+          questions: [
+            { text: '¿Es spam o una estafa?', type: 'boolean', options: [] },
+            { text: '¿Qué tipo de mail es?', type: 'choice', options: ['Trabajo', 'Personal', 'Promoción', 'Estafa'] },
+            { text: '¿Qué tan urgente parece?', type: 'score', options: ['Nada urgente', 'Poco urgente', 'Urgente', 'Muy urgente'] },
+          ],
         },
       },
     },
     en: {
-      state: 'State (text or JSON)',
-      questions: 'Questions (JSON)',
-      run: 'Evaluate',
-      result: 'Result',
-      exampleState: 'The customer wrote three angry emails about a late delivery. The support agent apologized and issued a full refund.',
-      exampleQuestions: {
-        refunded: { type: 'boolean', instructions: 'Was a refund issued?' },
-        topic: {
-          type: 'choice',
-          instructions: 'What is the main topic of the ticket?',
-          criteria: {
-            shipping: 'Delivery or logistics problems',
-            billing: 'Charges, invoices or payments',
-            product: 'Defects or product questions',
-          },
+      intro: 'Jev reads a situation and answers closed questions with probabilities. Pick an example or write your own.',
+      step1: '1 · The situation',
+      step2: '2 · The questions',
+      step3: '3 · What Jev answered',
+      examples: 'Examples:',
+      statePlaceholder: 'Write what happened here: an email, a comment, a conversation…',
+      questionPlaceholder: 'What do you want to know?',
+      types: { boolean: 'Yes / No', choice: 'Pick one option', score: 'Score on a scale' },
+      hints: {
+        boolean: 'Jev tells how likely the answer is "yes".',
+        choice: 'Jev picks the option that fits best.',
+        score: 'Order the levels from lowest to highest. Jev picks where it lands.',
+      },
+      optionPlaceholder: 'Option',
+      levelPlaceholder: 'Level',
+      addOption: '+ add option',
+      addLevel: '+ add level',
+      addQuestion: '+ New question',
+      remove: 'Remove',
+      run: 'Ask Jev',
+      running: 'Thinking…',
+      yes: 'Yes', no: 'No',
+      sure: (p) => `${p}% sure`,
+      meta: (ms, t) => `Answered in ${ms} ms · ${t} tokens`,
+      errNoState: 'Write a situation first.',
+      errNoText: 'The question is missing.',
+      errOptions: 'Needs at least 2 options with text.',
+      errNoQuestions: 'Add at least one question.',
+      errServer: 'Jev could not answer',
+      advanced: 'Advanced mode',
+      advancedHint: 'What is sent to the model and the raw response.',
+      presets: {
+        support: {
+          label: 'Support',
+          state: 'The customer wrote three angry emails about a late delivery. The support agent apologized and issued a full refund.',
+          questions: [
+            { text: 'Was a refund issued?', type: 'boolean', options: [] },
+            { text: 'What is the main topic of the ticket?', type: 'choice', options: ['Shipping', 'Billing', 'Product'] },
+            { text: 'How angry is the customer?', type: 'score', options: ['Calm', 'Annoyed', 'Angry', 'Furious'] },
+          ],
         },
-        anger: {
-          type: 'score',
-          instructions: 'How angry is the customer?',
-          criteria: ['calm', 'annoyed', 'angry', 'furious'],
+        review: {
+          label: 'Review',
+          state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
+          questions: [
+            { text: 'Would the customer recommend the product?', type: 'boolean', options: [] },
+            { text: 'What are they complaining about?', type: 'choice', options: ['Sound', 'Battery', 'Price', 'Shipping'] },
+            { text: 'How many stars would they give?', type: 'score', options: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'] },
+          ],
+        },
+        email: {
+          label: 'Email',
+          state: 'CONGRATULATIONS! You won an iPhone. Click here within the next 24 hours to claim your prize: bit.ly/prize-now',
+          questions: [
+            { text: 'Is it spam or a scam?', type: 'boolean', options: [] },
+            { text: 'What kind of email is it?', type: 'choice', options: ['Work', 'Personal', 'Promotion', 'Scam'] },
+            { text: 'How urgent does it look?', type: 'score', options: ['Not urgent', 'Slightly urgent', 'Urgent', 'Very urgent'] },
+          ],
         },
       },
     },
   };
 
   const $ = (id) => document.getElementById(id);
-  const examples = (lang) => ({
-    state: I18N[lang].exampleState,
-    questions: JSON.stringify(I18N[lang].exampleQuestions, null, 2),
-  });
-  const isExample = (field) => Object.keys(I18N).some((l) => examples(l)[field] === $(field).value);
+  const h = (tag, props = {}, ...kids) => {
+    const el = Object.assign(document.createElement(tag), props);
+    el.append(...kids.flat(Infinity).filter((k) => k != null));
+    return el;
+  };
 
-  const setLang = (lang) => {
+  let lang = 'es';
+  let preset = 'support';
+  let dirty = false;
+  let questions = [];
+  let lastRun = null;
+  const t = () => I18N[lang];
+  const blank = (type = 'boolean') => ({ text: '', type, options: type === 'boolean' ? [] : ['', ''] });
+
+  const loadPreset = (key) => {
+    preset = key;
+    dirty = false;
+    const p = t().presets[key];
+    $('state').value = p.state;
+    questions = structuredClone(p.questions);
+    lastRun = null;
+    renderQuestions();
+    renderResults();
+  };
+
+  const touch = () => { dirty = true; preset = null; };
+
+  const renderExamples = () => {
+    $('examples').replaceChildren(
+      h('span', { textContent: t().examples }),
+      ...Object.entries(t().presets).map(([key, p]) => h('button', { textContent: p.label, onclick: () => loadPreset(key) })),
+    );
+  };
+
+  const renderQuestions = (errors = {}) => {
+    $('questions').replaceChildren(...questions.map((q, i) => {
+      const typeSel = h('select', { onchange: (e) => { touch(); const next = e.target.value; q.type = next; if (next !== 'boolean' && q.options.length < 2) q.options = ['', '']; renderQuestions(); } },
+        Object.entries(t().types).map(([v, label]) => h('option', { value: v, textContent: label, selected: q.type === v })));
+      const opts = q.type === 'boolean' ? null : h('div', { className: 'opts' },
+        q.options.map((o, j) => h('div', { className: 'opt' },
+          q.type === 'score' ? h('span', { className: 'idx', textContent: j + 1 }) : null,
+          h('input', { value: o, placeholder: q.type === 'score' ? `${t().levelPlaceholder} ${j + 1}` : `${t().optionPlaceholder} ${j + 1}`, oninput: (e) => { touch(); q.options[j] = e.target.value; } }),
+          q.options.length > 2 ? h('button', { className: 'x', title: t().remove, textContent: '×', onclick: () => { touch(); q.options.splice(j, 1); renderQuestions(); } }) : null,
+        )),
+        h('button', { className: 'link', textContent: q.type === 'score' ? t().addLevel : t().addOption, onclick: () => { touch(); q.options.push(''); renderQuestions(); } }),
+      );
+      return h('div', { className: 'card' },
+        h('div', { className: 'q-head' },
+          h('span', { className: 'num', textContent: `#${i + 1}` }),
+          typeSel,
+          questions.length > 1 ? h('button', { className: 'x', title: t().remove, textContent: '×', onclick: () => { touch(); questions.splice(i, 1); renderQuestions(); } }) : null,
+        ),
+        h('input', { className: 'q-text', value: q.text, placeholder: t().questionPlaceholder, oninput: (e) => { touch(); q.text = e.target.value; } }),
+        h('p', { className: 'hint', textContent: t().hints[q.type] }),
+        opts,
+        errors[i] ? h('p', { className: 'error', textContent: errors[i] }) : null,
+      );
+    }));
+  };
+
+  const toRequest = () => ({
+    state: $('state').value.trim(),
+    questions: Object.fromEntries(questions.map((q, i) => {
+      const options = q.options.map((o) => o.trim()).filter(Boolean);
+      const base = { type: q.type, instructions: q.text.trim() };
+      if (q.type === 'choice') base.criteria = Object.fromEntries(options.map((o) => [o, null]));
+      if (q.type === 'score') base.criteria = options;
+      return [`q${i + 1}`, base];
+    })),
+  });
+
+  const validate = () => {
+    const errors = {};
+    questions.forEach((q, i) => {
+      if (!q.text.trim()) errors[i] = t().errNoText;
+      else if (q.type !== 'boolean' && q.options.filter((o) => o.trim()).length < 2) errors[i] = t().errOptions;
+    });
+    return errors;
+  };
+
+  const pct = (p) => Math.round(p * 100);
+  const bar = (label, p, win) => h('div', { className: `bar-row${win ? ' win' : ''}` },
+    h('span', { textContent: label }),
+    h('div', { className: 'bar' }, h('i', { style: `width:${pct(p)}%` })),
+    h('span', { className: 'pct', textContent: `${pct(p)}%` }));
+
+  const renderAnswer = (q, a) => {
+    if (a.type === 'boolean') {
+      const yes = a.probability >= 0.5;
+      return [
+        h('p', { className: `verdict ${yes ? 'yes' : 'no'}`, textContent: `${yes ? t().yes : t().no} · ${t().sure(pct(yes ? a.probability : 1 - a.probability))}` }),
+        bar(t().yes, a.probability, yes),
+        bar(t().no, 1 - a.probability, !yes),
+      ];
+    }
+    if (a.type === 'choice') {
+      const probs = Object.entries(a.probabilities ?? { [a.choice]: 1 }).sort((x, y) => y[1] - x[1]);
+      return [h('p', { className: 'verdict', textContent: a.choice }), probs.map(([k, p]) => bar(k, p, k === a.choice))];
+    }
+    const levels = q.criteria;
+    const nearest = Math.min(levels.length - 1, Math.max(0, Math.round(a.score)));
+    return [
+      h('p', { className: 'verdict', textContent: `${levels[nearest]} · ${nearest + 1}/${levels.length}` }),
+      levels.map((name, j) => bar(name, a.probabilities?.[j] ?? (j === nearest ? 1 : 0), j === nearest)),
+    ];
+  };
+
+  const renderResults = () => {
+    $('results-title').hidden = !lastRun;
+    $('req').textContent = lastRun ? JSON.stringify(lastRun.req, null, 2) : '';
+    $('res').textContent = lastRun ? JSON.stringify(lastRun.res, null, 2) : '';
+    if (!lastRun) return $('results').replaceChildren();
+    const { req, res } = lastRun;
+    if (res.error) {
+      return $('results').replaceChildren(h('div', { className: 'card fail' }, res.local ? null : h('strong', { textContent: t().errServer }), h('p', { textContent: res.error })));
+    }
+    $('results').replaceChildren(
+      ...Object.entries(req.questions).map(([id, q]) => h('div', { className: 'card answer' },
+        h('h3', { textContent: q.instructions }),
+        res.answers?.[id] ? renderAnswer(q, res.answers[id]) : null)),
+      h('p', { className: 'meta', textContent: t().meta(res.ms, res.usage?.totalTokens ?? '?') }),
+    );
+  };
+
+  const setLang = (next) => {
+    lang = next;
     document.documentElement.lang = lang;
     $('lang').value = lang;
-    document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = I18N[lang][el.dataset.i18n]));
-    for (const field of ['state', 'questions']) {
-      if (!$(field).value || isExample(field)) $(field).value = examples(lang)[field];
-    }
+    document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t()[el.dataset.i18n]));
+    $('state').placeholder = t().statePlaceholder;
+    renderExamples();
+    if (!dirty && preset) loadPreset(preset);
+    else { renderQuestions(); renderResults(); }
     try { localStorage.setItem('lang', lang); } catch {}
+  };
+
+  $('state').oninput = touch;
+  $('lang').onchange = (e) => setLang(e.target.value);
+  $('add-q').onclick = () => { touch(); questions.push(blank()); renderQuestions(); };
+
+  $('run').onclick = async () => {
+    const req = toRequest();
+    const errors = validate();
+    if (!req.state || !questions.length || Object.keys(errors).length) {
+      renderQuestions(errors);
+      lastRun = { req, res: { local: true, error: !req.state ? t().errNoState : !questions.length ? t().errNoQuestions : Object.values(errors)[0] } };
+      return renderResults();
+    }
+    renderQuestions();
+    $('run').disabled = true;
+    $('run').textContent = t().running;
+    try {
+      const r = await fetch('/evaluate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(req) });
+      lastRun = { req, res: await r.json() };
+    } catch (error) {
+      lastRun = { req, res: { error: error.message } };
+    }
+    $('run').disabled = false;
+    $('run').textContent = t().run;
+    renderResults();
+    $('results-title').scrollIntoView({ behavior: 'smooth' });
   };
 
   let saved = null;
   try { saved = localStorage.getItem('lang'); } catch {}
   setLang(I18N[saved] ? saved : navigator.language.startsWith('es') ? 'es' : 'en');
-  $('lang').onchange = (e) => setLang(e.target.value);
-
-  $('run').onclick = async () => {
-    const out = $('out');
-    out.textContent = '...';
-    try {
-      const raw = $('state').value.trim();
-      let state = raw;
-      try { state = JSON.parse(raw); } catch {}
-      const questions = JSON.parse($('questions').value);
-      const res = await fetch('/evaluate', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ state, questions }),
-      });
-      out.textContent = JSON.stringify(await res.json(), null, 2);
-    } catch (error) {
-      out.textContent = error.message;
-    }
-  };
 </script>
 </body>
 </html>
