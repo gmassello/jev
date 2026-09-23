@@ -1,0 +1,12 @@
+{
+  "name": "jev-playground",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js"
+  },
+  "dependencies": {
+    "ai": "^7.0.113"
+  }
+}
