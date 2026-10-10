@@ -42,7 +42,7 @@ La app abre en la pestaña **Desafío**: 15 tickets de soporte de ejemplo con su
 2. **Las preguntas**: agregá preguntas con un formulario: elegí *Sí / No*, *Elegir una opción* o *Puntaje en escala* y escribí las opciones. No hace falta JSON.
 3. **Preguntarle a Jev**: cada respuesta se muestra como un veredicto simple ("Sí · 98% de seguridad", "Enojado · 3/4") con una barra por opción.
 
-La interfaz está en inglés y en español (selector arriba a la derecha, se recuerda entre visitas). El **Modo avanzado**, abajo de todo, muestra el request exacto que se envía al modelo y la respuesta cruda.
+La interfaz está en inglés y en español (selector arriba a la derecha, se recuerda entre visitas). Cada corrida muestra su tiempo, los tokens de entrada y el costo estimado (solo con el precio de entrada, que es el publicado). **Ver JSON** muestra el request exacto que se envía al modelo y la respuesta cruda, y **¿Cómo leer esto?** lleva a la sección de Docs que explica los números.
 
 La pestaña **Docs** es una referencia técnica para devs: tipos de preguntas y respuestas, integración por SDK y HTTP, Jev vs. LLMs, "System One", diseño de preguntas, umbrales, costo, errores y seguridad.
 

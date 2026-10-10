@@ -68,7 +68,7 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
 - **Covers:** R5 · F2
 - **Files:** `index.html`, `copy.js`, `pricing.js`, `tests/pricing.test.js`
 - **Depends on:** U1
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: una corrida del desafío terminada → el pie muestra 15 tickets, el tiempo total, los tokens sumados y el costo en US$ que da el módulo de precio para esos tokens. Covers AE5.
   - happy: "Ver JSON" → muestra el último request y la última respuesta sin salir de la pantalla.

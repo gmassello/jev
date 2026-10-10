@@ -147,12 +147,11 @@
 <h2 id="results-title" data-i18n="step3" hidden></h2>
 <div id="results"></div>
 
-<details id="advanced">
-  <summary data-i18n="advanced"></summary>
+<div id="json" hidden>
   <p class="hint" data-i18n="advancedHint"></p>
   <pre id="req"></pre>
   <pre id="res"></pre>
-</details>
+</div>
 </main>
 
 <main id="view-docs" hidden></main>
@@ -162,6 +161,7 @@
   import { QUESTIONS, LEVELS, TICKETS } from './challenge/tickets.js';
   import { judge, summarize, canRun, bucket } from './challenge/score.js';
   import { pool } from './challenge/pool.js';
+  import { costParts } from './pricing.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -284,8 +284,24 @@
       ...Object.entries(req.questions).map(([id, q]) => h('div', { className: 'card answer' },
         h('h3', { textContent: q.instructions }),
         res.answers?.[id] ? renderAnswer(q, res.answers[id]) : null)),
-      h('p', { className: 'meta', textContent: t().meta(res.ms, res.usage?.totalTokens ?? '?') }),
+      h('p', { className: 'meta num', textContent: costLine(t().questionsCount(Object.keys(req.questions).length), res.ms, res.usage?.inputTokens) }),
+      h('div', { className: 'chips' },
+        h('button', { className: 'link', type: 'button', textContent: t().howToRead, onclick: () => openDocs('results') }),
+        h('button', { id: 'view-json', type: 'button', textContent: $('json').hidden ? t().viewJson : t().hideJson, onclick: (e) => {
+          $('json').hidden = !$('json').hidden;
+          e.target.textContent = $('json').hidden ? t().viewJson : t().hideJson;
+        } })),
     );
+  };
+
+  const costLine = (what, ms, inputTokens) => {
+    const { seconds, tokens, usd } = costParts({ ms, inputTokens }, t().locale);
+    return t().costFooter(what, seconds, tokens, usd);
+  };
+
+  const openDocs = (id) => {
+    setTab('docs');
+    document.getElementById(`doc-${id}`)?.scrollIntoView({ block: 'start' });
   };
 
   const renderDocs = () => {
@@ -371,6 +387,9 @@
     $('ch-errors').hidden = challenge.running || s.errors === 0 || s.answered === 0;
     $('ch-errors').textContent = t().challengeErrorsNote(s.errors);
     $('ch-all-failed').hidden = challenge.running || s.errors === 0 || s.answered > 0;
+    $('ch-cost').hidden = challenge.running || s.answered === 0;
+    $('ch-cost').textContent = costLine(t().ticketsCount(s.answered), challenge.ms,
+      challenge.rows.reduce((sum, r) => sum + (r.inputTokens ?? 0), 0));
     paintThreshold(s);
     return s;
   };
@@ -401,7 +420,7 @@
       });
       const body = await r.json();
       if (!r.ok || !body.answers?.[qid]) throw new Error(body.error || `HTTP ${r.status}`);
-      challenge.rows[i] = { id: ticket.id, status: 'done', expected: ticket.expected[qid], ...judge(question, body.answers[qid], ticket.expected[qid], LEVELS[qid]) };
+      challenge.rows[i] = { id: ticket.id, status: 'done', expected: ticket.expected[qid], inputTokens: body.usage?.inputTokens, ...judge(question, body.answers[qid], ticket.expected[qid], LEVELS[qid]) };
     } catch {
       challenge.rows[i] = { id: ticket.id, status: 'error', expected: ticket.expected[qid] };
     }
@@ -412,9 +431,12 @@
   const runChallenge = async () => {
     if (!canRun(challenge.text) || challenge.running) return;
     challenge.running = true;
+    challenge.ms = null;
     resetRows();
     renderChallenge();
+    const started = performance.now();
     await pool(TICKETS, CONCURRENCY, (_, i) => askOne(i));
+    challenge.ms = Math.round(performance.now() - started);
     challenge.running = false;
     renderChallenge();
     const s = summarize(challenge.rows);
@@ -452,7 +474,9 @@
       ),
       h('div', { id: 'ch-score', className: 'scoreboard', hidden: true, ariaLive: 'polite' },
         h('span', { id: 'ch-score-num', className: 'score' }),
-        h('span', { className: 'score-label', textContent: t().challengeScoreLabel })),
+        h('span', { className: 'score-label', textContent: t().challengeScoreLabel }),
+        h('button', { className: 'link', type: 'button', textContent: t().howToRead, onclick: () => openDocs('results') })),
+      h('p', { id: 'ch-cost', className: 'meta num', hidden: true }),
       h('div', { id: 'ch-threshold', className: 'card threshold', hidden: true },
         h('label', { htmlFor: 'ch-th', className: 'h-label', textContent: t().thresholdLabel }),
         h('div', { className: 'slider' },

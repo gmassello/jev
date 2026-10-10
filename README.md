@@ -42,7 +42,7 @@ The app opens on the **Challenge** tab: 15 sample support tickets with their exp
 2. **The questions** — add questions with a form: pick *Yes / No*, *Pick one option* or *Score on a scale* and type the options. No JSON needed.
 3. **Ask Jev** — each answer is shown as a plain verdict ("Yes · 98% sure", "Angry · 3/4") with a bar per option.
 
-The UI is available in English and Spanish (selector in the top right, remembered between visits). **Advanced mode** at the bottom shows the exact request sent to the model and the raw response.
+The UI is available in English and Spanish (selector in the top right, remembered between visits). Every run shows its time, input tokens and estimated cost (input price only, the one published). **View JSON** shows the exact request sent to the model and the raw response, and **How do I read this?** jumps to the Docs section that explains the numbers.
 
 The **Docs** tab is a technical reference for developers: question and answer types, SDK and HTTP integration, Jev vs. LLMs, "System One", question design, thresholds, cost, errors and security.
 
