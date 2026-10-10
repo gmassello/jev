@@ -1,0 +1,5 @@
+# criterio	peso	regex — criterios de éxito del presentador (charla interna, pesos no publicados)
+Entienden qué es Jev y qué no	not published	LLM|System One|clasificador|classifier|no es un chat|not a chat|generat|salida estructurada|structured output
+Pueden integrarlo solos	not published	experimental_evaluate|AI SDK|npm i ai|curl|snippet|integra|AI_GATEWAY_API_KEY
+Detectan un caso propio	not published	caso de uso|use case|routing|triage|clasific|classif|moderaci|guardrail|piloto|pilot
+Costo y riesgos claros	not published	costo|cost|precio|price|token|calibra|umbral|threshold|seguridad|security|API key|PII|rate limit
