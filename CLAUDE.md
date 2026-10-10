@@ -16,8 +16,11 @@ node --test --test-name-pattern="<nombre del test>" # un solo test; sin ruta: no
                                                     # type-check: no hay (JS sin build)
                                                     # deploy: no hay (PLAN U7 en cut; la charla corre en local)
 python3 cases/small/checks.py http://localhost:3001 # caso chico contra el server corriendo (3 llamadas reales a Jev)
+npm run challenge                                   # corre los 15 tickets x 4 preguntas contra Jev y reescribe challenge/results.json (60 llamadas reales)
 ```
 
 **Gate antes de dar una tarea por terminada:** `npm test`, y si se tocó `server.js` o el contrato de `/evaluate`, también `python3 cases/small/checks.py http://localhost:3001` con el server levantado.
+
+Si se editan `challenge/tickets.js` o sus preguntas, hay que volver a correr `npm run challenge`: `tests/tickets.test.js` falla con "stale results" hasta que `results.json` coincide con los tickets.
 
 El server sirve solo `index.html` y los módulos de la lista `MODULES` de `server.js`: un `.js` nuevo que importe el navegador se agrega ahí, o el navegador recibe 404.

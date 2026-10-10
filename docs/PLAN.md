@@ -28,15 +28,16 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
   - error: tokens indefinidos (el gateway no devolvió usage) → el costo se muestra como "—", no como NaN.
 
 ### U2. Dataset de 15 tickets de soporte con etiquetas validadas
-- **Goal:** existen 15 tickets sintéticos en español, cada uno con la respuesta esperada para cada pregunta sugerida (área, ¿pide reembolso?, urgencia y la trampa de conteo "¿cuántos productos menciona?"), y un script que corre el set contra Jev y guarda aciertos, confianza, tokens y tiempo en un JSON de resultados.
+- **Goal:** existen 15 tickets sintéticos en español, cada uno con la respuesta esperada para cada pregunta sugerida (área, ¿pide reembolso?, urgencia y la pregunta de conteo "¿cuántos productos distintos menciona?", que pone a prueba una limitación documentada), y un script que corre el set contra Jev y guarda aciertos, confianza, tokens y tiempo en un JSON de resultados.
 - **Covers:** R1, R3 · F1
-- **Files:** `challenge/tickets.js`, `scripts/run-challenge.mjs`, `challenge/results.json`, `tests/tickets.test.js`
+- **Files:** `challenge/tickets.js`, `challenge/score.js` (adelantado de U3: el script ya necesita juzgar aciertos), `scripts/run-challenge.mjs`, `challenge/results.json`, `tests/tickets.test.js`, `tests/score.test.js`
 - **Depends on:** U1
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el set → tiene 15 tickets, todos con texto en español y una etiqueta esperada válida para cada pregunta sugerida. Covers AE1.
   - happy: el script corrido contra Jev → escribe un JSON con aciertos por pregunta, confianza por ticket, tokens totales y tiempo.
-  - edge: la trampa de conteo → al menos un ticket queda fallado o con confianza menor a 0.5 en el JSON de resultados. Covers AE3.
+  - edge: la pregunta de conteo → queda registrada como corrida `trap` con su resultado medido (aciertos y confianza por ticket), sin exigir una falla. Covers AE3.
+  - edge: se editan los tickets y no se vuelve a correr el script → el test detecta que `results.json` quedó desactualizado (ids o esperados distintos).
   - error: una etiqueta esperada que no está entre las opciones de la pregunta → el test de forma falla nombrando el ticket.
 
 ### U3. Pestaña Desafío: correr el set y mostrar el marcador
@@ -105,7 +106,7 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
   - edge: la consigna de caso propio → es la última slide antes del cierre.
 
 ### U9. Video corto en español
-- **Goal:** un screencast narrado en español recorre el desafío (pregunta, marcador, falla de la trampa, umbral, costo) y cierra con dónde ver el snippet; es el acceso asincrónico, porque no hay deploy.
+- **Goal:** un screencast narrado en español recorre el desafío (pregunta, marcador, resultado de la pregunta de conteo, umbral, costo) y cierra con dónde ver el snippet; es el acceso asincrónico, porque no hay deploy.
 - **Covers:** R10 · F4
 - **Files:** `docs/video/` (guion, audio, mp4)
 - **Depends on:** U3, U4, U5
@@ -135,7 +136,7 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
 ## Risks
 - La red de la sala no llega al gateway — likelihood: media — mitigation: probar la red el día anterior desde la sala — fallback: mostrar el video (U9) y las cifras de `challenge/results.json`.
 - Rate limit o error del gateway con 15 llamadas seguidas — likelihood: baja (medido: 0 errores con concurrencia 15 y 5) — mitigation: concurrencia 5 y reintento por fila — fallback: las filas fallidas muestran "Reintentar" y el marcador cuenta sobre las que respondieron.
-- Jev acierta la trampa de conteo y no se ve la falla — likelihood: media — mitigation: U2 valida la trampa contra Jev antes de la charla y se cambian los tickets si no falla — fallback: mostrar la confianza baja como la señal de "no confíes acá".
+- ~~Jev acierta la trampa de conteo y no se ve la falla~~ — ocurrió en U2 (15/15). Resuelto: R3 muestra el dato medido; las fallas reales del set (área y urgencia) y la confianza baja cargan el mensaje de "no confíes ciegamente".
 - `experimental_evaluate` cambia en una versión nueva de `ai` — likelihood: baja — mitigation: pinnear `ai` a la versión exacta instalada (regla común de dependencias) en U1.
 - El costo real es mayor que el estimado si AI Gateway cobra tokens de salida — likelihood: media — mitigation: rotular el costo como estimado de entrada y contrastarlo con el consumo del dashboard de AI Gateway después de una corrida — fallback: decir en la charla que es una cota inferior.
 - Los tokens y el costo cambian entre corridas — likelihood: alta — mitigation: el deck y el video toman las cifras del JSON de una corrida y lo dicen; en vivo se muestran las de esa corrida.

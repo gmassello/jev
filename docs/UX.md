@@ -34,9 +34,9 @@ Contraste, foco y teclado van a `hackathon-ux-ud-review`, no se miden acá.
 **Desafío (F1, F2).** Detalla BRIEF F1 y F2.
 
 1. Al abrir: el set **Tickets de soporte** (15 tickets) ya cargado en una tabla compacta: asunto, primeras palabras y la columna *Esperado*. Arriba, una sola pregunta precargada (`choice`: "¿A qué área va este ticket?" con Facturación / Envíos / Técnica / Cuenta).
-2. El público dicta: el presentador edita la pregunta o elige otra del menú de preguntas sugeridas (por ejemplo, "¿Pide un reembolso?" o "¿Cuántos productos menciona?", que es la trampa de conteo). Una pregunta a la vez, para que el marcador hable de una sola cosa.
+2. El público dicta: el presentador edita la pregunta o elige otra del menú de preguntas sugeridas (por ejemplo, "¿Pide un reembolso?" o "¿Cuántos productos distintos menciona?", que pone a prueba una limitación que declara la doc). Una pregunta a la vez, para que el marcador hable de una sola cosa.
 3. CTA único: **Evaluar los 15 tickets**. Progreso visible "Evaluando 6/15…" y las filas se completan a medida que llegan.
-4. **Pico**: el marcador grande "N/15 aciertos" y las filas falladas resaltadas, con la respuesta de Jev, la esperada y la confianza. La trampa de conteo aparece fallada o con confianza baja: ahí se explica qué no es Jev.
+4. **Pico**: el marcador grande "N/15 aciertos" y las filas falladas resaltadas, con la respuesta de Jev, la esperada y la confianza. Si se corre la pregunta de conteo, el resultado se muestra tal cual: la doc dice que le cuesta contar y acá se ve lo que midió. Ahí se explica qué no es Jev y por qué las limitaciones se miden.
 5. **Final**: el slider de umbral (0.5 → 0.95). Debajo, tres números que se recalculan sin volver a llamar a Jev: **Automáticos · A revisión humana · Errores que se automatizarían**. El pie cierra con tickets, segundos y costo en US$ de esa corrida (clave `costFooter`), medidos en vivo. Ese es el número que se lleva el público.
 6. Link al pie: "Así se hace en código →", que abre Docs en `#doc-integrate` (R6). Después viene la consigna del caso propio (R7), que va en el deck.
 

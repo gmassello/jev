@@ -240,8 +240,8 @@ export const DOCS = {
         head: ['Bien para', 'Mal para'],
         rows: [
           ['Clasificación e intent detection', 'Generar texto, resúmenes o respuestas'],
-          ['Routing a colas, equipos o modelos', 'Conteos («¿cuántos ítems menciona?»)'],
-          ['Triage y priorización', 'Aritmética y razonamiento con fechas'],
+          ['Routing a colas, equipos o modelos', 'Conteos y fechas: TypeSafe los marca como límite, pero en el desafío de este playground acertó; medilo con tus casos'],
+          ['Triage y priorización', 'Aritmética (límite que documenta TypeSafe, no probado acá)'],
           ['Moderación y guardrails', 'Explicar la decisión'],
           ['Verificación automática (¿el output de otro LLM cumple X?)', 'Decisiones que requieren varios pasos de razonamiento'],
         ],
@@ -378,8 +378,8 @@ export const DOCS = {
         head: ['Good for', 'Not good for'],
         rows: [
           ['Classification and intent detection', 'Generating text, summaries or replies'],
-          ['Routing to queues, teams or models', 'Counting ("how many items are mentioned?")'],
-          ['Triage and prioritization', 'Arithmetic and date reasoning'],
+          ['Routing to queues, teams or models', 'Counting and dates: TypeSafe lists them as limits, but it got them right in this playground\'s challenge; measure with your own cases'],
+          ['Triage and prioritization', 'Arithmetic (a limit TypeSafe documents, not tested here)'],
           ['Moderation and guardrails', 'Explaining the decision'],
           ['Automated verification (does another LLM\'s output meet X?)', 'Decisions that need multi-step reasoning'],
         ],

@@ -31,12 +31,14 @@ def check_runs_consistent(root):
         expect(run.get("correct") == ok, f"{name}: correct {run.get('correct')} != {ok} rows ok")
 
 
-def check_trap_visible(root):
+def check_trap_recorded(root):
     traps = [r for r in load_runs(root) if r.get("trap") is True]
     expect(traps, "no run marked trap: true")
     for run in traps:
-        weak = [r for r in run.get("rows") or [] if r.get("ok") is False or (r.get("confidence") or 0) < 0.5]
-        expect(weak, f"{run.get('question')}: trap run has no failed or low-confidence row")
+        rows = run.get("rows") or []
+        expect(len(rows) == TOTAL, f"{run.get('question')}: trap run has {len(rows)} rows, want {TOTAL}")
+        missing = [r.get("id") for r in rows if not isinstance(r.get("confidence"), (int, float))]
+        expect(not missing, f"{run.get('question')}: rows without confidence: {missing}")
 
 
 def check_runs_measured(root):
@@ -68,7 +70,7 @@ def check_video(root):
     expect(videos, "no non-empty .mp4 in docs/video/")
 
 
-CHECKS = [check_runs_consistent, check_trap_visible, check_runs_measured, check_deck, check_video]
+CHECKS = [check_runs_consistent, check_trap_recorded, check_runs_measured, check_deck, check_video]
 
 
 def main():

@@ -8,7 +8,7 @@ El sistema es el playground local (`index.html` + `server.js` → AI SDK → AI 
 
 | IDs | Funcionalidad | Actor | Prioridad | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
-| R1, R2, R3 · F1 | Desafío con 15 tickets de soporte, marcador y casos trampa | A1, A2 | must (U2, U3) | Entienden qué es Jev y qué no | Sí: es el centro |
+| R1, R2, R3 · F1 | Desafío con 15 tickets de soporte, marcador y pregunta de conteo | A1, A2 | must (U2, U3) | Entienden qué es Jev y qué no | Sí: es el centro |
 | R4 · F2 | Umbral de confianza recalculado sin llamar a Jev | A1, A2 | must (U4) | Costo y riesgos claros | Sí: es el final |
 | R5 · F2 | Costo y tiempo de cada corrida | A1, A2 | must (U5) | Costo y riesgos claros | Sí: pie de la corrida |
 | R6, R7 · F3 | Camino a integrar (snippet, Docs, slide) y consigna de caso propio | A2 | must (U8; U10 should) | Pueden integrarlo solos; Detectan un caso propio | Parcial: cierre del video |
@@ -28,12 +28,12 @@ Estado inicial: playground corriendo en local (`PORT=3001 npm start`) con `AI_GA
 2. El público dicta "¿Pide un reembolso?" y el presentador la elige de las preguntas sugeridas.
 3. Clic en **Evaluar los 15 tickets**: "Evaluando 6/15…" y las filas se completan.
 4. El marcador muestra N/15 y resalta las filas falladas con respuesta de Jev, esperada y confianza.
-5. El presentador elige la trampa "¿Cuántos productos menciona?" y la evalúa: al menos un ticket sale fallado o con confianza baja.
+5. El presentador elige "¿Cuántos productos distintos menciona?" y la evalúa: el marcador muestra lo que midió frente a la limitación que declara la doc.
 
 Criterios de aceptación:
 - AE1. Given el desafío abierto, when el presentador elige el set de tickets de soporte, then se ven los tickets en español con su respuesta esperada. — **How it is proven:** `node --test tests/tickets.test.js` (forma del set, PLAN U2) + `screenshot` de la pestaña.
 - AE2. Given una pregunta cargada, when se evalúa el set, then el marcador muestra cuántos acertó sobre el total y marca cada caso fallado con la respuesta de Jev, la esperada y su confianza. — **How it is proven:** `node --test tests/score.test.js` (PLAN U3) + `python3 cases/large/checks.py .` (`check_runs_consistent`).
-- AE3. Given el set completo, when se evalúa una pregunta que depende de contar o de una fecha, then al menos un caso trampa aparece como fallado. — **How it is proven:** `node scripts/run-challenge.mjs` escribe `challenge/results.json` y `python3 cases/large/checks.py .` (`check_trap_visible`) lo verifica.
+- AE3. Given el set completo, when se evalúa la pregunta de conteo, then el marcador muestra el resultado medido de esa corrida (aciertos y confianza por ticket) junto a la limitación que declara la doc, sin forzar una falla. — **How it is proven:** `npm run challenge` escribe `challenge/results.json`; `node --test --test-name-pattern="trap"` y `python3 cases/large/checks.py .` (`check_trap_recorded`) verifican que la corrida quede registrada.
 
 ### F2. Calibrar el umbral — R4, R5
 
@@ -64,7 +64,7 @@ Criterios de aceptación:
 Estado inicial: alguien que no fue a la charla, sin nada instalado.
 
 1. Abre el video corto en español.
-2. Ve el desafío completo: pregunta, marcador, falla de la trampa, umbral y costo.
+2. Ve el desafío completo: pregunta, marcador, resultado de la pregunta de conteo, umbral y costo.
 3. El cierre le dice dónde está el snippet y el repo.
 
 Criterios de aceptación:
@@ -103,12 +103,12 @@ Correr: `python3 cases/medium/checks.py http://localhost:3001` (5 llamadas reale
 | Layer | Criterion | How it is proven |
 |---|---|---|
 | Producto | Cada corrida del desafío tiene 15 filas y `correct` coincide con las filas acertadas | `check_runs_consistent` |
-| Producto | La corrida trampa muestra una falla o confianza < 0.5 | `check_trap_visible` |
+| Producto | La corrida de conteo (`trap`) está registrada con sus 15 filas medidas | `check_trap_recorded` |
 | Producto | El deck existe en PDF 16:9, en español, y muestra un marcador medido | `check_deck` |
 | Producto | Hay video `.mp4` no vacío | `check_video` |
 | Sistema | Cada corrida registra tokens y tiempo | `check_runs_measured` |
 
-Correr: `python3 cases/large/checks.py .` (sin red; lee artefactos). Hoy falla 5/5 porque U2, U8 y U9 no están hechos: es lo esperado.
+Correr: `python3 cases/large/checks.py .` (sin red; lee artefactos). Desde U2 pasa 3/5: `challenge/results.json` ya existe y es consistente; fallan `check_deck` y `check_video` hasta U8 y U9.
 
 ### Validación de las suites
 - **Contra algo que funciona:** un server mínimo escrito desde las specs (fuera del repo) da 6/6 en el chico y 3/3 en el mediano; un repo armado desde `cases/large/SPEC.md` da 5/5 en el grande. El playground real da 6/6 y 3/3 (2026-10-10).

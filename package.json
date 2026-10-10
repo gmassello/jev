@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node --env-file-if-exists=.env server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "challenge": "node --env-file-if-exists=.env scripts/run-challenge.mjs"
   },
   "dependencies": {
     "ai": "7.0.113"
