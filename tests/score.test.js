@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { judge, scoreRun, summarize, canRun } from '../challenge/score.js';
+import { judge, scoreRun, summarize, canRun, bucket } from '../challenge/score.js';
 
 const levels = ['baja', 'media', 'alta'];
 
@@ -51,4 +51,28 @@ test('canRun: an empty or blank question cannot be evaluated', () => {
   assert.equal(canRun('   '), false);
   assert.equal(canRun(undefined), false);
   assert.equal(canRun('¿A qué área va este ticket?'), true);
+});
+
+const done = (confidence, ok = true) => ({ status: 'done', confidence, ok });
+
+test('bucket: raising the threshold from 0.5 to 0.9 automates fewer tickets and sends more to review', () => {
+  const rows = [done(0.99), done(0.95), done(0.8), done(0.74, false), done(0.6), done(0.55)];
+  const low = bucket(rows, 0.5);
+  const high = bucket(rows, 0.9);
+  assert.deepEqual(low, { auto: 6, review: 0, wrongAuto: 1 });
+  assert.deepEqual(high, { auto: 2, review: 4, wrongAuto: 0 });
+  assert.ok(high.auto < low.auto && high.review > low.review);
+});
+
+test('bucket: at 0.95 with every confidence below, nothing is automated', () => {
+  const rows = Array.from({ length: 15 }, () => done(0.9));
+  assert.deepEqual(bucket(rows, 0.95), { auto: 0, review: 15, wrongAuto: 0 });
+});
+
+test('bucket: a wrong answer above the threshold counts as an error that would be automated', () => {
+  assert.deepEqual(bucket([done(0.97, false), done(0.4, false)], 0.9), { auto: 1, review: 1, wrongAuto: 1 });
+});
+
+test('bucket: rows without an answer or without confidence are never automated', () => {
+  assert.deepEqual(bucket([{ status: 'error' }, { status: 'pending' }, done(null)], 0.5), { auto: 0, review: 1, wrongAuto: 0 });
 });

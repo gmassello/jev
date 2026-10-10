@@ -24,3 +24,9 @@ export const summarize = (rows) => {
 };
 
 export const canRun = (instructions) => typeof instructions === 'string' && instructions.trim().length > 0;
+
+export const bucket = (rows, threshold) => {
+  const answered = rows.filter((r) => r.status === 'done');
+  const auto = answered.filter((r) => (r.confidence ?? 0) >= threshold);
+  return { auto: auto.length, review: answered.length - auto.length, wrongAuto: auto.filter((r) => !r.ok).length };
+};

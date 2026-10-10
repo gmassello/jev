@@ -57,7 +57,7 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
 - **Covers:** R4 · F2
 - **Files:** `index.html`, `challenge/score.js`, `copy.js`, `tests/score.test.js`
 - **Depends on:** U3
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: los mismos resultados con umbral 0.5 y después 0.9 → baja la cantidad de automáticos, sube la de revisión, y no se hace ninguna llamada nueva. Covers AE4.
   - edge: umbral en el extremo (0.95) con todas las confianzas debajo → 0 automáticos, 15 a revisión, 0 errores automatizados.

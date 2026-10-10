@@ -36,7 +36,7 @@ Optional variables: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-a
 
 ## Using the playground
 
-The app opens on the **Challenge** tab: 15 sample support tickets with their expected answer. Pick one of the suggested questions (or reword it), press *Evaluate the 15 tickets* and the score shows how many Jev got right, with the failures highlighted and the confidence of each answer.
+The app opens on the **Challenge** tab: 15 sample support tickets with their expected answer. Pick one of the suggested questions (or reword it), press *Evaluate the 15 tickets* and the score shows how many Jev got right, with the failures highlighted and the confidence of each answer. A threshold slider then shows, without calling Jev again, how many tickets would be automated, how many would go to human review and how many errors would slip through.
 
 1. **The situation** — write what happened, or load one of the examples (Support, Review, Email).
 2. **The questions** — add questions with a form: pick *Yes / No*, *Pick one option* or *Score on a scale* and type the options. No JSON needed.

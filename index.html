@@ -101,6 +101,16 @@
   .badge.ok { color: var(--ok); background: var(--ok-soft); }
   .badge.bad { color: var(--bad); background: var(--bad-soft); }
   .badge.warn { color: var(--warn); background: var(--warn-soft); }
+  .threshold { margin: .8rem 0 1rem; }
+  .threshold .slider { display: flex; align-items: center; gap: .8rem; }
+  .threshold input[type="range"] { flex: 1; accent-color: var(--accent); }
+  .threshold .value { font: 700 1.25rem var(--font-mono); min-width: 3.5rem; text-align: right; }
+  .counters { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-top: .8rem; }
+  .counter { border: 1px solid var(--line); border-radius: 10px; padding: .6rem .8rem; }
+  .counter b { display: block; font: 700 2rem/1.1 var(--font-mono); font-variant-numeric: tabular-nums; }
+  .counter span { font-size: .85rem; color: var(--muted); }
+  .counter.auto b { color: var(--ok); } .counter.review b { color: var(--warn); } .counter.wrong b { color: var(--bad); }
+  @media (max-width: 520px) { .counters { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .tickets td.arrived { animation: none; } }
   @media (max-width: 520px) { .q-head { flex-wrap: wrap; } .q-head select { margin-left: 0; width: 100%; } }
 </style>
@@ -150,7 +160,7 @@
 <script type="module">
   import { I18N, resolve, docsFor } from './copy.js';
   import { QUESTIONS, LEVELS, TICKETS } from './challenge/tickets.js';
-  import { judge, summarize, canRun } from './challenge/score.js';
+  import { judge, summarize, canRun, bucket } from './challenge/score.js';
   import { pool } from './challenge/pool.js';
 
   const $ = (id) => document.getElementById(id);
@@ -304,7 +314,7 @@
   };
 
   const CONCURRENCY = 5;
-  const challenge = { qid: 'team', text: QUESTIONS.team.instructions, rows: [], running: false };
+  const challenge = { qid: 'team', text: QUESTIONS.team.instructions, rows: [], running: false, threshold: 0.5 };
   let rowEls = [];
   const resetRows = () => { challenge.rows = TICKETS.map((tk) => ({ id: tk.id, status: 'idle', expected: tk.expected[challenge.qid] })); };
   resetRows();
@@ -339,7 +349,8 @@
     el.jev.textContent = done ? answerLabel(row.answer) : row.status === 'pending' ? '…' : '';
     el.conf.textContent = done ? percent(row.confidence) : '';
     const result = done
-      ? [h('span', { className: `badge ${row.ok ? 'ok' : 'bad'}`, textContent: row.ok ? t().badgeOk : t().badgeFail })]
+      ? [h('span', { className: `badge ${row.ok ? 'ok' : 'bad'}`, textContent: row.ok ? t().badgeOk : t().badgeFail }),
+        ...((row.confidence ?? 0) < challenge.threshold ? [' ', h('span', { className: 'badge warn', textContent: t().badgeReview })] : [])]
       : row.status === 'error'
         ? [h('span', { className: 'badge bad', textContent: t().errRowFailed }), ' ', h('button', { className: 'link', type: 'button', textContent: t().retry, disabled: challenge.running, onclick: () => retry(i) })]
         : [];
@@ -360,7 +371,19 @@
     $('ch-errors').hidden = challenge.running || s.errors === 0 || s.answered === 0;
     $('ch-errors').textContent = t().challengeErrorsNote(s.errors);
     $('ch-all-failed').hidden = challenge.running || s.errors === 0 || s.answered > 0;
+    paintThreshold(s);
     return s;
+  };
+
+  const paintThreshold = (s = summarize(challenge.rows)) => {
+    const box = $('ch-threshold');
+    if (!box) return;
+    box.hidden = challenge.running || s.answered === 0;
+    const b = bucket(challenge.rows, challenge.threshold);
+    $('ch-th-value').textContent = new Intl.NumberFormat(t().locale, { minimumFractionDigits: 2 }).format(challenge.threshold);
+    $('ch-auto').textContent = b.auto;
+    $('ch-review').textContent = b.review;
+    $('ch-wrong').textContent = b.wrongAuto;
   };
 
   const askOne = async (i) => {
@@ -430,6 +453,20 @@
       h('div', { id: 'ch-score', className: 'scoreboard', hidden: true, ariaLive: 'polite' },
         h('span', { id: 'ch-score-num', className: 'score' }),
         h('span', { className: 'score-label', textContent: t().challengeScoreLabel })),
+      h('div', { id: 'ch-threshold', className: 'card threshold', hidden: true },
+        h('label', { htmlFor: 'ch-th', className: 'h-label', textContent: t().thresholdLabel }),
+        h('div', { className: 'slider' },
+          h('input', { id: 'ch-th', type: 'range', min: '0.5', max: '0.95', step: '0.05', value: String(challenge.threshold), oninput: (e) => {
+            challenge.threshold = Number(e.target.value);
+            paintThreshold();
+            rowEls.forEach((_, i) => paintRow(i));
+          } }),
+          h('span', { id: 'ch-th-value', className: 'value', ariaLive: 'polite' })),
+        h('div', { className: 'counters' },
+          h('div', { className: 'counter auto' }, h('b', { id: 'ch-auto' }), h('span', { textContent: t().thresholdAuto })),
+          h('div', { className: 'counter review' }, h('b', { id: 'ch-review' }), h('span', { textContent: t().thresholdReview })),
+          h('div', { className: 'counter wrong' }, h('b', { id: 'ch-wrong' }), h('span', { textContent: t().thresholdWrongAuto }))),
+        h('p', { className: 'hint', textContent: t().thresholdHelp_plain })),
       h('p', { id: 'ch-errors', className: 'hint', hidden: true }),
       h('div', { id: 'ch-all-failed', className: 'card fail', hidden: true, textContent: t().errAllFailed }),
       h('div', { className: 'table-wrap' }, h('table', { className: 'tickets' },
