@@ -56,6 +56,27 @@
   details { margin-top: 2rem; }
   summary { cursor: pointer; color: var(--muted); }
   pre { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .75rem; overflow: auto; font: 12px/1.4 ui-monospace, monospace; }
+  .tabs { display: flex; gap: .3rem; border-bottom: 1px solid var(--line); margin: 1rem 0 0; }
+  .tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: .5rem 1rem; color: var(--muted); font-weight: 600; }
+  .tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+  .toc { display: flex; flex-wrap: wrap; gap: .4rem .8rem; font-size: .9rem; margin-bottom: 1rem; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .doc { margin: 0 0 .8rem; padding: 0; scroll-margin-top: 1rem; }
+  .doc summary { color: var(--text); font-weight: 700; font-size: 1.05rem; padding: 1rem; }
+  .doc .doc-body { padding: 0 1rem 1rem; }
+  .doc p, .doc li { line-height: 1.55; }
+  .doc p { margin: 0 0 .7rem; }
+  .doc ul { margin: 0 0 .7rem; padding-left: 1.2rem; }
+  .doc li { margin-bottom: .35rem; }
+  .table-wrap { overflow-x: auto; margin: 0 0 .7rem; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .code { position: relative; }
+  .code pre { margin: 0 0 .7rem; padding-top: 2.2rem; }
+  .code button { position: absolute; top: .4rem; right: .4rem; font-size: .8rem; padding: .2rem .6rem; }
+  .cta { display: block; margin: 1.2rem auto 0; padding: .7rem 1.4rem; font-weight: 600; background: var(--accent); color: #fff; border: 0; }
   @media (max-width: 520px) { .q-head { flex-wrap: wrap; } .q-head select { margin-left: 0; width: 100%; } }
 </style>
 </head>
@@ -67,6 +88,12 @@
     <option value="en">English</option>
   </select>
 </header>
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-playground" data-tab="playground" data-i18n="tabPlayground"></button>
+  <button role="tab" id="tab-docs" data-tab="docs" data-i18n="tabDocs"></button>
+</nav>
+
+<main id="view-playground">
 <p class="intro" data-i18n="intro"></p>
 
 <h2 data-i18n="step1"></h2>
@@ -88,134 +115,12 @@
   <pre id="req"></pre>
   <pre id="res"></pre>
 </details>
+</main>
 
-<script>
-  const I18N = {
-    es: {
-      intro: 'Jev lee una situación y responde preguntas cerradas con probabilidades. Elegí un ejemplo o escribí el tuyo.',
-      step1: '1 · La situación',
-      step2: '2 · Las preguntas',
-      step3: '3 · Lo que respondió Jev',
-      examples: 'Ejemplos:',
-      statePlaceholder: 'Escribí acá lo que pasó: un mail, un comentario, una conversación…',
-      questionPlaceholder: '¿Qué querés saber?',
-      types: { boolean: 'Sí / No', choice: 'Elegir una opción', score: 'Puntaje en escala' },
-      hints: {
-        boolean: 'Jev dice qué tan probable es que la respuesta sea "sí".',
-        choice: 'Jev elige la opción que mejor encaja.',
-        score: 'Ordená los niveles de menor a mayor. Jev elige en cuál cae.',
-      },
-      optionPlaceholder: 'Opción',
-      levelPlaceholder: 'Nivel',
-      addOption: '+ agregar opción',
-      addLevel: '+ agregar nivel',
-      addQuestion: '+ Nueva pregunta',
-      remove: 'Quitar',
-      run: 'Preguntarle a Jev',
-      running: 'Pensando…',
-      yes: 'Sí', no: 'No',
-      sure: (p) => `${p}% de seguridad`,
-      meta: (ms, t) => `Respondió en ${ms} ms · ${t} tokens`,
-      errNoState: 'Escribí una situación primero.',
-      errNoText: 'Falta escribir la pregunta.',
-      errOptions: 'Necesita al menos 2 opciones con texto.',
-      errNoQuestions: 'Agregá al menos una pregunta.',
-      errServer: 'Jev no pudo responder',
-      advanced: 'Modo avanzado',
-      advancedHint: 'Lo que se envía al modelo y la respuesta cruda.',
-      presets: {
-        support: {
-          label: 'Soporte',
-          state: 'El cliente mandó tres mails enojado por una entrega demorada. El agente de soporte pidió disculpas y le devolvió todo el dinero.',
-          questions: [
-            { text: '¿Se hizo un reembolso?', type: 'boolean', options: [] },
-            { text: '¿Cuál es el tema principal del ticket?', type: 'choice', options: ['Envío', 'Facturación', 'Producto'] },
-            { text: '¿Qué tan enojado está el cliente?', type: 'score', options: ['Tranquilo', 'Molesto', 'Enojado', 'Furioso'] },
-          ],
-        },
-        review: {
-          label: 'Reseña',
-          state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
-          questions: [
-            { text: '¿El cliente recomendaría el producto?', type: 'boolean', options: [] },
-            { text: '¿De qué se queja?', type: 'choice', options: ['Sonido', 'Batería', 'Precio', 'Envío'] },
-            { text: '¿Cuántas estrellas le daría?', type: 'score', options: ['1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'] },
-          ],
-        },
-        email: {
-          label: 'Email',
-          state: '¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya',
-          questions: [
-            { text: '¿Es spam o una estafa?', type: 'boolean', options: [] },
-            { text: '¿Qué tipo de mail es?', type: 'choice', options: ['Trabajo', 'Personal', 'Promoción', 'Estafa'] },
-            { text: '¿Qué tan urgente parece?', type: 'score', options: ['Nada urgente', 'Poco urgente', 'Urgente', 'Muy urgente'] },
-          ],
-        },
-      },
-    },
-    en: {
-      intro: 'Jev reads a situation and answers closed questions with probabilities. Pick an example or write your own.',
-      step1: '1 · The situation',
-      step2: '2 · The questions',
-      step3: '3 · What Jev answered',
-      examples: 'Examples:',
-      statePlaceholder: 'Write what happened here: an email, a comment, a conversation…',
-      questionPlaceholder: 'What do you want to know?',
-      types: { boolean: 'Yes / No', choice: 'Pick one option', score: 'Score on a scale' },
-      hints: {
-        boolean: 'Jev tells how likely the answer is "yes".',
-        choice: 'Jev picks the option that fits best.',
-        score: 'Order the levels from lowest to highest. Jev picks where it lands.',
-      },
-      optionPlaceholder: 'Option',
-      levelPlaceholder: 'Level',
-      addOption: '+ add option',
-      addLevel: '+ add level',
-      addQuestion: '+ New question',
-      remove: 'Remove',
-      run: 'Ask Jev',
-      running: 'Thinking…',
-      yes: 'Yes', no: 'No',
-      sure: (p) => `${p}% sure`,
-      meta: (ms, t) => `Answered in ${ms} ms · ${t} tokens`,
-      errNoState: 'Write a situation first.',
-      errNoText: 'The question is missing.',
-      errOptions: 'Needs at least 2 options with text.',
-      errNoQuestions: 'Add at least one question.',
-      errServer: 'Jev could not answer',
-      advanced: 'Advanced mode',
-      advancedHint: 'What is sent to the model and the raw response.',
-      presets: {
-        support: {
-          label: 'Support',
-          state: 'The customer wrote three angry emails about a late delivery. The support agent apologized and issued a full refund.',
-          questions: [
-            { text: 'Was a refund issued?', type: 'boolean', options: [] },
-            { text: 'What is the main topic of the ticket?', type: 'choice', options: ['Shipping', 'Billing', 'Product'] },
-            { text: 'How angry is the customer?', type: 'score', options: ['Calm', 'Annoyed', 'Angry', 'Furious'] },
-          ],
-        },
-        review: {
-          label: 'Review',
-          state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
-          questions: [
-            { text: 'Would the customer recommend the product?', type: 'boolean', options: [] },
-            { text: 'What are they complaining about?', type: 'choice', options: ['Sound', 'Battery', 'Price', 'Shipping'] },
-            { text: 'How many stars would they give?', type: 'score', options: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'] },
-          ],
-        },
-        email: {
-          label: 'Email',
-          state: 'CONGRATULATIONS! You won an iPhone. Click here within the next 24 hours to claim your prize: bit.ly/prize-now',
-          questions: [
-            { text: 'Is it spam or a scam?', type: 'boolean', options: [] },
-            { text: 'What kind of email is it?', type: 'choice', options: ['Work', 'Personal', 'Promotion', 'Scam'] },
-            { text: 'How urgent does it look?', type: 'score', options: ['Not urgent', 'Slightly urgent', 'Urgent', 'Very urgent'] },
-          ],
-        },
-      },
-    },
-  };
+<main id="view-docs" hidden></main>
+
+<script type="module">
+  import { I18N, resolve, docsFor } from './copy.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -229,7 +134,7 @@
   let dirty = false;
   let questions = [];
   let lastRun = null;
-  const t = () => I18N[lang];
+  const t = () => resolve(lang);
   const blank = (type = 'boolean') => ({ text: '', type, options: type === 'boolean' ? [] : ['', ''] });
 
   const loadPreset = (key) => {
@@ -342,6 +247,41 @@
     );
   };
 
+  const renderDocs = () => {
+    const docs = docsFor(lang);
+    const section = (d) => h('details', { className: 'card doc', id: `doc-${d.id}`, open: true },
+      h('summary', { textContent: d.title }),
+      h('div', { className: 'doc-body' },
+        (d.lead ?? []).map((p) => h('p', { textContent: p })),
+        d.list ? h('ul', {}, d.list.map((li) => h('li', { textContent: li }))) : null,
+        (d.code ?? []).map((src) => h('div', { className: 'code' },
+          h('button', { textContent: t().copy, onclick: async (e) => {
+            try { await navigator.clipboard.writeText(src); e.target.textContent = t().copied; setTimeout(() => (e.target.textContent = t().copy), 1500); } catch {}
+          } }),
+          h('pre', { textContent: src }))),
+        d.table ? h('div', { className: 'table-wrap' }, h('table', {},
+          h('thead', {}, h('tr', {}, d.table.head.map((c) => h('th', { textContent: c })))),
+          h('tbody', {}, d.table.rows.map((r) => h('tr', {}, r.map((c) => h('td', { textContent: c }))))))) : null,
+        (d.body ?? []).map((p) => h('p', { textContent: p })),
+      ));
+    $('view-docs').replaceChildren(
+      h('p', { className: 'intro', textContent: t().docsIntro }),
+      h('nav', { className: 'toc' }, h('span', { className: 'hint', textContent: t().docsToc }), docs.map((d) => h('a', { href: `#doc-${d.id}`, textContent: d.title }))),
+      ...docs.map(section),
+      h('button', { className: 'cta', textContent: t().tryIt, onclick: () => { setTab('playground'); scrollTo(0, 0); } }),
+    );
+  };
+
+  const setTab = (tab) => {
+    for (const name of ['playground', 'docs']) {
+      $(`view-${name}`).hidden = name !== tab;
+      $(`tab-${name}`).setAttribute('aria-selected', String(name === tab));
+    }
+    try { localStorage.setItem('tab', tab); } catch {}
+  };
+
+  document.querySelectorAll('[data-tab]').forEach((b) => (b.onclick = () => setTab(b.dataset.tab)));
+
   const setLang = (next) => {
     lang = next;
     document.documentElement.lang = lang;
@@ -349,6 +289,7 @@
     document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t()[el.dataset.i18n]));
     $('state').placeholder = t().statePlaceholder;
     renderExamples();
+    renderDocs();
     if (!dirty && preset) loadPreset(preset);
     else { renderQuestions(); renderResults(); }
     try { localStorage.setItem('lang', lang); } catch {}
@@ -382,8 +323,10 @@
   };
 
   let saved = null;
-  try { saved = localStorage.getItem('lang'); } catch {}
+  let savedTab = null;
+  try { saved = localStorage.getItem('lang'); savedTab = localStorage.getItem('tab'); } catch {}
   setLang(I18N[saved] ? saved : navigator.language.startsWith('es') ? 'es' : 'en');
+  setTab(savedTab === 'docs' ? 'docs' : 'playground');
 </script>
 </body>
 </html>

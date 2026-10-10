@@ -5,6 +5,8 @@ import { experimental_evaluate as evaluate } from 'ai';
 const PORT = process.env.PORT ?? 3000;
 const MODEL = process.env.JEV_MODEL ?? 'typesafe-ai/jev';
 
+const MODULES = new Set(['/copy.js', '/pricing.js']);
+
 const send = (res, status, body, type = 'application/json') => {
   res.writeHead(status, { 'content-type': type });
   res.end(type === 'application/json' ? JSON.stringify(body, null, 2) : body);
@@ -13,6 +15,9 @@ const send = (res, status, body, type = 'application/json') => {
 createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/') {
     return send(res, 200, await readFile(new URL('./index.html', import.meta.url)), 'text/html');
+  }
+  if (req.method === 'GET' && MODULES.has(req.url)) {
+    return send(res, 200, await readFile(new URL(`.${req.url}`, import.meta.url)), 'text/javascript');
   }
   if (req.method === 'POST' && req.url === '/evaluate') {
     try {

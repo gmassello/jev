@@ -29,6 +29,7 @@ En la práctica, está pensado para decisiones rápidas, baratas y de alto volum
 cp .env.example .env   # completar AI_GATEWAY_API_KEY
 npm i
 npm start              # http://localhost:3000
+npm test               # suite de tests (node --test, sin red)
 ```
 
 Variables opcionales: `PORT` (por defecto `3000`) y `JEV_MODEL` (por defecto `typesafe-ai/jev`).
@@ -40,6 +41,8 @@ Variables opcionales: `PORT` (por defecto `3000`) y `JEV_MODEL` (por defecto `ty
 3. **Preguntarle a Jev**: cada respuesta se muestra como un veredicto simple ("Sí · 98% de seguridad", "Enojado · 3/4") con una barra por opción.
 
 La interfaz está en inglés y en español (selector arriba a la derecha, se recuerda entre visitas). El **Modo avanzado**, abajo de todo, muestra el request exacto que se envía al modelo y la respuesta cruda.
+
+La pestaña **Docs** es una referencia técnica para devs: tipos de preguntas y respuestas, integración por SDK y HTTP, Jev vs. LLMs, "System One", diseño de preguntas, umbrales, costo, errores y seguridad.
 
 ## Tipos de pregunta
 
