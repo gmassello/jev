@@ -43,9 +43,9 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
 ### U3. Pestaña Desafío: correr el set y mostrar el marcador
 - **Goal:** la pestaña Desafío abre por defecto con el set precargado y una pregunta; "Evaluar los 15 tickets" corre las llamadas con progreso visible fila por fila y termina con el marcador N/15 y las filas falladas resaltadas con respuesta de Jev, esperada y confianza.
 - **Covers:** R1, R2, R3 · F1
-- **Files:** `index.html`, `challenge/score.js`, `copy.js`, `tests/score.test.js`
+- **Files:** `index.html`, `challenge/score.js`, `challenge/pool.js` (compartido con el script de U2), `copy.js`, `server.js` (módulos permitidos), `tests/score.test.js`, `tests/pool.test.js`
 - **Depends on:** U1, U2
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: 15 respuestas con 12 coincidencias contra la esperada → marcador 12/15 y 3 filas marcadas como fallo, cada una con respuesta, esperada y confianza. Covers AE2.
   - edge: la pregunta queda vacía → el CTA se deshabilita y aparece la ayuda "Escribí una pregunta para evaluar los tickets."

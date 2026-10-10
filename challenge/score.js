@@ -11,3 +11,16 @@ export const judge = (question, answer, expected, levels = []) => {
 };
 
 export const scoreRun = (rows) => ({ total: rows.length, correct: rows.filter((r) => r.ok).length });
+
+export const summarize = (rows) => {
+  const answered = rows.filter((r) => r.status === 'done');
+  return {
+    total: rows.length,
+    answered: answered.length,
+    correct: answered.filter((r) => r.ok).length,
+    failed: answered.filter((r) => !r.ok),
+    errors: rows.filter((r) => r.status === 'error').length,
+  };
+};
+
+export const canRun = (instructions) => typeof instructions === 'string' && instructions.trim().length > 0;

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { judge, scoreRun } from '../challenge/score.js';
+import { judge, scoreRun, summarize, canRun } from '../challenge/score.js';
 
 const levels = ['baja', 'media', 'alta'];
 
@@ -30,4 +30,25 @@ test('missing probabilities give a null confidence, not a crash', () => {
 
 test('scoreRun counts the correct rows over the total', () => {
   assert.deepEqual(scoreRun([{ ok: true }, { ok: false }, { ok: true }]), { total: 3, correct: 2 });
+});
+
+test('summarize: 15 answered rows with 12 correct give 12/15 and the 3 failures with their details', () => {
+  const rows = Array.from({ length: 15 }, (_, i) => ({ id: `T${i}`, status: 'done', ok: i < 12, answer: 'envios', expected: 'facturacion', confidence: 0.7 }));
+  const s = summarize(rows);
+  assert.equal(s.correct, 12);
+  assert.equal(s.answered, 15);
+  assert.equal(s.failed.length, 3);
+  assert.deepEqual(Object.keys(s.failed[0]).sort(), ['answer', 'confidence', 'expected', 'id', 'ok', 'status']);
+});
+
+test('summarize: a call that failed is not counted, the score is over the tickets that answered', () => {
+  const rows = [{ status: 'done', ok: true }, { status: 'error' }, { status: 'done', ok: false }, { status: 'pending' }];
+  assert.deepEqual({ ...summarize(rows), failed: summarize(rows).failed.length }, { total: 4, answered: 2, correct: 1, failed: 1, errors: 1 });
+});
+
+test('canRun: an empty or blank question cannot be evaluated', () => {
+  assert.equal(canRun(''), false);
+  assert.equal(canRun('   '), false);
+  assert.equal(canRun(undefined), false);
+  assert.equal(canRun('¿A qué área va este ticket?'), true);
 });

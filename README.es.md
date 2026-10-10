@@ -36,6 +36,8 @@ Variables opcionales: `PORT` (por defecto `3000`) y `JEV_MODEL` (por defecto `ty
 
 ## Cómo usar el playground
 
+La app abre en la pestaña **Desafío**: 15 tickets de soporte de ejemplo con su respuesta esperada. Elegís una de las preguntas sugeridas (o la reformulás), tocás *Evaluar los 15 tickets* y el marcador muestra cuántos acertó Jev, con las fallas resaltadas y la confianza de cada respuesta.
+
 1. **La situación**: escribí lo que pasó, o cargá uno de los ejemplos (Soporte, Reseña, Email).
 2. **Las preguntas**: agregá preguntas con un formulario: elegí *Sí / No*, *Elegir una opción* o *Puntaje en escala* y escribí las opciones. No hace falta JSON.
 3. **Preguntarle a Jev**: cada respuesta se muestra como un veredicto simple ("Sí · 98% de seguridad", "Enojado · 3/4") con una barra por opción.

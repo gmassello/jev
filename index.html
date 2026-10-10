@@ -7,12 +7,15 @@
 <style>
   :root {
     color-scheme: light dark;
-    --bg: #f7f7f8; --card: #fff; --text: #1a1a1a; --muted: #666; --line: #ddd;
-    --accent: #2f6fed; --accent-soft: #2f6fed22; --ok: #1a8f4c; --bad: #c62828; --bad-soft: #c6282815;
+    --bg: #f7f7f8; --card: #ffffff; --text: #1a1a1a; --muted: #666666; --line: #dddddd; --border-strong: #858585;
+    --accent: #2a62d9; --accent-soft: #2a62d922; --on-accent: #ffffff; --ring: #2a62d9;
+    --ok: #157a40; --ok-soft: #157a4015; --bad: #c62828; --bad-soft: #c6282815; --warn: #ab570a; --warn-soft: #ab570a15;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --dur-fast: 150ms; --dur-count: 700ms;
     font-family: system-ui, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #151517; --card: #202024; --text: #eee; --muted: #999; --line: #333; --accent: #6b9bff; --accent-soft: #6b9bff26; --ok: #4cc27f; --bad: #ff6b6b; --bad-soft: #ff6b6b1a; }
+    :root { --bg: #151517; --card: #202024; --text: #eeeeee; --muted: #999999; --line: #333333; --border-strong: #707070; --accent: #6b9bff; --accent-soft: #6b9bff26; --on-accent: #0b1020; --ring: #6b9bff; --ok: #4cc27f; --ok-soft: #4cc27f1f; --bad: #ff6b6b; --bad-soft: #ff6b6b1a; --warn: #f5a623; --warn-soft: #f5a6231f; }
   }
   * { box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); max-width: 820px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
@@ -41,7 +44,7 @@
   .link { border: 0; background: none; color: var(--accent); padding: .2rem 0; }
   .x { border: 0; background: none; color: var(--muted); font-size: 1.1rem; padding: 0 .4rem; }
   .x:hover { color: var(--bad); }
-  #run { display: block; width: 100%; margin-top: 1.2rem; padding: .8rem; font-size: 1.1rem; font-weight: 600; background: var(--accent); color: #fff; border: 0; }
+  #run { display: block; width: 100%; margin-top: 1.2rem; padding: .8rem; font-size: 1.1rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
   #run:disabled { opacity: .6; cursor: wait; }
   .answer h3 { margin: 0 0 .3rem; font-size: 1rem; }
   .verdict { font-size: 1.4rem; font-weight: 700; margin: .2rem 0 .6rem; }
@@ -76,7 +79,29 @@
   .code { position: relative; }
   .code pre { margin: 0 0 .7rem; padding-top: 2.2rem; }
   .code button { position: absolute; top: .4rem; right: .4rem; font-size: .8rem; padding: .2rem .6rem; }
-  .cta { display: block; margin: 1.2rem auto 0; padding: .7rem 1.4rem; font-weight: 600; background: var(--accent); color: #fff; border: 0; }
+  .cta { display: block; margin: 1.2rem auto 0; padding: .7rem 1.4rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .field { display: grid; gap: .3rem; margin-bottom: .8rem; }
+  .field label { font-size: .9rem; font-weight: 600; }
+  .field select, .field input { width: 100%; border-color: var(--border-strong); }
+  .primary { display: block; width: 100%; padding: .8rem; font-size: 1.1rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
+  .primary:disabled { opacity: .5; cursor: not-allowed; }
+  .primary[aria-busy="true"] { opacity: .75; cursor: wait; }
+  .scoreboard { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; margin: 1.2rem 0 .4rem; }
+  .score { font: 700 4.5rem/1.1 var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .score-label { font-size: 1.25rem; color: var(--muted); }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .tickets td:first-child { min-width: 14rem; }
+  .tickets .tid { font: 600 .75rem var(--font-mono); color: var(--muted); display: block; }
+  .tickets tr.fail td { background: var(--bad-soft); }
+  .tickets td.pending { color: var(--muted); }
+  .tickets td.arrived { animation: arrive var(--dur-fast) ease-out; }
+  @keyframes arrive { from { opacity: 0; } to { opacity: 1; } }
+  .badge { display: inline-block; border-radius: 9999px; font-size: .75rem; font-weight: 600; padding: .15rem .5rem; white-space: nowrap; }
+  .badge.ok { color: var(--ok); background: var(--ok-soft); }
+  .badge.bad { color: var(--bad); background: var(--bad-soft); }
+  .badge.warn { color: var(--warn); background: var(--warn-soft); }
+  @media (prefers-reduced-motion: reduce) { .tickets td.arrived { animation: none; } }
   @media (max-width: 520px) { .q-head { flex-wrap: wrap; } .q-head select { margin-left: 0; width: 100%; } }
 </style>
 </head>
@@ -89,11 +114,14 @@
   </select>
 </header>
 <nav class="tabs" role="tablist">
+  <button role="tab" id="tab-challenge" data-tab="challenge" data-i18n="tabChallenge"></button>
   <button role="tab" id="tab-playground" data-tab="playground" data-i18n="tabPlayground"></button>
   <button role="tab" id="tab-docs" data-tab="docs" data-i18n="tabDocs"></button>
 </nav>
 
-<main id="view-playground">
+<main id="view-challenge" hidden></main>
+
+<main id="view-playground" hidden>
 <p class="intro" data-i18n="intro"></p>
 
 <h2 data-i18n="step1"></h2>
@@ -121,6 +149,9 @@
 
 <script type="module">
   import { I18N, resolve, docsFor } from './copy.js';
+  import { QUESTIONS, LEVELS, TICKETS } from './challenge/tickets.js';
+  import { judge, summarize, canRun } from './challenge/score.js';
+  import { pool } from './challenge/pool.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -272,8 +303,145 @@
     );
   };
 
+  const CONCURRENCY = 5;
+  const challenge = { qid: 'team', text: QUESTIONS.team.instructions, rows: [], running: false };
+  let rowEls = [];
+  const resetRows = () => { challenge.rows = TICKETS.map((tk) => ({ id: tk.id, status: 'idle', expected: tk.expected[challenge.qid] })); };
+  resetRows();
+
+  const answerLabel = (value) => {
+    if (value == null) return '';
+    return QUESTIONS[challenge.qid].type === 'boolean' ? (value ? t().yes : t().no) : String(value);
+  };
+  const percent = (p) => (p == null ? '—' : new Intl.NumberFormat(t().locale, { style: 'percent', maximumFractionDigits: 0 }).format(p));
+
+  const countUp = (el, target, total) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = `${target}/${total}`; return; }
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / 700);
+      el.textContent = `${Math.round((1 - (1 - p) ** 3) * target)}/${total}`;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const paintRow = (i) => {
+    const row = challenge.rows[i];
+    const el = rowEls[i];
+    if (!el) return;
+    const done = row.status === 'done';
+    const settled = done || row.status === 'error';
+    el.expected.textContent = answerLabel(row.expected);
+    el.tr.className = done && !row.ok ? 'fail' : '';
+    for (const td of [el.jev, el.conf, el.result]) td.className = row.status === 'pending' ? 'pending' : settled ? 'arrived' : '';
+    el.conf.classList.add('num');
+    el.jev.textContent = done ? answerLabel(row.answer) : row.status === 'pending' ? '…' : '';
+    el.conf.textContent = done ? percent(row.confidence) : '';
+    const result = done
+      ? [h('span', { className: `badge ${row.ok ? 'ok' : 'bad'}`, textContent: row.ok ? t().badgeOk : t().badgeFail })]
+      : row.status === 'error'
+        ? [h('span', { className: 'badge bad', textContent: t().errRowFailed }), ' ', h('button', { className: 'link', type: 'button', textContent: t().retry, disabled: challenge.running, onclick: () => retry(i) })]
+        : [];
+    el.result.replaceChildren(...result);
+  };
+
+  const paintProgress = () => {
+    const btn = $('ch-run');
+    if (!btn) return;
+    const s = summarize(challenge.rows);
+    const ready = canRun(challenge.text);
+    $('ch-empty').hidden = ready;
+    btn.disabled = !ready || challenge.running;
+    btn.setAttribute('aria-busy', String(challenge.running));
+    btn.textContent = challenge.running ? t().challengeProgress(s.answered + s.errors, s.total) : t().challengeRun(s.total);
+    $('ch-score').hidden = !challenge.running && s.answered === 0;
+    $('ch-score-num').textContent = challenge.running ? `—/${s.total}` : `${s.correct}/${s.answered}`;
+    $('ch-errors').hidden = challenge.running || s.errors === 0 || s.answered === 0;
+    $('ch-errors').textContent = t().challengeErrorsNote(s.errors);
+    $('ch-all-failed').hidden = challenge.running || s.errors === 0 || s.answered > 0;
+    return s;
+  };
+
+  const askOne = async (i) => {
+    const qid = challenge.qid;
+    const { trap, ...question } = QUESTIONS[qid];
+    const ticket = TICKETS[i];
+    challenge.rows[i] = { id: ticket.id, status: 'pending', expected: ticket.expected[qid] };
+    paintRow(i);
+    paintProgress();
+    try {
+      const r = await fetch('/evaluate', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ state: ticket.text, questions: { [qid]: { ...question, instructions: challenge.text.trim() } } }),
+      });
+      const body = await r.json();
+      if (!r.ok || !body.answers?.[qid]) throw new Error(body.error || `HTTP ${r.status}`);
+      challenge.rows[i] = { id: ticket.id, status: 'done', expected: ticket.expected[qid], ...judge(question, body.answers[qid], ticket.expected[qid], LEVELS[qid]) };
+    } catch {
+      challenge.rows[i] = { id: ticket.id, status: 'error', expected: ticket.expected[qid] };
+    }
+    paintRow(i);
+    paintProgress();
+  };
+
+  const runChallenge = async () => {
+    if (!canRun(challenge.text) || challenge.running) return;
+    challenge.running = true;
+    resetRows();
+    renderChallenge();
+    await pool(TICKETS, CONCURRENCY, (_, i) => askOne(i));
+    challenge.running = false;
+    renderChallenge();
+    const s = summarize(challenge.rows);
+    if (s.answered) countUp($('ch-score-num'), s.correct, s.answered);
+  };
+
+  const retry = async (i) => {
+    await askOne(i);
+    rowEls.forEach((_, k) => paintRow(k));
+  };
+
+  const renderChallenge = () => {
+    const q = QUESTIONS[challenge.qid];
+    const select = h('select', {
+      id: 'ch-q',
+      disabled: challenge.running,
+      onchange: (e) => { challenge.qid = e.target.value; challenge.text = QUESTIONS[challenge.qid].instructions; resetRows(); renderChallenge(); },
+    }, Object.entries(QUESTIONS).map(([id, qq]) => h('option', { value: id, textContent: qq.instructions, selected: id === challenge.qid })));
+    const input = h('input', { id: 'ch-text', value: challenge.text, disabled: challenge.running, oninput: (e) => { challenge.text = e.target.value; paintProgress(); } });
+    rowEls = TICKETS.map((tk) => {
+      const cells = { expected: h('td'), jev: h('td'), conf: h('td'), result: h('td') };
+      return { ...cells, tr: h('tr', {}, h('td', {}, h('span', { className: 'tid', textContent: tk.id }), tk.text), cells.expected, cells.jev, cells.conf, cells.result) };
+    });
+    $('view-challenge').replaceChildren(
+      h('h2', { textContent: t().challengeTitle }),
+      h('p', { className: 'intro', textContent: t().challengeIntro_plain }),
+      h('div', { className: 'card' },
+        h('div', { className: 'field' }, h('label', { htmlFor: 'ch-q', textContent: t().challengeSuggested }), select),
+        h('div', { className: 'field' },
+          h('label', { htmlFor: 'ch-text', textContent: t().challengeQuestion }),
+          input,
+          h('p', { id: 'ch-empty', className: 'error', textContent: t().errEmptyQuestion, hidden: true })),
+        q.trap ? h('p', { className: 'hint', textContent: t().challengeTrapNote }) : null,
+        h('button', { id: 'ch-run', className: 'primary', type: 'button', onclick: runChallenge }),
+      ),
+      h('div', { id: 'ch-score', className: 'scoreboard', hidden: true, ariaLive: 'polite' },
+        h('span', { id: 'ch-score-num', className: 'score' }),
+        h('span', { className: 'score-label', textContent: t().challengeScoreLabel })),
+      h('p', { id: 'ch-errors', className: 'hint', hidden: true }),
+      h('div', { id: 'ch-all-failed', className: 'card fail', hidden: true, textContent: t().errAllFailed }),
+      h('div', { className: 'table-wrap' }, h('table', { className: 'tickets' },
+        h('thead', {}, h('tr', {}, [t().colTicket, t().colExpected, t().colJev, t().colConfidence, t().colResult].map((c) => h('th', { textContent: c })))),
+        h('tbody', {}, rowEls.map((r) => r.tr)))),
+    );
+    rowEls.forEach((_, i) => paintRow(i));
+    paintProgress();
+  };
+
   const setTab = (tab) => {
-    for (const name of ['playground', 'docs']) {
+    for (const name of ['challenge', 'playground', 'docs']) {
       $(`view-${name}`).hidden = name !== tab;
       $(`tab-${name}`).setAttribute('aria-selected', String(name === tab));
     }
@@ -290,6 +458,7 @@
     $('state').placeholder = t().statePlaceholder;
     renderExamples();
     renderDocs();
+    renderChallenge();
     if (!dirty && preset) loadPreset(preset);
     else { renderQuestions(); renderResults(); }
     try { localStorage.setItem('lang', lang); } catch {}
@@ -326,7 +495,7 @@
   let savedTab = null;
   try { saved = localStorage.getItem('lang'); savedTab = localStorage.getItem('tab'); } catch {}
   setLang(I18N[saved] ? saved : navigator.language.startsWith('es') ? 'es' : 'en');
-  setTab(savedTab === 'docs' ? 'docs' : 'playground');
+  setTab(['playground', 'docs'].includes(savedTab) ? savedTab : 'challenge');
 </script>
 </body>
 </html>

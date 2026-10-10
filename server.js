@@ -5,7 +5,7 @@ import { experimental_evaluate as evaluate } from 'ai';
 const PORT = process.env.PORT ?? 3000;
 const MODEL = process.env.JEV_MODEL ?? 'typesafe-ai/jev';
 
-const MODULES = new Set(['/copy.js', '/pricing.js']);
+const MODULES = new Set(['/copy.js', '/pricing.js', '/challenge/tickets.js', '/challenge/score.js', '/challenge/pool.js']);
 
 const send = (res, status, body, type = 'application/json') => {
   res.writeHead(status, { 'content-type': type });

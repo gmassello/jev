@@ -2,23 +2,11 @@ import { writeFile } from 'node:fs/promises';
 import { experimental_evaluate as evaluate } from 'ai';
 import { QUESTIONS, LEVELS, TICKETS } from '../challenge/tickets.js';
 import { judge, scoreRun } from '../challenge/score.js';
+import { pool } from '../challenge/pool.js';
 
 const MODEL = process.env.JEV_MODEL ?? 'typesafe-ai/jev';
 const CONCURRENCY = 5;
 const OUT = new URL('../challenge/results.json', import.meta.url);
-
-const pool = async (items, size, fn) => {
-  const out = new Array(items.length);
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length) {
-      const i = next++;
-      out[i] = await fn(items[i]);
-    }
-  };
-  await Promise.all(Array.from({ length: size }, worker));
-  return out;
-};
 
 const runQuestion = async (id) => {
   const { trap, ...question } = QUESTIONS[id];
