@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Jev para devs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #666666;
+  --line: #dddddd;
+  --border-strong: #858585;
+  --accent: #2a62d9;
+  --accent-soft: #2a62d922;
+  --on-accent: #ffffff;
+  --ring: #2a62d9;
+  --ok: #157a40;
+  --ok-soft: #157a4015;
+  --bad: #c62828;
+  --bad-soft: #c6282815;
+  --warn: #ab570a;
+  --warn-soft: #ab570a15;
+  --code-bg: #101010;
+  --code-fg: #f5f6f7;
+  --code-muted: #8b949e;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --fs-score: 4.5rem;
+  --fs-display: 3rem;
+  --fs-h1: 2rem;
+  --fs-h2: 1.25rem;
+  --fs-body: 1rem;
+  --lh-tight: 1.15;
+  --lh-body: 1.55;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 4rem;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 9999px;
+}
+@page { size: 1920px 1080px; margin: 0; }
+html { font-size: 28px; }
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: var(--fs-body); line-height: var(--lh-body); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.slide { width: 1920px; height: 1080px; overflow: hidden; position: relative; padding: 120px 140px; display: flex; flex-direction: column; gap: var(--space-6); break-after: page; background: var(--bg); }
+.slide:last-child { break-after: auto; }
+.kicker { font-family: var(--font-mono); color: var(--accent); font-weight: 500; letter-spacing: 0.02em; }
+h1 { font-size: var(--fs-display); line-height: var(--lh-tight); letter-spacing: -0.05em; font-weight: 600; }
+h2 { font-size: var(--fs-h1); line-height: 1.25; letter-spacing: -0.04em; font-weight: 600; }
+.lead { font-size: var(--fs-h2); color: var(--muted); max-width: 1400px; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--font-mono); }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; }
+.cols { display: grid; gap: var(--space-6); grid-auto-flow: column; grid-auto-columns: 1fr; flex: 1; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
+.card h3 { font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.02em; }
+.term { background: var(--code-bg); color: var(--code-fg); font-family: var(--font-mono); font-size: var(--fs-body); line-height: 1.5; border-radius: var(--radius-md); padding: var(--space-6); white-space: pre; }
+.term .c { color: var(--code-muted); }
+.term .k { color: #8ab4ff; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; }
+td:first-child { font-weight: 600; }
+.pill { display: inline-block; padding: 0 var(--space-3); border-radius: var(--radius-pill); font-weight: 600; }
+.ok { color: var(--ok); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+.pill.ok { background: var(--ok-soft); } .pill.bad { background: var(--bad-soft); } .pill.warn { background: var(--warn-soft); }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); }
+.grid4 .card { padding: var(--space-5) var(--space-6); gap: 0; }
+.grid4 .score { font-size: var(--fs-display); }
+.score { font-size: var(--fs-score); line-height: var(--lh-tight); letter-spacing: -0.02em; }
+.flow { display: flex; align-items: center; gap: var(--space-5); font-size: var(--fs-h2); font-weight: 600; }
+.flow span { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: var(--space-5) var(--space-6); }
+.flow i { color: var(--accent); font-style: normal; }
+.foot { position: absolute; left: 140px; right: 140px; bottom: 56px; display: flex; justify-content: space-between; color: var(--muted); font-family: var(--font-mono); }
+.cover { justify-content: center; background: var(--code-bg); color: var(--code-fg); }
+.cover h1 { font-size: 5rem; }
+.cover .lead { color: var(--code-muted); }
+.cover .foot { color: var(--code-muted); }
+.shot { display: grid; grid-template-columns: 840px 1fr; gap: var(--space-8); align-items: start; }
+.shot img { width: 840px; border-radius: var(--radius-md); border: 1px solid var(--line); }
+ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--space-3); }
+</style>
+</head>
+<body>
+
+<section class="slide cover">
+  <p class="kicker">charla interna · 22/10/2026</p>
+  <h1>Jev para devs</h1>
+  <p class="lead">Un modelo que evalúa, no que conversa.</p>
+  <div class="foot"><span>gmassello</span><span>github.com/gmassello/jev</span></div>
+</section>
+
+<!-- src: copy.js DOCS.es "what"; respuesta real de POST /evaluate (playground) -->
+<section class="slide">
+  <p class="kicker">01 · qué es</p>
+  <h2>Le das un texto y preguntas cerradas; devuelve respuestas tipadas</h2>
+  <div class="cols">
+    <div class="term"><span class="c">// entrada</span>
+state: <span class="k">"El televisor llegó con la
+        pantalla partida..."</span>
+questions: {
+  refund: { type: <span class="k">'boolean'</span>,
+    instructions: <span class="k">'¿Pide reembolso?'</span> }
+}</div>
+    <div class="term"><span class="c">// salida: un objeto, no texto</span>
+answers: {
+  refund: { probability: <span class="k">0.98</span> }
+}
+usage: { inputTokens: <span class="k">~400</span> }</div>
+  </div>
+  <p class="lead">Sin prompt engineering de formato ni parseo: el tipo de la respuesta lo fija la pregunta.</p>
+</section>
+
+<!-- src: copy.js DOCS.es "vs-llm" -->
+<section class="slide">
+  <p class="kicker">02 · jev vs. llm</p>
+  <h2>No es un chatbot más chico</h2>
+  <table>
+    <tr><th></th><th>Jev</th><th>LLM</th></tr>
+    <tr><td>Salida</td><td>probability / choice / score + distribución</td><td>Tokens de texto</td></tr>
+    <tr><td>Formato</td><td>Garantizado por tipo de pregunta</td><td>Depende del modelo y del prompt</td></tr>
+    <tr><td>Latencia</td><td>&lt; 1 s por evaluación</td><td>Crece con el largo de la respuesta</td></tr>
+    <tr><td>Precio</td><td class="mono">US$0,042 / M tokens de entrada</td><td>Bastante más caro por token</td></tr>
+    <tr><td>Razonamiento</td><td>No explica ni encadena pasos</td><td>Chain-of-thought, tool use</td></tr>
+  </table>
+</section>
+
+<!-- src: copy.js DOCS.es "system-one" -->
+<section class="slide">
+  <p class="kicker">03 · system one</p>
+  <h2>Pensar rápido, pensar despacio</h2>
+  <div class="cols">
+    <div class="card" style="border-color: var(--accent)">
+      <h3>Sistema 1 · <span style="color: var(--accent)">Jev</span></h3>
+      <p>Rápido, automático, un juicio de un vistazo.</p>
+      <p class="muted">"¿Este cliente está enojado?"</p>
+    </div>
+    <div class="card">
+      <h3>Sistema 2 · LLM</h3>
+      <p>Lento, deliberado, paso a paso.</p>
+      <p class="muted">"Calculá el reintegro con estas tres reglas."</p>
+    </div>
+  </div>
+  <p class="lead">Kahneman describe dos modos de pensar. Muchas decisiones de un sistema son de Sistema 1, y pagar Sistema 2 por cada una es caro y lento.</p>
+</section>
+
+<!-- src: challenge/tickets.js QUESTIONS (refund, team, urgency) -->
+<section class="slide">
+  <p class="kicker">04 · tipos de pregunta</p>
+  <h2>Tres tipos, tres formas de respuesta</h2>
+  <div class="cols">
+    <div class="card"><h3 class="mono">boolean</h3><p>¿El cliente pide un reembolso?</p><p class="muted mono">→ probability: 0.98</p></div>
+    <div class="card"><h3 class="mono">choice</h3><p>¿A qué área va? facturación, envíos, técnica o cuenta</p><p class="muted mono">→ choice: "envios" + probabilities</p></div>
+    <div class="card"><h3 class="mono">score</h3><p>¿Qué tan urgente es? baja, media, alta</p><p class="muted mono">→ score: Σ i·p(i), desde 0</p></div>
+  </div>
+  <p class="lead">Una pregunta = una sola cosa. Opciones que no se pisen. Niveles de menor a mayor.</p>
+</section>
+
+<!-- src: docs/deck-desafio.png, corrida en vivo de localhost:3001 el 2026-10-10 -->
+<section class="slide shot">
+  <img src="deck-desafio.png" alt="Pestaña Desafío con el marcador 14/15">
+  <div style="display: flex; flex-direction: column; gap: var(--space-6)">
+    <p class="kicker">05 · el desafío</p>
+    <h2>15 tickets de soporte con su respuesta correcta</h2>
+    <p class="lead">Ustedes dictan la pregunta, Jev evalúa los 15 en paralelo y el marcador muestra en qué acierta, con qué confianza y dónde falla.</p>
+    <p class="flow"><span>Vamos a la demo <i>→</i></span></p>
+  </div>
+</section>
+
+<!-- src: challenge/results.json (ranAt 2026-10-10T22:17:54.530Z) -->
+<section class="slide" style="gap: var(--space-5)">
+  <p class="kicker">06 · resultados medidos</p>
+  <h2>Acierta mucho, pero no siempre, y avisa cuando duda</h2>
+  <div class="grid4">
+    <div class="card"><span class="num score">14/15</span><span class="muted">área</span></div>
+    <div class="card"><span class="num score">15/15</span><span class="muted">reembolso</span></div>
+    <div class="card"><span class="num score">14/15</span><span class="muted">urgencia</span></div>
+    <div class="card"><span class="num score">15/15</span><span class="muted">conteo</span></div>
+  </div>
+  <table>
+    <tr><th>Ticket</th><th>Esperado</th><th>Jev</th><th>Confianza</th></tr>
+    <tr><td class="mono">T06 · TV rota, pide la plata</td><td>envíos</td><td class="bad">facturación</td><td class="num">0,72</td></tr>
+    <tr><td class="mono">T11 · filtro de precio roto, "no es urgente"</td><td>baja</td><td class="bad">media</td><td class="num">0,53</td></tr>
+  </table>
+  <p class="lead" style="margin-top: auto">La doc marca contar como límite; acá acertó 15/15. Medilo con tus casos.</p>
+</section>
+
+<!-- src: challenge/results.json run team (6194 tokens, 1252 ms) y bucket() de challenge/score.js; pricing.js -->
+<section class="slide">
+  <p class="kicker">07 · costo y riesgos</p>
+  <h2>Barato y rápido; el riesgo está en confiar sin umbral</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Una corrida de 15 tickets</h3>
+      <p><span class="num">US$0,00026</span> estimado</p>
+      <p><span class="num">6.194</span> tokens de entrada · <span class="num">1,3 s</span></p>
+      <p class="muted">Cota inferior: el precio de salida no está publicado.</p>
+    </div>
+    <div class="card">
+      <h3>Umbral 0,9 en "área"</h3>
+      <p><span class="pill ok">12</span> automáticos · <span class="pill warn">3</span> a revisión</p>
+      <p><span class="pill bad">0</span> errores automatizados</p>
+      <p class="muted">Con 0,5: 15 automáticos y 1 error se cuela.</p>
+    </div>
+  </div>
+  <ul>
+    <li>La key de AI Gateway va en el server, nunca en el navegador ni en el repo.</li>
+    <li>Calibrá el umbral con datos propios etiquetados antes de automatizar.</li>
+  </ul>
+</section>
+
+<!-- src: copy.js SNIPPET; package.json (ai 7.0.113) -->
+<section class="slide">
+  <p class="kicker">08 · integración</p>
+  <h2>Tres pasos</h2>
+  <div class="shot" style="grid-template-columns: 1fr 1.4fr; gap: var(--space-7)">
+    <ul style="font-size: var(--fs-h2)">
+      <li>Key de AI Gateway en <span class="mono">AI_GATEWAY_API_KEY</span></li>
+      <li><span class="mono">npm i ai@7.0.113</span></li>
+      <li>Llamar a <span class="mono">experimental_evaluate</span></li>
+    </ul>
+    <div class="term"><span class="k">import</span> { experimental_evaluate <span class="k">as</span> evaluate } <span class="k">from</span> 'ai';
+
+<span class="k">const</span> { answers } = <span class="k">await</span> evaluate({
+  model: 'typesafe-ai/jev',
+  state: ticketText,
+  questions: {
+    urgent: { type: 'boolean',
+      instructions: 'Is this ticket urgent?' },
+  },
+});
+
+<span class="k">if</span> (answers.urgent.probability &gt; 0.9) escalate();</div>
+  </div>
+</section>
+
+<section class="slide" style="justify-content: center">
+  <p class="kicker">09 · tu turno</p>
+  <h1>¿Dónde usarías Jev en tu trabajo?</h1>
+  <p class="flow"><span>texto</span><i>→</i><span>pregunta cerrada</span><i>→</i><span>umbral</span><i>→</i><span>acción</span></p>
+  <p class="lead">Logs, PRs, tickets, alertas, outputs de otro LLM: cualquier texto que hoy alguien lee para decidir algo simple.</p>
+</section>
+
+<section class="slide cover">
+  <p class="kicker">gracias</p>
+  <h1>Probalo</h1>
+  <div class="term" style="background: #1c1c1e; align-self: start">git clone github.com/gmassello/jev
+npm ci
+PORT=3001 npm start</div>
+  <p class="lead">Pestaña Docs para la referencia completa · video del desafío: próximamente en el repo.</p>
+  <div class="foot"><span>gmassello</span><span>github.com/gmassello/jev</span></div>
+</section>
+
+</body>
+</html>

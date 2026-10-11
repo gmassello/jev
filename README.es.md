@@ -80,6 +80,7 @@ La pestaña **Docs** es una referencia técnica para devs: tipos de preguntas y 
 
 - [Jev en AI Gateway](https://vercel.com/ai-gateway/models/jev)
 - [Documentación de TypeSafe](https://docs.typesafe.ai/introduction)
+- [Deck de la charla (PDF)](docs/deck.pdf)
 
 ## Licencia
 

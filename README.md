@@ -80,6 +80,7 @@ The **Docs** tab is a technical reference for developers: question and answer ty
 
 - [Jev on AI Gateway](https://vercel.com/ai-gateway/models/jev)
 - [TypeSafe documentation](https://docs.typesafe.ai/introduction)
+- [Talk deck (Spanish, PDF)](docs/deck.pdf)
 
 ## License
 

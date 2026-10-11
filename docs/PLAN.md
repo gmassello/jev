@@ -97,9 +97,9 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
 ### U8. Deck en español
 - **Goal:** `docs/deck.html` y `docs/deck.pdf` en español cubren qué es Jev, Jev vs. LLMs, System One, el desafío, integración (con el snippet probado), costo, riesgos y la consigna de caso propio; toda cifra sale de `challenge/results.json` o de la medición del costo.
 - **Covers:** R6, R7, R8 · F3
-- **Files:** `docs/deck.html`, `docs/deck.pdf`
+- **Files:** `docs/deck.html`, `docs/deck.pdf`, `docs/deck-desafio.png`
 - **Depends on:** U2
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el PDF → existe, tiene 1920×1080 por página y contiene las secciones de R8.
   - happy: cada cifra del deck → coincide con la de `challenge/results.json`.
