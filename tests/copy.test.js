@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { I18N, DOCS, resolve, docsFor } from '../copy.js';
+import { I18N, DOCS, resolve, docsFor, snippetFor } from '../copy.js';
 import { costParts } from '../pricing.js';
 
 const shape = (value) =>
@@ -50,4 +50,24 @@ test('the UI says confianza, never "de seguridad", for a probability', () => {
 test('the cost footer composes count, seconds, tokens and estimated cost', () => {
   const { seconds, tokens, usd } = costParts({ ms: 1100, inputTokens: 6635 }, I18N.es.locale);
   assert.equal(I18N.es.costFooter(I18N.es.ticketsCount(15), seconds, tokens, usd), '15 tickets · 1,1 s · 6.635 tokens de entrada · US$0,00028 estimado');
+});
+
+test('the playground explains a yes/no answer and a scale answer in plain words', () => {
+  assert.equal(I18N.es.explain.boolean(true, 98), 'Jev está 98% seguro de que sí. Arriba de 90% podrías automatizar; abajo, que lo mire una persona.');
+  assert.match(I18N.es.explain.score('Enojado', 3, 4), /«Enojado» \(nivel 3 de 4\)/);
+  assert.match(I18N.en.explain.choice('Shipping', 81), /“Shipping” with 81%/);
+});
+
+test('the lesson has the same steps in es and en, from theory to code, covering the three answer types', () => {
+  const shape = (lang) => I18N[lang].lessons.map((l) => [l.id, l.kind, l.question?.type ?? null, l.question?.options.length ?? 0, l.question?.descriptions?.length ?? 0]);
+  assert.deepEqual(shape('es'), shape('en'));
+  const kinds = I18N.es.lessons.map((l) => l.kind);
+  assert.equal(kinds[0], 'theory');
+  assert.equal(kinds.at(-1), 'code');
+  assert.deepEqual([...new Set(I18N.es.lessons.filter((l) => l.kind === 'ask').map((l) => l.question.type))].sort(), ['boolean', 'choice', 'score']);
+});
+
+test('the code step builds a runnable evaluate call around the question', () => {
+  const src = snippetFor({ type: 'choice', instructions: '¿A qué área va?', criteria: { cuenta: 'Acceso' } });
+  for (const part of ['experimental_evaluate', "model: 'typesafe-ai/jev'", '"instructions": "¿A qué área va?"', '"cuenta": "Acceso"']) assert.ok(src.includes(part), part);
 });

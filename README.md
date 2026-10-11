@@ -36,15 +36,16 @@ Optional variables: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-a
 
 ## Using the playground
 
-The app opens on the **Challenge** tab: 15 sample support tickets with their expected answer. Pick one of the suggested questions (or reword it), press *Evaluate the 15 tickets* and the score shows how many Jev got right, with the failures highlighted and the confidence of each answer. A threshold slider then shows, without calling Jev again, how many tickets would be automated, how many would go to human review and how many errors would slip through.
+The playground is a six-step lesson that goes from the simplest idea to your own code. Move with *Next step →* and *← Back*; the app remembers where you left off.
 
-1. **The situation** — write what happened, or load one of the examples (Support, Review, Email).
-2. **The questions** — add questions with a form: pick *Yes / No*, *Pick one option* or *Score on a scale* and type the options. No JSON needed.
-3. **Ask Jev** — each answer is shown as a plain verdict ("Yes · 98% sure", "Angry · 3/4") with a bar per option.
+1. **What is Jev?** — theory only: text in, closed question, answer with a probability.
+2. **Yes / No** — a support case; the answer is a probability and a threshold decides what to automate.
+3. **Pick one option** — an email to classify; the probability is split across the options.
+4. **Scale** — a product review scored from 1 to 5 stars; the score is the average position, from 0.
+5. **Options with a definition** — a ticket routed to a team, with a short description per option sent in `criteria`.
+6. **Take it to your code** — the `experimental_evaluate` call for the question of step 5, ready to copy.
 
-The UI is available in English and Spanish (selector in the top right, remembered between visits). Every run shows its time, input tokens and estimated cost (input price only, the one published). **View JSON** shows the exact request sent to the model and the raw response, and **How do I read this?** jumps to the Docs section that explains the numbers.
-
-The **Docs** tab is a technical reference for developers: question and answer types, SDK and HTTP integration, Jev vs. LLMs, "System One", question design, thresholds, cost, errors and security.
+Each step with a question brings a short explanation, a ready-made text and question (both editable), the answer with one sentence that explains it, and, behind *Show the call JSON*, the exact request and response. The UI is in English and Spanish (selector in the top right) and always uses the light theme.
 
 ## Question types
 

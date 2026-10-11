@@ -37,11 +37,14 @@ export const I18N = {
     copy: 'Copiar',
     copied: '¡Copiado!',
     tryIt: 'Probalo en el playground →',
-    intro: 'Jev lee una situación y responde preguntas cerradas con probabilidades. Elegí un ejemplo o escribí el tuyo.',
-    step1: '1 · La situación',
-    step2: '2 · Las preguntas',
-    step3: '3 · Lo que respondió Jev',
-    examples: 'Ejemplos:',
+    step1: 'El texto',
+    step2: 'La pregunta',
+    step3: 'La respuesta de Jev',
+    stepOf: (n, total) => `Paso ${n} de ${total}`,
+    next: 'Siguiente paso →',
+    prev: '← Anterior',
+    start: 'Empezar →',
+    descriptionPlaceholder: 'Descripción',
     statePlaceholder: 'Escribí acá lo que pasó: un mail, un comentario, una conversación…',
     questionPlaceholder: '¿Qué querés saber?',
     types: { boolean: 'Sí / No', choice: 'Elegir una opción', score: 'Puntaje en escala' },
@@ -54,7 +57,6 @@ export const I18N = {
     levelPlaceholder: 'Nivel',
     addOption: '+ agregar opción',
     addLevel: '+ agregar nivel',
-    addQuestion: '+ Nueva pregunta',
     remove: 'Quitar',
     run: 'Preguntarle a Jev',
     running: 'Pensando…',
@@ -62,45 +64,80 @@ export const I18N = {
     sure: (p) => `${p}% de confianza`,
     costFooter: (what, seconds, tokens, usd) => `${what} · ${seconds} s · ${tokens} tokens de entrada · ${usd} estimado`,
     ticketsCount: (n) => `${n} tickets`,
-    questionsCount: (n) => (n === 1 ? '1 pregunta' : `${n} preguntas`),
     howToRead: '¿Cómo leer esto?',
-    viewJson: 'Ver JSON',
-    hideJson: 'Ocultar JSON',
+    explain: {
+      boolean: (yes, p) => `Jev está ${p}% seguro de que ${yes ? 'sí' : 'no'}. Arriba de 90% podrías automatizar; abajo, que lo mire una persona.`,
+      choice: (option, p) => `Eligió «${option}» con ${p}%. Las barras muestran cómo repartió la probabilidad entre las opciones.`,
+      score: (level, n, total) => `Lo ubicó en «${level}» (nivel ${n} de ${total}). Las barras muestran qué tan seguro está de cada nivel.`,
+    },
+    jsonToggle: 'Ver el JSON de la llamada',
+    jsonRequest: 'Lo que le mandamos a Jev',
+    jsonResponse: 'Lo que respondió Jev',
     errNoState: 'Escribí una situación primero.',
     errNoText: 'Falta escribir la pregunta.',
     errOptions: 'Necesita al menos 2 opciones con texto.',
-    errNoQuestions: 'Agregá al menos una pregunta.',
     errServer: 'Jev no pudo responder',
-    advancedHint: 'Lo que se envía al modelo y la respuesta cruda.',
-    presets: {
-      support: {
-        label: 'Soporte',
+    lessons: [
+      {
+        id: 'what', kind: 'theory', title: '¿Qué es Jev?',
+        theory: [
+          'Jev es un modelo que evalúa, no que conversa. Le das un texto y una pregunta cerrada, y te devuelve una respuesta con su probabilidad.',
+          'Un chat como ChatGPT escribe una respuesta libre que después tenés que interpretar. Jev contesta siempre en un formato fijo: un sí o no, una opción de una lista o un nivel de una escala, con un número que dice qué tan seguro está.',
+          'En los próximos pasos vas a probar cada tipo de respuesta, de a uno, con un ejemplo distinto.',
+        ],
+      },
+      {
+        id: 'boolean', kind: 'ask', title: 'Sí / No',
+        theory: [
+          'La pregunta más simple: algo que se responde con sí o no.',
+          'Jev devuelve una probabilidad de 0 a 1 de que la respuesta sea "sí". 0,98 quiere decir "casi seguro que sí"; 0,5, "no sé".',
+          'En tu código elegís un umbral: por encima, el sistema actúa solo; por debajo, que lo revise una persona.',
+        ],
         state: 'El cliente mandó tres mails enojado por una entrega demorada. El agente de soporte pidió disculpas y le devolvió todo el dinero.',
-        questions: [
-          { text: '¿Se hizo un reembolso?', type: 'boolean', options: [] },
-          { text: '¿Cuál es el tema principal del ticket?', type: 'choice', options: ['Envío', 'Facturación', 'Producto'] },
-          { text: '¿Qué tan enojado está el cliente?', type: 'score', options: ['Tranquilo', 'Molesto', 'Enojado', 'Furioso'] },
-        ],
+        question: { type: 'boolean', text: '¿Se le devolvió la plata al cliente?', options: [] },
       },
-      review: {
-        label: 'Reseña',
-        state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
-        questions: [
-          { text: '¿El cliente recomendaría el producto?', type: 'boolean', options: [] },
-          { text: '¿De qué se queja?', type: 'choice', options: ['Sonido', 'Batería', 'Precio', 'Envío'] },
-          { text: '¿Cuántas estrellas le daría?', type: 'score', options: ['1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'] },
+      {
+        id: 'choice', kind: 'ask', title: 'Elegir una opción',
+        theory: [
+          'Ahora la respuesta es una opción de una lista que definís vos.',
+          'Jev elige la que mejor encaja y reparte la probabilidad entre todas: el reparto suma 100%.',
+          'Conviene que las opciones no se pisen entre sí; si dos significan casi lo mismo, Jev duda entre las dos.',
         ],
-      },
-      email: {
-        label: 'Email',
         state: '¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya',
-        questions: [
-          { text: '¿Es spam o una estafa?', type: 'boolean', options: [] },
-          { text: '¿Qué tipo de mail es?', type: 'choice', options: ['Trabajo', 'Personal', 'Promoción', 'Estafa'] },
-          { text: '¿Qué tan urgente parece?', type: 'score', options: ['Nada urgente', 'Poco urgente', 'Urgente', 'Muy urgente'] },
+        question: { type: 'choice', text: '¿Qué tipo de mail es?', options: ['Trabajo', 'Personal', 'Promoción', 'Estafa'] },
+      },
+      {
+        id: 'score', kind: 'ask', title: 'Escala',
+        theory: [
+          'Cuando la respuesta es un grado (poco, algo, mucho), usás una escala.',
+          'Los niveles van ordenados de menor a mayor. Jev devuelve la probabilidad de cada nivel y un score: la posición promedio, contando desde 0.',
+          'Un score de 3,2 en una escala de 5 niveles cae cerca del cuarto nivel.',
+        ],
+        state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
+        question: { type: 'score', text: '¿Cuántas estrellas le daría?', options: ['1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'] },
+      },
+      {
+        id: 'criteria', kind: 'ask', title: 'Opciones con definición',
+        theory: [
+          'Un nombre de opción suelto puede ser ambiguo: ¿un reintegro es de "facturación" o de "envíos"?',
+          'Podés acompañar cada opción con una descripción corta que le dice a Jev qué entra en ella. Viaja en el campo criteria del request.',
+          'Es la forma que conviene para rutear tickets a un equipo.',
+        ],
+        state: 'Hace dos días que no puedo entrar a mi cuenta: me dice que la contraseña es incorrecta aunque ya la cambié.',
+        question: {
+          type: 'choice', text: '¿A qué área va este ticket?',
+          options: ['facturacion', 'envios', 'tecnica', 'cuenta'],
+          descriptions: ['Cobros, facturas, reintegros y cargos en la tarjeta', 'Entregas, demoras y paquetes dañados o perdidos', 'Errores de la web o de la app', 'Acceso, seguridad y datos de la cuenta'],
+        },
+      },
+      {
+        id: 'code', kind: 'code', title: 'Llevalo a tu código',
+        theory: [
+          'Lo que hiciste en el playground es una llamada a experimental_evaluate del AI SDK de Vercel.',
+          'Necesitás la key de AI Gateway en AI_GATEWAY_API_KEY y el paquete ai. Este es el código de la pregunta del paso anterior:',
         ],
       },
-    },
+    ],
   },
   en: {
     locale: 'en-US',
@@ -140,11 +177,14 @@ export const I18N = {
     copy: 'Copy',
     copied: 'Copied!',
     tryIt: 'Try it in the playground →',
-    intro: 'Jev reads a situation and answers closed questions with probabilities. Pick an example or write your own.',
-    step1: '1 · The situation',
-    step2: '2 · The questions',
-    step3: '3 · What Jev answered',
-    examples: 'Examples:',
+    step1: 'The text',
+    step2: 'The question',
+    step3: 'What Jev answered',
+    stepOf: (n, total) => `Step ${n} of ${total}`,
+    next: 'Next step →',
+    prev: '← Back',
+    start: 'Start →',
+    descriptionPlaceholder: 'Description',
     statePlaceholder: 'Write what happened here: an email, a comment, a conversation…',
     questionPlaceholder: 'What do you want to know?',
     types: { boolean: 'Yes / No', choice: 'Pick one option', score: 'Score on a scale' },
@@ -157,7 +197,6 @@ export const I18N = {
     levelPlaceholder: 'Level',
     addOption: '+ add option',
     addLevel: '+ add level',
-    addQuestion: '+ New question',
     remove: 'Remove',
     run: 'Ask Jev',
     running: 'Thinking…',
@@ -165,45 +204,80 @@ export const I18N = {
     sure: (p) => `${p}% confidence`,
     costFooter: (what, seconds, tokens, usd) => `${what} · ${seconds} s · ${tokens} input tokens · ${usd} estimated`,
     ticketsCount: (n) => `${n} tickets`,
-    questionsCount: (n) => (n === 1 ? '1 question' : `${n} questions`),
     howToRead: 'How do I read this?',
-    viewJson: 'View JSON',
-    hideJson: 'Hide JSON',
+    explain: {
+      boolean: (yes, p) => `Jev is ${p}% sure the answer is ${yes ? 'yes' : 'no'}. Above 90% you could automate; below, have a person look at it.`,
+      choice: (option, p) => `It picked “${option}” with ${p}%. The bars show how it split the probability across the options.`,
+      score: (level, n, total) => `It placed it at “${level}” (level ${n} of ${total}). The bars show how sure it is of each level.`,
+    },
+    jsonToggle: 'Show the call JSON',
+    jsonRequest: 'What we sent to Jev',
+    jsonResponse: 'What Jev answered',
     errNoState: 'Write a situation first.',
     errNoText: 'The question is missing.',
     errOptions: 'Needs at least 2 options with text.',
-    errNoQuestions: 'Add at least one question.',
     errServer: 'Jev could not answer',
-    advancedHint: 'What is sent to the model and the raw response.',
-    presets: {
-      support: {
-        label: 'Support',
+    lessons: [
+      {
+        id: 'what', kind: 'theory', title: 'What is Jev?',
+        theory: [
+          'Jev is a model that evaluates, it does not chat. You give it a text and a closed question, and it returns an answer with its probability.',
+          'A chat like ChatGPT writes a free-form answer you then have to interpret. Jev always answers in a fixed format: a yes or no, an option from a list or a level on a scale, with a number that says how sure it is.',
+          'In the next steps you will try each kind of answer, one at a time, with a different example.',
+        ],
+      },
+      {
+        id: 'boolean', kind: 'ask', title: 'Yes / No',
+        theory: [
+          'The simplest question: something answered with yes or no.',
+          'Jev returns a probability from 0 to 1 that the answer is "yes". 0.98 means "almost certainly yes"; 0.5 means "I don\'t know".',
+          'In your code you pick a threshold: above it, the system acts on its own; below it, a person reviews it.',
+        ],
         state: 'The customer wrote three angry emails about a late delivery. The support agent apologized and issued a full refund.',
-        questions: [
-          { text: 'Was a refund issued?', type: 'boolean', options: [] },
-          { text: 'What is the main topic of the ticket?', type: 'choice', options: ['Shipping', 'Billing', 'Product'] },
-          { text: 'How angry is the customer?', type: 'score', options: ['Calm', 'Annoyed', 'Angry', 'Furious'] },
-        ],
+        question: { type: 'boolean', text: 'Did the customer get their money back?', options: [] },
       },
-      review: {
-        label: 'Review',
-        state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
-        questions: [
-          { text: 'Would the customer recommend the product?', type: 'boolean', options: [] },
-          { text: 'What are they complaining about?', type: 'choice', options: ['Sound', 'Battery', 'Price', 'Shipping'] },
-          { text: 'How many stars would they give?', type: 'score', options: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'] },
+      {
+        id: 'choice', kind: 'ask', title: 'Pick one option',
+        theory: [
+          'Now the answer is one option from a list you define.',
+          'Jev picks the one that fits best and splits the probability across all of them: the split adds up to 100%.',
+          'Keep the options from overlapping; if two mean almost the same, Jev hesitates between them.',
         ],
-      },
-      email: {
-        label: 'Email',
         state: 'CONGRATULATIONS! You won an iPhone. Click here within the next 24 hours to claim your prize: bit.ly/prize-now',
-        questions: [
-          { text: 'Is it spam or a scam?', type: 'boolean', options: [] },
-          { text: 'What kind of email is it?', type: 'choice', options: ['Work', 'Personal', 'Promotion', 'Scam'] },
-          { text: 'How urgent does it look?', type: 'score', options: ['Not urgent', 'Slightly urgent', 'Urgent', 'Very urgent'] },
+        question: { type: 'choice', text: 'What kind of email is it?', options: ['Work', 'Personal', 'Promotion', 'Scam'] },
+      },
+      {
+        id: 'score', kind: 'ask', title: 'Scale',
+        theory: [
+          'When the answer is a degree (a little, some, a lot), you use a scale.',
+          'Levels go from lowest to highest. Jev returns the probability of each level and a score: the average position, counting from 0.',
+          'A score of 3.2 on a 5-level scale lands near the fourth level.',
+        ],
+        state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
+        question: { type: 'score', text: 'How many stars would they give?', options: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'] },
+      },
+      {
+        id: 'criteria', kind: 'ask', title: 'Options with a definition',
+        theory: [
+          'A bare option name can be ambiguous: is a refund "billing" or "shipping"?',
+          'You can add a short description to each option that tells Jev what belongs in it. It travels in the criteria field of the request.',
+          'It is the shape that works for routing tickets to a team.',
+        ],
+        state: 'For two days I have not been able to log into my account: it says the password is wrong even though I already changed it.',
+        question: {
+          type: 'choice', text: 'Which team does this ticket go to?',
+          options: ['billing', 'shipping', 'tech', 'account'],
+          descriptions: ['Charges, invoices, refunds and card payments', 'Deliveries, delays and damaged or lost packages', 'Website or app errors', 'Access, security and account data'],
+        },
+      },
+      {
+        id: 'code', kind: 'code', title: 'Take it to your code',
+        theory: [
+          'What you did in the playground is a call to experimental_evaluate from the Vercel AI SDK.',
+          'You need the AI Gateway key in AI_GATEWAY_API_KEY and the ai package. This is the code for the question from the previous step:',
         ],
       },
-    },
+    ],
   },
 };
 
@@ -218,6 +292,19 @@ questions: {
 });
 
 if (answers.urgent.probability > 0.9) escalate();`;
+
+export const snippetFor = (question) => `import { experimental_evaluate as evaluate } from 'ai';
+
+const { answers } = await evaluate({
+  model: 'typesafe-ai/jev',
+  state: text,
+  questions: {
+    q1: ${JSON.stringify(question, null, 2).replace(/\n/g, '\n    ')},
+  },
+});
+
+console.log(answers.q1);
+`;
 
 export const CURL = `curl -s localhost:3000/evaluate \\
 -H 'content-type: application/json' \\
