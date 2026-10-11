@@ -42,7 +42,9 @@
   #view-playground h3 { font-size: .95rem; margin: 1.4rem 0 .4rem; }
   .opt.described { display: grid; grid-template-columns: minmax(6rem, 30%) 1fr auto; }
   .step-nav { display: flex; justify-content: space-between; gap: .8rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
-  #next { margin-left: auto; background: var(--accent); color: var(--on-accent); border: 0; font-weight: 600; padding: .6rem 1.2rem; }
+  .step-nav.top { margin: 1rem 0 0; padding: 0 0 1rem; border-top: 0; border-bottom: 1px solid var(--line); }
+  .nav-next { margin-left: auto; background: var(--accent); color: var(--on-accent); border: 0; font-weight: 600; padding: .6rem 1.2rem; }
+  .nav-next:hover { opacity: .9; }
   #json { margin-top: 1rem; }
   #json summary { color: var(--accent); }
   #code pre, #json pre { background: #101010; color: #f5f6f7; border-color: #101010; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -142,6 +144,11 @@
 <main id="view-challenge" hidden></main>
 
 <main id="view-playground" hidden>
+<div class="step-nav top">
+  <button class="nav-prev" type="button"></button>
+  <button class="nav-home" type="button"></button>
+  <button class="nav-next" type="button"></button>
+</div>
 <p class="stepper"><span id="step-of"></span><span id="dots" aria-hidden="true"></span></p>
 <h2 id="lesson-title" class="lesson-title"></h2>
 <div id="theory" class="theory"></div>
@@ -166,8 +173,9 @@
 <div id="code" hidden></div>
 
 <div class="step-nav">
-  <button id="prev" type="button"></button>
-  <button id="next" type="button"></button>
+  <button class="nav-prev" type="button"></button>
+  <button class="nav-home" type="button"></button>
+  <button class="nav-next" type="button"></button>
 </div>
 </main>
 
@@ -263,10 +271,10 @@
       renderResults();
     }
     if (L.kind === 'code') renderCode();
-    $('prev').hidden = step === 0;
-    $('prev').textContent = t().prev;
-    $('next').hidden = step === total - 1;
-    $('next').textContent = step === 0 ? t().start : t().next;
+    const nav = (cls, text, hidden) => document.querySelectorAll(cls).forEach((b) => { b.textContent = text; b.hidden = hidden; });
+    nav('.nav-prev', t().prev, step === 0);
+    nav('.nav-home', t().home, step === 0);
+    nav('.nav-next', step === 0 ? t().start : t().next, step === total - 1);
     try { localStorage.setItem('step', String(step)); } catch {}
   };
 
@@ -558,8 +566,9 @@
   };
 
   $('state').oninput = (e) => { entry().state = e.target.value; };
-  $('prev').onclick = () => go(step - 1);
-  $('next').onclick = () => go(step + 1);
+  document.querySelectorAll('.nav-prev').forEach((b) => (b.onclick = () => go(step - 1)));
+  document.querySelectorAll('.nav-home').forEach((b) => (b.onclick = () => go(0)));
+  document.querySelectorAll('.nav-next').forEach((b) => (b.onclick = () => go(step + 1)));
   $('lang').onchange = (e) => setLang(e.target.value);
 
   $('run').onclick = async () => {
