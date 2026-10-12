@@ -27,8 +27,15 @@
   textarea { resize: vertical; min-height: 5rem; }
   button { font: inherit; cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: inherit; padding: .4rem .8rem; }
   button:hover { border-color: var(--accent); }
+  .table-wrap { overflow-x: auto; margin: 0 0 1rem; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--card); }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td:first-child { font-weight: 600; min-width: 9rem; }
+  td a { color: var(--accent); }
   .multi-q { margin: 0; font-weight: 600; }
   .outro { font-weight: 600; }
+  .explain.review { background: var(--warn-soft); color: var(--warn); font-weight: 600; }
   .type-badge { display: inline-block; font-size: .8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: .15rem .6rem; margin-bottom: .6rem; }
   .explain { background: var(--accent-soft); border-radius: 6px; padding: .6rem .8rem; margin: .8rem 0 0; line-height: 1.5; }
   .stepper { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin: 1.2rem 0 0; }
@@ -190,7 +197,16 @@
     $('step-of').textContent = t().stepOf(step + 1, total);
     $('dots').replaceChildren(...lessons().map((_, i) => h('i', { className: i <= step ? 'on' : '' })));
     $('lesson-title').textContent = L.title;
-    $('theory').replaceChildren(...L.theory.map((p) => h('p', { textContent: p })));
+    $('theory').replaceChildren(
+      ...L.theory.map((p) => h('p', { textContent: p })),
+      ...(L.table ? [h('div', { className: 'table-wrap' }, h('table', {},
+        h('thead', {}, h('tr', {}, L.table.head.map((c) => h('th', { textContent: c })))),
+        h('tbody', {}, L.table.rows.map(([name, url, what, diff]) => h('tr', {},
+          h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
+          h('td', { textContent: what }),
+          h('td', { textContent: diff }))))))] : []),
+      ...(L.outro ? [h('p', { className: 'explain', textContent: L.outro })] : []),
+    );
     $('ask').hidden = L.kind === 'theory';
     if (L.kind !== 'theory') {
       $('state').value = entry().state;
@@ -244,6 +260,20 @@
     return t().explain.score(q.criteria[nearest], nearest + 1, q.criteria.length);
   };
 
+  const confidenceOf = (q, a) => {
+    if (a.type === 'boolean') return Math.max(a.probability, 1 - a.probability);
+    if (a.type === 'choice') return a.probabilities?.[a.choice] ?? 1;
+    const nearest = Math.min(q.criteria.length - 1, Math.max(0, Math.round(a.score)));
+    return a.probabilities?.[nearest] ?? 1;
+  };
+
+  const thresholdLine = (q, a) => {
+    const limit = lesson().threshold;
+    if (!limit) return null;
+    const p = confidenceOf(q, a);
+    return h('p', { className: `explain${p >= limit ? '' : ' review'}`, textContent: t().thresholdNote(pct(p), p >= limit, pct(limit)) });
+  };
+
   const renderResults = () => {
     $('results-title').hidden = !lastRun;
     $('json').hidden = !lastRun || Boolean(lastRun.res.local);
@@ -257,8 +287,8 @@
     $('results').replaceChildren(
       ...Object.entries(req.questions).map(([id, q]) => h('div', { className: 'card answer' },
         h('h3', { textContent: q.instructions }),
-        res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) })] : null)),
-      isMulti() ? h('p', { className: 'explain outro', textContent: t().multiOutro }) : null,
+        res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) }), thresholdLine(q, res.answers[id])] : null)),
+      ...(isMulti() ? [h('p', { className: 'explain outro', textContent: t().multiOutro })] : []),
     );
   };
 

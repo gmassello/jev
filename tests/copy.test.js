@@ -40,14 +40,28 @@ test('the playground explains a yes/no answer and a scale answer in plain words'
   assert.match(I18N.en.explain.choice('Shipping', 81), /“Shipping” with 81%/);
 });
 
-test('the lesson has the same steps in es and en, from theory to one call with several questions', () => {
+test('the lesson has the same steps in es and en, from theory to one call with several questions and a doubtful case', () => {
   const shape = (lang) => I18N[lang].lessons.map((l) => [l.id, l.kind, l.question?.type ?? null, l.question?.options.length ?? 0, l.question?.descriptions?.length ?? 0, (l.questions ?? []).map((q) => [q.type, q.options.length])]);
   assert.deepEqual(shape('es'), shape('en'));
   const lessons = I18N.es.lessons;
   assert.equal(lessons[0].kind, 'theory');
   assert.deepEqual([...new Set(lessons.filter((l) => l.kind === 'ask').map((l) => l.question.type))].sort(), ['boolean', 'choice', 'score']);
-  const multi = lessons.at(-1);
+  const multi = lessons.find((l) => l.kind === 'multi');
   assert.equal(multi.kind, 'multi');
   assert.deepEqual(multi.questions.map((q) => q.type).sort(), ['boolean', 'choice', 'score']);
   assert.equal(new Set(multi.questions.map((q) => q.id)).size, multi.questions.length);
+  for (const lang of ['es', 'en']) assert.equal(I18N[lang].lessons.find((l) => l.id === 'doubt')?.threshold, 0.9, lang);
+});
+
+test('the threshold note says whether a confidence would be automated or reviewed', () => {
+  assert.equal(I18N.es.thresholdNote(58, false, 90), 'Confianza 58%: con un umbral de 90%, este ticket iría a revisión humana.');
+  assert.equal(I18N.en.thresholdNote(97, true, 90), 'Confidence 97%: with a 90% threshold, this would be automated.');
+});
+
+test('the similar-projects step has the same rows and links in es and en, led by Clef and Strands Decider', () => {
+  const table = (lang) => I18N[lang].lessons.find((l) => l.id === 'similar').table;
+  const [es, en] = [table('es'), table('en')];
+  assert.deepEqual(es.rows.map((r) => r[1]), en.rows.map((r) => r[1]));
+  for (const t of [es, en]) for (const r of t.rows) assert.equal(r.length, 4);
+  assert.deepEqual(es.rows.slice(0, 2).map((r) => r[0]), ['Cloudflare Clef', 'AWS Strands Decider 2B']);
 });
