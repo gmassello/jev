@@ -36,14 +36,15 @@ Optional variables: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-a
 
 ## Using the playground
 
-The playground is a six-step lesson that goes from the simplest idea to your own code. Move with *Next step →* and *← Back*; the app remembers where you left off.
+The playground is a seven-step lesson that goes from the simplest idea to your own code. Move with *Next step →* and *← Back*; the app remembers where you left off.
 
-1. **What is Jev?** — theory only: text in, closed question, answer with a probability.
-2. **Yes / No** — a support case; the answer is a probability and a threshold decides what to automate.
-3. **Pick one option** — an email to classify; the probability is split across the options.
-4. **Scale** — a product review scored from 1 to 5 stars; the score is the average position, from 0.
-5. **Options with a definition** — a ticket routed to a team, with a short description per option sent in `criteria`.
-6. **Take it to your code** — the `experimental_evaluate` call for the question of step 5, ready to copy.
+1. **Thinking fast, thinking slow** — theory only: Kahneman's System 1 (fast, automatic) and System 2 (slow, deliberate); Jev is System 1, LLMs are System 2.
+2. **What is Jev?** — theory only: text in, closed question, answer with a probability.
+3. **Yes / No** — a support case; the answer is a probability and a threshold decides what to automate.
+4. **Pick one option** — an email to classify; the probability is split across the options.
+5. **Scale** — a product review scored from 1 to 5 stars; the score is the average position, from 0.
+6. **Options with a definition** — a ticket routed to a team, with a short description per option sent in `criteria`.
+7. **Take it to your code** — the `experimental_evaluate` call for the question of step 6, ready to copy.
 
 Each step with a question brings a short explanation, a ready-made text and question (both editable), the answer with one sentence that explains it, and, behind *Show the call JSON*, the exact request and response. The UI is in English and Spanish (selector in the top right) and always uses the light theme.
 
