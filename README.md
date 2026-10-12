@@ -1,87 +1,24 @@
 # Jev Playground
 
-**English** | [Español](README.es.md)
-
-A minimal local app to try [`typesafe-ai/jev`](https://vercel.com/ai-gateway/models/jev) through Vercel AI Gateway.
-
-Jev is not a chat model. It evaluates a **state** (text or JSON) against **typed questions** and returns probabilities instead of free text.
-
-![Jev Playground demo](docs/demo.gif)
-
-## About Jev
-
-Jev is an AI model from TypeSafe AI, launched in September 2026. Unlike chatbots, it doesn't generate text. You give it some input, like a support ticket or a log, plus a set of typed questions with predefined answers. It returns structured decisions (a choice, a score, or a yes/no) with a probability for each one, so your code can use the result directly without parsing anything.
-
-The name comes from William Stanley Jevons, the 19th-century economist whose paradox describes how a falling cost can lead to a resource being used more and more. TypeSafe's bet is that if intelligence becomes dirt cheap, it will end up everywhere.
-
-TypeSafe calls Jev the first of its System One models, a concept borrowed from the distinction between System 1 and System 2 thinking, popularized by Daniel Kahneman in *Thinking, Fast and Slow*. System 1 covers fast, intuitive, almost automatic decisions; System 2 is slow, deliberate reasoning. TypeSafe places traditional LLMs in the second group and Jev in the first.
-
-In practice, it's built for fast, cheap, high-volume decisions inside software: classifying, routing, scoring, and triaging. Responses come back in under a second, and it's priced far below typical LLMs. The trade-offs are that it can't explain its reasoning, it struggles with counting and dates, and its confidence scores still need to be validated against your own data before you rely on them.
-
-## Requirements
-
-- Node 24+
-- A Vercel AI Gateway API key
+A step-by-step playground to learn [Jev](https://vercel.com/ai-gateway/models/jev), TypeSafe's evaluation model, through Vercel AI Gateway.
 
 ## Setup
 
+Requires Node 24+ and a [Vercel AI Gateway](https://vercel.com/ai-gateway) API key.
+
 ```bash
-cp .env.example .env   # fill in AI_GATEWAY_API_KEY
-npm i
+cp .env.example .env   # set AI_GATEWAY_API_KEY
+npm ci
 npm start              # http://localhost:3000
-npm test               # test suite (node --test, no network)
 ```
 
-Optional variables: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-ai/jev`).
+Optional: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-ai/jev`). Run the tests with `npm test`.
 
-## Using the playground
+## Before you use it in production
 
-The playground is a six-step lesson that goes from the simplest idea to your own code. Move with *Next step →* and *← Back*; the app remembers where you left off.
-
-1. **What is Jev?** — theory only: text in, closed question, answer with a probability.
-2. **Yes / No** — a support case; the answer is a probability and a threshold decides what to automate.
-3. **Pick one option** — an email to classify; the probability is split across the options.
-4. **Scale** — a product review scored from 1 to 5 stars; the score is the average position, from 0.
-5. **Options with a definition** — a ticket routed to a team, with a short description per option sent in `criteria`.
-6. **Take it to your code** — the `experimental_evaluate` call for the question of step 5, ready to copy.
-
-Each step with a question brings a short explanation, a ready-made text and question (both editable), the answer with one sentence that explains it, and, behind *Show the call JSON*, the exact request and response. The UI is in English and Spanish (selector in the top right) and always uses the light theme.
-
-## Question types
-
-| Type | `criteria` | Answer |
-|---|---|---|
-| `boolean` | optional `{ true, false }` | `probability` (0–1) |
-| `choice` | object `{ option: description }` | `choice` + `probabilities` |
-| `score` | ordered array of levels (2 or more) | `score` + `probabilities` |
-
-`score` is the zero-based, probability-weighted position in the `criteria` array (e.g. `2.19` ≈ third level).
-
-```json
-{
-  "refunded": { "type": "boolean", "instructions": "Was a refund issued?" },
-  "topic": {
-    "type": "choice",
-    "instructions": "What is the main topic?",
-    "criteria": { "shipping": "Delivery problems", "billing": "Payments" }
-  },
-  "anger": {
-    "type": "score",
-    "instructions": "How angry is the customer?",
-    "criteria": ["calm", "annoyed", "angry", "furious"]
-  }
-}
-```
-
-## API
-
-`POST /evaluate` with `{ "state": ..., "questions": { ... } }` returns `answers`, `usage`, `warnings`, `modelId` and `ms`.
-
-## Links
-
-- [Jev on AI Gateway](https://vercel.com/ai-gateway/models/jev)
-- [TypeSafe documentation](https://docs.typesafe.ai/introduction)
-- [Talk deck (Spanish, PDF)](docs/deck.pdf)
+- **Calibrate the threshold on your own data.** Label a few dozen real cases and check how often Jev is right at each confidence level before letting it act on its own.
+- **Measure the limits, don't read them.** TypeSafe documents counting and dates as weak spots, yet both worked in our tests; your cases may go the other way.
+- **Keep the key on the server.** Call Jev from your backend, never from the browser, and never commit the key.
 
 ## License
 

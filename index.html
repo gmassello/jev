@@ -19,7 +19,6 @@
   body { background: var(--bg); color: var(--text); max-width: 820px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
   header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
   h1 { margin: 0; font-size: 1.6rem; }
-  .intro { color: var(--muted); margin: .4rem 0 1.5rem; }
   h2 { font-size: 1.1rem; margin: 1.8rem 0 .6rem; }
   h2 small { color: var(--muted); font-weight: 400; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; margin-bottom: .8rem; }
@@ -28,9 +27,6 @@
   textarea { resize: vertical; min-height: 5rem; }
   button { font: inherit; cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: inherit; padding: .4rem .8rem; }
   button:hover { border-color: var(--accent); }
-  .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; align-items: center; }
-  .chips span { color: var(--muted); }
-  .q-head { display: flex; gap: .5rem; align-items: center; margin-bottom: .6rem; }
   .type-badge { display: inline-block; font-size: .8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: .15rem .6rem; margin-bottom: .6rem; }
   .explain { background: var(--accent-soft); border-radius: 6px; padding: .6rem .8rem; margin: .8rem 0 0; line-height: 1.5; }
   .stepper { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin: 1.2rem 0 0; }
@@ -67,63 +63,13 @@
   .bar-row.win { font-weight: 700; }
   .pct { text-align: right; font-variant-numeric: tabular-nums; }
   .fail { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
-  .meta { color: var(--muted); font-size: .85rem; }
   details { margin-top: 2rem; }
   summary { cursor: pointer; color: var(--muted); }
   pre { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .75rem; overflow: auto; font: 12px/1.4 ui-monospace, monospace; }
-  .tabs { display: flex; gap: .3rem; border-bottom: 1px solid var(--line); margin: 1rem 0 0; }
-  .tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: .5rem 1rem; color: var(--muted); font-weight: 600; }
-  .tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
-  .toc { display: flex; flex-wrap: wrap; gap: .4rem .8rem; font-size: .9rem; margin-bottom: 1rem; }
-  .toc a { color: var(--accent); text-decoration: none; }
-  .toc a:hover { text-decoration: underline; }
-  .doc { margin: 0 0 .8rem; padding: 0; scroll-margin-top: 1rem; }
-  .doc summary { color: var(--text); font-weight: 700; font-size: 1.05rem; padding: 1rem; }
-  .doc .doc-body { padding: 0 1rem 1rem; }
-  .doc p, .doc li { line-height: 1.55; }
-  .doc p { margin: 0 0 .7rem; }
-  .doc ul { margin: 0 0 .7rem; padding-left: 1.2rem; }
-  .doc li { margin-bottom: .35rem; }
-  .table-wrap { overflow-x: auto; margin: 0 0 .7rem; }
-  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
-  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { color: var(--muted); font-weight: 600; }
   .code { position: relative; }
   .code pre { margin: 0 0 .7rem; padding-top: 2.2rem; }
   .code button { position: absolute; top: .4rem; right: .4rem; font-size: .8rem; padding: .2rem .6rem; }
-  .cta { display: block; margin: 1.2rem auto 0; padding: .7rem 1.4rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
   button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-  .field { display: grid; gap: .3rem; margin-bottom: .8rem; }
-  .field label { font-size: .9rem; font-weight: 600; }
-  .field select, .field input { width: 100%; border-color: var(--border-strong); }
-  .primary { display: block; width: 100%; padding: .8rem; font-size: 1.1rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
-  .primary:disabled { opacity: .5; cursor: not-allowed; }
-  .primary[aria-busy="true"] { opacity: .75; cursor: wait; }
-  .scoreboard { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; margin: 1.2rem 0 .4rem; }
-  .score { font: 700 4.5rem/1.1 var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-  .score-label { font-size: 1.25rem; color: var(--muted); }
-  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-  .tickets td:first-child { min-width: 14rem; }
-  .tickets .tid { font: 600 .75rem var(--font-mono); color: var(--muted); display: block; }
-  .tickets tr.fail td { background: var(--bad-soft); }
-  .tickets td.pending { color: var(--muted); }
-  .tickets td.arrived { animation: arrive var(--dur-fast) ease-out; }
-  @keyframes arrive { from { opacity: 0; } to { opacity: 1; } }
-  .badge { display: inline-block; border-radius: 9999px; font-size: .75rem; font-weight: 600; padding: .15rem .5rem; white-space: nowrap; }
-  .badge.ok { color: var(--ok); background: var(--ok-soft); }
-  .badge.bad { color: var(--bad); background: var(--bad-soft); }
-  .badge.warn { color: var(--warn); background: var(--warn-soft); }
-  .threshold { margin: .8rem 0 1rem; }
-  .threshold .slider { display: flex; align-items: center; gap: .8rem; }
-  .threshold input[type="range"] { flex: 1; accent-color: var(--accent); }
-  .threshold .value { font: 700 1.25rem var(--font-mono); min-width: 3.5rem; text-align: right; }
-  .counters { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-top: .8rem; }
-  .counter { border: 1px solid var(--line); border-radius: 10px; padding: .6rem .8rem; }
-  .counter b { display: block; font: 700 2rem/1.1 var(--font-mono); font-variant-numeric: tabular-nums; }
-  .counter span { font-size: .85rem; color: var(--muted); }
-  .counter.auto b { color: var(--ok); } .counter.review b { color: var(--warn); } .counter.wrong b { color: var(--bad); }
-  @media (max-width: 520px) { .counters { grid-template-columns: 1fr; } }
-  @media (prefers-reduced-motion: reduce) { .tickets td.arrived { animation: none; } }
 </style>
 </head>
 <body>
@@ -134,15 +80,7 @@
     <option value="en">English</option>
   </select>
 </header>
-<nav class="tabs" role="tablist" hidden>
-  <button role="tab" id="tab-challenge" data-tab="challenge" data-i18n="tabChallenge"></button>
-  <button role="tab" id="tab-playground" data-tab="playground" data-i18n="tabPlayground"></button>
-  <button role="tab" id="tab-docs" data-tab="docs" data-i18n="tabDocs"></button>
-</nav>
-
-<main id="view-challenge" hidden></main>
-
-<main id="view-playground" hidden>
+<main id="view-playground">
 <div class="step-nav top">
   <button class="nav-prev" type="button"></button>
   <button class="nav-home" type="button"></button>
@@ -178,14 +116,8 @@
 </div>
 </main>
 
-<main id="view-docs" hidden></main>
-
 <script type="module">
-  import { I18N, resolve, docsFor, snippetFor } from './copy.js';
-  import { QUESTIONS, LEVELS, TICKETS } from './challenge/tickets.js';
-  import { judge, summarize, canRun, bucket } from './challenge/score.js';
-  import { pool } from './challenge/pool.js';
-  import { costParts } from './pricing.js';
+  import { I18N, resolve, snippetFor } from './copy.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -333,231 +265,12 @@
     );
   };
 
-  const costLine = (what, ms, inputTokens) => {
-    const { seconds, tokens, usd } = costParts({ ms, inputTokens }, t().locale);
-    return t().costFooter(what, seconds, tokens, usd);
-  };
-
-  const openDocs = (id) => {
-    setTab('docs');
-    document.getElementById(`doc-${id}`)?.scrollIntoView({ block: 'start' });
-  };
-
-  const renderDocs = () => {
-    const docs = docsFor(lang);
-    const section = (d) => h('details', { className: 'card doc', id: `doc-${d.id}`, open: true },
-      h('summary', { textContent: d.title }),
-      h('div', { className: 'doc-body' },
-        (d.lead ?? []).map((p) => h('p', { textContent: p })),
-        d.list ? h('ul', {}, d.list.map((li) => h('li', { textContent: li }))) : null,
-        (d.code ?? []).map((src) => h('div', { className: 'code' },
-          h('button', { textContent: t().copy, onclick: async (e) => {
-            try { await navigator.clipboard.writeText(src); e.target.textContent = t().copied; setTimeout(() => (e.target.textContent = t().copy), 1500); } catch {}
-          } }),
-          h('pre', { textContent: src }))),
-        d.table ? h('div', { className: 'table-wrap' }, h('table', {},
-          h('thead', {}, h('tr', {}, d.table.head.map((c) => h('th', { textContent: c })))),
-          h('tbody', {}, d.table.rows.map((r) => h('tr', {}, r.map((c) => h('td', { textContent: c }))))))) : null,
-        (d.body ?? []).map((p) => h('p', { textContent: p })),
-      ));
-    $('view-docs').replaceChildren(
-      h('p', { className: 'intro', textContent: t().docsIntro }),
-      h('nav', { className: 'toc' }, h('span', { className: 'hint', textContent: t().docsToc }), docs.map((d) => h('a', { href: `#doc-${d.id}`, textContent: d.title }))),
-      ...docs.map(section),
-      h('button', { className: 'cta', textContent: t().tryIt, onclick: () => { setTab('playground'); scrollTo(0, 0); } }),
-    );
-  };
-
-  const CONCURRENCY = 5;
-  const challenge = { qid: 'team', text: QUESTIONS.team.instructions, rows: [], running: false, threshold: 0.5 };
-  let rowEls = [];
-  const resetRows = () => { challenge.rows = TICKETS.map((tk) => ({ id: tk.id, status: 'idle', expected: tk.expected[challenge.qid] })); };
-  resetRows();
-
-  const answerLabel = (value) => {
-    if (value == null) return '';
-    return QUESTIONS[challenge.qid].type === 'boolean' ? (value ? t().yes : t().no) : String(value);
-  };
-  const percent = (p) => (p == null ? '—' : new Intl.NumberFormat(t().locale, { style: 'percent', maximumFractionDigits: 0 }).format(p));
-
-  const countUp = (el, target, total) => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = `${target}/${total}`; return; }
-    const start = performance.now();
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / 700);
-      el.textContent = `${Math.round((1 - (1 - p) ** 3) * target)}/${total}`;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-
-  const paintRow = (i) => {
-    const row = challenge.rows[i];
-    const el = rowEls[i];
-    if (!el) return;
-    const done = row.status === 'done';
-    const settled = done || row.status === 'error';
-    el.expected.textContent = answerLabel(row.expected);
-    el.tr.className = done && !row.ok ? 'fail' : '';
-    for (const td of [el.jev, el.conf, el.result]) td.className = row.status === 'pending' ? 'pending' : settled ? 'arrived' : '';
-    el.conf.classList.add('num');
-    el.jev.textContent = done ? answerLabel(row.answer) : row.status === 'pending' ? '…' : '';
-    el.conf.textContent = done ? percent(row.confidence) : '';
-    const result = done
-      ? [h('span', { className: `badge ${row.ok ? 'ok' : 'bad'}`, textContent: row.ok ? t().badgeOk : t().badgeFail }),
-        ...((row.confidence ?? 0) < challenge.threshold ? [' ', h('span', { className: 'badge warn', textContent: t().badgeReview })] : [])]
-      : row.status === 'error'
-        ? [h('span', { className: 'badge bad', textContent: t().errRowFailed }), ' ', h('button', { className: 'link', type: 'button', textContent: t().retry, disabled: challenge.running, onclick: () => retry(i) })]
-        : [];
-    el.result.replaceChildren(...result);
-  };
-
-  const paintProgress = () => {
-    const btn = $('ch-run');
-    if (!btn) return;
-    const s = summarize(challenge.rows);
-    const ready = canRun(challenge.text);
-    $('ch-empty').hidden = ready;
-    btn.disabled = !ready || challenge.running;
-    btn.setAttribute('aria-busy', String(challenge.running));
-    btn.textContent = challenge.running ? t().challengeProgress(s.answered + s.errors, s.total) : t().challengeRun(s.total);
-    $('ch-score').hidden = !challenge.running && s.answered === 0;
-    $('ch-score-num').textContent = challenge.running ? `—/${s.total}` : `${s.correct}/${s.answered}`;
-    $('ch-errors').hidden = challenge.running || s.errors === 0 || s.answered === 0;
-    $('ch-errors').textContent = t().challengeErrorsNote(s.errors);
-    $('ch-all-failed').hidden = challenge.running || s.errors === 0 || s.answered > 0;
-    $('ch-cost').hidden = challenge.running || s.answered === 0;
-    $('ch-cost').textContent = costLine(t().ticketsCount(s.answered), challenge.ms,
-      challenge.rows.reduce((sum, r) => sum + (r.inputTokens ?? 0), 0));
-    paintThreshold(s);
-    return s;
-  };
-
-  const paintThreshold = (s = summarize(challenge.rows)) => {
-    const box = $('ch-threshold');
-    if (!box) return;
-    box.hidden = challenge.running || s.answered === 0;
-    const b = bucket(challenge.rows, challenge.threshold);
-    $('ch-th-value').textContent = new Intl.NumberFormat(t().locale, { minimumFractionDigits: 2 }).format(challenge.threshold);
-    $('ch-auto').textContent = b.auto;
-    $('ch-review').textContent = b.review;
-    $('ch-wrong').textContent = b.wrongAuto;
-  };
-
-  const askOne = async (i) => {
-    const qid = challenge.qid;
-    const { trap, ...question } = QUESTIONS[qid];
-    const ticket = TICKETS[i];
-    challenge.rows[i] = { id: ticket.id, status: 'pending', expected: ticket.expected[qid] };
-    paintRow(i);
-    paintProgress();
-    try {
-      const r = await fetch('/evaluate', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ state: ticket.text, questions: { [qid]: { ...question, instructions: challenge.text.trim() } } }),
-      });
-      const body = await r.json();
-      if (!r.ok || !body.answers?.[qid]) throw new Error(body.error || `HTTP ${r.status}`);
-      challenge.rows[i] = { id: ticket.id, status: 'done', expected: ticket.expected[qid], inputTokens: body.usage?.inputTokens, ...judge(question, body.answers[qid], ticket.expected[qid], LEVELS[qid]) };
-    } catch {
-      challenge.rows[i] = { id: ticket.id, status: 'error', expected: ticket.expected[qid] };
-    }
-    paintRow(i);
-    paintProgress();
-  };
-
-  const runChallenge = async () => {
-    if (!canRun(challenge.text) || challenge.running) return;
-    challenge.running = true;
-    challenge.ms = null;
-    resetRows();
-    renderChallenge();
-    const started = performance.now();
-    await pool(TICKETS, CONCURRENCY, (_, i) => askOne(i));
-    challenge.ms = Math.round(performance.now() - started);
-    challenge.running = false;
-    renderChallenge();
-    const s = summarize(challenge.rows);
-    if (s.answered) countUp($('ch-score-num'), s.correct, s.answered);
-  };
-
-  const retry = async (i) => {
-    await askOne(i);
-    rowEls.forEach((_, k) => paintRow(k));
-  };
-
-  const renderChallenge = () => {
-    const q = QUESTIONS[challenge.qid];
-    const select = h('select', {
-      id: 'ch-q',
-      disabled: challenge.running,
-      onchange: (e) => { challenge.qid = e.target.value; challenge.text = QUESTIONS[challenge.qid].instructions; resetRows(); renderChallenge(); },
-    }, Object.entries(QUESTIONS).map(([id, qq]) => h('option', { value: id, textContent: qq.instructions, selected: id === challenge.qid })));
-    const input = h('input', { id: 'ch-text', value: challenge.text, disabled: challenge.running, oninput: (e) => { challenge.text = e.target.value; paintProgress(); } });
-    rowEls = TICKETS.map((tk) => {
-      const cells = { expected: h('td'), jev: h('td'), conf: h('td'), result: h('td') };
-      return { ...cells, tr: h('tr', {}, h('td', {}, h('span', { className: 'tid', textContent: tk.id }), tk.text), cells.expected, cells.jev, cells.conf, cells.result) };
-    });
-    $('view-challenge').replaceChildren(
-      h('h2', { textContent: t().challengeTitle }),
-      h('p', { className: 'intro', textContent: t().challengeIntro_plain }),
-      h('div', { className: 'card' },
-        h('div', { className: 'field' }, h('label', { htmlFor: 'ch-q', textContent: t().challengeSuggested }), select),
-        h('div', { className: 'field' },
-          h('label', { htmlFor: 'ch-text', textContent: t().challengeQuestion }),
-          input,
-          h('p', { id: 'ch-empty', className: 'error', textContent: t().errEmptyQuestion, hidden: true })),
-        q.trap ? h('p', { className: 'hint', textContent: t().challengeTrapNote }) : null,
-        h('button', { id: 'ch-run', className: 'primary', type: 'button', onclick: runChallenge }),
-      ),
-      h('div', { id: 'ch-score', className: 'scoreboard', hidden: true, ariaLive: 'polite' },
-        h('span', { id: 'ch-score-num', className: 'score' }),
-        h('span', { className: 'score-label', textContent: t().challengeScoreLabel }),
-        h('button', { className: 'link', type: 'button', textContent: t().howToRead, onclick: () => openDocs('results') })),
-      h('p', { id: 'ch-cost', className: 'meta num', hidden: true }),
-      h('div', { id: 'ch-threshold', className: 'card threshold', hidden: true },
-        h('label', { htmlFor: 'ch-th', className: 'h-label', textContent: t().thresholdLabel }),
-        h('div', { className: 'slider' },
-          h('input', { id: 'ch-th', type: 'range', min: '0.5', max: '0.95', step: '0.05', value: String(challenge.threshold), oninput: (e) => {
-            challenge.threshold = Number(e.target.value);
-            paintThreshold();
-            rowEls.forEach((_, i) => paintRow(i));
-          } }),
-          h('span', { id: 'ch-th-value', className: 'value', ariaLive: 'polite' })),
-        h('div', { className: 'counters' },
-          h('div', { className: 'counter auto' }, h('b', { id: 'ch-auto' }), h('span', { textContent: t().thresholdAuto })),
-          h('div', { className: 'counter review' }, h('b', { id: 'ch-review' }), h('span', { textContent: t().thresholdReview })),
-          h('div', { className: 'counter wrong' }, h('b', { id: 'ch-wrong' }), h('span', { textContent: t().thresholdWrongAuto }))),
-        h('p', { className: 'hint', textContent: t().thresholdHelp_plain })),
-      h('p', { id: 'ch-errors', className: 'hint', hidden: true }),
-      h('div', { id: 'ch-all-failed', className: 'card fail', hidden: true, textContent: t().errAllFailed }),
-      h('div', { className: 'table-wrap' }, h('table', { className: 'tickets' },
-        h('thead', {}, h('tr', {}, [t().colTicket, t().colExpected, t().colJev, t().colConfidence, t().colResult].map((c) => h('th', { textContent: c })))),
-        h('tbody', {}, rowEls.map((r) => r.tr)))),
-    );
-    rowEls.forEach((_, i) => paintRow(i));
-    paintProgress();
-  };
-
-  const setTab = (tab) => {
-    for (const name of ['challenge', 'playground', 'docs']) {
-      $(`view-${name}`).hidden = name !== tab;
-      $(`tab-${name}`).setAttribute('aria-selected', String(name === tab));
-    }
-    try { localStorage.setItem('tab', tab); } catch {}
-  };
-
-  document.querySelectorAll('[data-tab]').forEach((b) => (b.onclick = () => setTab(b.dataset.tab)));
-
   const setLang = (next) => {
     lang = next;
     document.documentElement.lang = lang;
     $('lang').value = lang;
     document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t()[el.dataset.i18n]));
     $('state').placeholder = t().statePlaceholder;
-    renderDocs();
-    renderChallenge();
     byStep = {};
     runs = {};
     renderStep();
@@ -597,7 +310,6 @@
   try { saved = localStorage.getItem('lang'); step = Math.max(0, Number(localStorage.getItem('step')) || 0); } catch {}
   step = Math.min(step, I18N.en.lessons.length - 1);
   setLang(I18N[saved] ? saved : navigator.language.startsWith('es') ? 'es' : 'en');
-  setTab('playground');
 </script>
 </body>
 </html>
