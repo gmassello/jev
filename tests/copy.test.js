@@ -80,3 +80,9 @@ test('the glossary covers the same terms in es and en, with one definition each'
   assert.deepEqual(rows('es').map((r) => r.length), rows('en').map((r) => r.length));
   for (const term of ['state', 'question', 'criteria', 'score', 'usage']) assert.ok(rows('es').some((r) => r[0] === term) && rows('en').some((r) => r[0] === term), term);
 });
+
+test('the when-to-use step has the same rows in es and en', () => {
+  const step = (lang) => I18N[lang].lessons.find((l) => l.id === 'when');
+  assert.equal(step('es').table.rows.length, step('en').table.rows.length);
+  for (const lang of ['es', 'en']) for (const r of step(lang).table.rows) assert.equal(r.length, 3);
+});

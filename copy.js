@@ -51,29 +51,6 @@ export const I18N = {
         ],
       },
       {
-        id: 'glossary', kind: 'theory', title: 'Conceptos',
-        theory: ['Las palabras que vas a ver en la lección. Si alguna no queda clara, volvé a este paso.'],
-        table: {
-          head: ['Concepto', 'Qué es'],
-          rows: [
-            ['state', null, 'El texto (o JSON) que Jev lee.'],
-            ['question', null, 'Lo que le preguntás, con su tipo: boolean, choice o score.'],
-            ['boolean', null, 'Pregunta de sí o no. Devuelve la probabilidad de que sea sí.'],
-            ['choice', null, 'Elegir una opción de una lista. Devuelve la elegida y la probabilidad de cada una.'],
-            ['score', null, 'Elegir un nivel de una escala ordenada. Devuelve la posición promedio, contando desde 0.'],
-            ['criteria', null, 'Qué significa cada respuesta posible. Cambia según el tipo de pregunta.'],
-            ['Opciones', null, 'En choice: la lista de respuestas posibles, cada una con una descripción opcional.'],
-            ['Niveles', null, 'En score: los escalones de la escala, de menor a mayor, cada uno con su descripción.'],
-            ['Sí y no', null, 'En boolean: la definición de qué cuenta como sí y qué cuenta como no.'],
-            ['Probabilidad', null, 'De 0 a 1, qué tan probable es una respuesta.'],
-            ['Confianza', null, 'La probabilidad de la respuesta que eligió Jev.'],
-            ['Umbral', null, 'La confianza mínima para que tu sistema actúe solo; por debajo, revisa una persona.'],
-            ['Varias preguntas', null, 'Se mandan en una sola llamada, cada una con su id, y vuelve una respuesta por id.'],
-            ['usage', null, 'Los tokens que leyó Jev en la llamada; el costo se calcula sobre los de entrada.'],
-          ],
-        },
-      },
-      {
         id: 'boolean', kind: 'ask', title: 'Sí / No',
         theory: [
           'La pregunta más simple: algo que se responde con sí o no.',
@@ -141,6 +118,20 @@ export const I18N = {
         question: { type: 'choice', text: '¿A qué área va este ticket?', options: ['facturacion', 'envios', 'tecnica'] },
       },
       {
+        id: 'when', kind: 'theory', title: 'Cuándo usar Jev y cuándo no',
+        theory: ['Jev contesta preguntas cerradas. Si lo que necesitás es una decisión entre opciones conocidas, encaja; si necesitás texto o datos nuevos, no.'],
+        table: {
+          head: ['Sirve para', 'Mejor otra cosa'],
+          rows: [
+            ['Rutear tickets a un área', null, 'Redactar la respuesta al cliente (un LLM)'],
+            ['Moderar contenido', null, 'Extraer campos a un JSON (un LLM con salida estructurada)'],
+            ['Evaluar si un LLM inventó datos', null, 'Cálculos exactos (código)'],
+            ['Priorizar por urgencia', null, 'Decidir solo, sin umbral ni revisión humana'],
+          ],
+        },
+        outro: 'Si la salida es una decisión cerrada, Jev. Si es texto libre, un LLM. Si es una regla fija, código.',
+      },
+      {
         id: 'similar', kind: 'theory', title: 'Proyectos parecidos',
         theory: ['Jev no es el único. Estos proyectos resuelven el mismo problema, o una parte.'],
         table: {
@@ -156,6 +147,29 @@ export const I18N = {
           ],
         },
         outro: 'Los más parecidos son Clef, de Cloudflare (compatible con la API de Jev y de código abierto), y Strands Decider, de AWS (abierto y pensado para correr local). Los demás sirven si tu caso es de un solo tipo, como moderación o etiquetas fijas. En cualquier caso, compará con tus propios datos antes de elegir.',
+      },
+      {
+        id: 'glossary', kind: 'theory', title: 'Conceptos',
+        theory: ['Un repaso de las palabras que aparecieron en la lección.'],
+        table: {
+          head: ['Concepto', 'Qué es'],
+          rows: [
+            ['state', null, 'El texto (o JSON) que Jev lee.'],
+            ['question', null, 'Lo que le preguntás, con su tipo: boolean, choice o score.'],
+            ['boolean', null, 'Pregunta de sí o no. Devuelve la probabilidad de que sea sí.'],
+            ['choice', null, 'Elegir una opción de una lista. Devuelve la elegida y la probabilidad de cada una.'],
+            ['score', null, 'Elegir un nivel de una escala ordenada. Devuelve la posición promedio, contando desde 0.'],
+            ['criteria', null, 'Qué significa cada respuesta posible. Cambia según el tipo de pregunta.'],
+            ['Opciones', null, 'En choice: la lista de respuestas posibles, cada una con una descripción opcional.'],
+            ['Niveles', null, 'En score: los escalones de la escala, de menor a mayor, cada uno con su descripción.'],
+            ['Sí y no', null, 'En boolean: la definición de qué cuenta como sí y qué cuenta como no.'],
+            ['Probabilidad', null, 'De 0 a 1, qué tan probable es una respuesta.'],
+            ['Confianza', null, 'La probabilidad de la respuesta que eligió Jev.'],
+            ['Umbral', null, 'La confianza mínima para que tu sistema actúe solo; por debajo, revisa una persona.'],
+            ['Varias preguntas', null, 'Se mandan en una sola llamada, cada una con su id, y vuelve una respuesta por id.'],
+            ['usage', null, 'Los tokens que leyó Jev en la llamada; el costo se calcula sobre los de entrada.'],
+          ],
+        },
       },
       {
         id: 'code', kind: 'code', title: 'Llevalo a tu código',
@@ -242,29 +256,6 @@ else console.log('A revisión humana:', probabilities);
         ],
       },
       {
-        id: 'glossary', kind: 'theory', title: 'Concepts',
-        theory: ['The words you will see in the lesson. If one is unclear, come back to this step.'],
-        table: {
-          head: ['Concept', 'What it is'],
-          rows: [
-            ['state', null, 'The text (or JSON) that Jev reads.'],
-            ['question', null, 'What you ask, with its type: boolean, choice or score.'],
-            ['boolean', null, 'A yes or no question. Returns the probability that the answer is yes.'],
-            ['choice', null, 'Pick one option from a list. Returns the chosen one and the probability of each.'],
-            ['score', null, 'Pick a level on an ordered scale. Returns the average position, counting from 0.'],
-            ['criteria', null, 'What each possible answer means. It changes with the question type.'],
-            ['Options', null, 'In choice: the list of possible answers, each with an optional description.'],
-            ['Levels', null, 'In score: the steps of the scale, from lowest to highest, each with its description.'],
-            ['Yes and no', null, 'In boolean: the definition of what counts as yes and what counts as no.'],
-            ['Probability', null, 'From 0 to 1, how likely an answer is.'],
-            ['Confidence', null, 'The probability of the answer Jev picked.'],
-            ['Threshold', null, 'The minimum confidence for your system to act on its own; below it, a person reviews.'],
-            ['Several questions', null, 'Sent in a single call, each with its id, and one answer comes back per id.'],
-            ['usage', null, 'The tokens Jev read in the call; cost is computed on the input ones.'],
-          ],
-        },
-      },
-      {
         id: 'boolean', kind: 'ask', title: 'Yes / No',
         theory: [
           'The simplest question: something answered with yes or no.',
@@ -332,6 +323,20 @@ else console.log('A revisión humana:', probabilities);
         question: { type: 'choice', text: 'Which team does this ticket go to?', options: ['billing', 'shipping', 'tech'] },
       },
       {
+        id: 'when', kind: 'theory', title: 'When to use Jev and when not',
+        theory: ['Jev answers closed questions. If you need a decision between known options, it fits; if you need new text or data, it does not.'],
+        table: {
+          head: ['Good for', 'Better with something else'],
+          rows: [
+            ['Routing tickets to a team', null, 'Writing the reply to the customer (an LLM)'],
+            ['Moderating content', null, 'Extracting fields into JSON (an LLM with structured output)'],
+            ['Checking whether an LLM made things up', null, 'Exact calculations (code)'],
+            ['Prioritizing by urgency', null, 'Deciding alone, with no threshold or human review'],
+          ],
+        },
+        outro: 'If the output is a closed decision, Jev. If it is free text, an LLM. If it is a fixed rule, code.',
+      },
+      {
         id: 'similar', kind: 'theory', title: 'Similar projects',
         theory: ['Jev is not alone. These projects solve the same problem, or part of it.'],
         table: {
@@ -347,6 +352,29 @@ else console.log('A revisión humana:', probabilities);
           ],
         },
         outro: 'The closest ones are Cloudflare Clef (Jev-API compatible and open source) and AWS Strands Decider (open and built to run locally). The others work if your case is a single kind, like moderation or fixed labels. Either way, compare them on your own data before choosing.',
+      },
+      {
+        id: 'glossary', kind: 'theory', title: 'Concepts',
+        theory: ['A recap of the words that showed up in the lesson.'],
+        table: {
+          head: ['Concept', 'What it is'],
+          rows: [
+            ['state', null, 'The text (or JSON) that Jev reads.'],
+            ['question', null, 'What you ask, with its type: boolean, choice or score.'],
+            ['boolean', null, 'A yes or no question. Returns the probability that the answer is yes.'],
+            ['choice', null, 'Pick one option from a list. Returns the chosen one and the probability of each.'],
+            ['score', null, 'Pick a level on an ordered scale. Returns the average position, counting from 0.'],
+            ['criteria', null, 'What each possible answer means. It changes with the question type.'],
+            ['Options', null, 'In choice: the list of possible answers, each with an optional description.'],
+            ['Levels', null, 'In score: the steps of the scale, from lowest to highest, each with its description.'],
+            ['Yes and no', null, 'In boolean: the definition of what counts as yes and what counts as no.'],
+            ['Probability', null, 'From 0 to 1, how likely an answer is.'],
+            ['Confidence', null, 'The probability of the answer Jev picked.'],
+            ['Threshold', null, 'The minimum confidence for your system to act on its own; below it, a person reviews.'],
+            ['Several questions', null, 'Sent in a single call, each with its id, and one answer comes back per id.'],
+            ['usage', null, 'The tokens Jev read in the call; cost is computed on the input ones.'],
+          ],
+        },
       },
       {
         id: 'code', kind: 'code', title: 'Take it to your code',
