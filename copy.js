@@ -80,14 +80,6 @@ export const I18N = {
     errServer: 'Jev no pudo responder',
     lessons: [
       {
-        id: 'system-one', kind: 'theory', title: 'Pensar rápido, pensar despacio',
-        theory: [
-          'El psicólogo Daniel Kahneman describe dos formas de pensar. El Sistema 1 es rápido y automático: mirás una cara y sabés al instante si la persona está enojada. El Sistema 2 es lento y deliberado: lo usás para calcular 17 × 24 o seguir un razonamiento paso a paso.',
-          'Los LLM son Sistema 2: escriben, razonan y explican, pero son lentos y caros para decisiones simples. Jev es Sistema 1: un juicio de un vistazo, en menos de un segundo y por una fracción del costo.',
-          'Por eso Jev sirve para las miles de decisiones chicas de un sistema (¿es urgente?, ¿a qué equipo va?, ¿es spam?) y no para las que necesitan pensar en varios pasos.',
-        ],
-      },
-      {
         id: 'what', kind: 'theory', title: '¿Qué es Jev?',
         theory: [
           'Jev es un modelo que evalúa, no que conversa. Le das un texto y una pregunta cerrada, y te devuelve una respuesta con su probabilidad.',
@@ -228,14 +220,6 @@ export const I18N = {
     errOptions: 'Needs at least 2 options with text.',
     errServer: 'Jev could not answer',
     lessons: [
-      {
-        id: 'system-one', kind: 'theory', title: 'Thinking fast, thinking slow',
-        theory: [
-          'Psychologist Daniel Kahneman describes two ways of thinking. System 1 is fast and automatic: you look at a face and instantly know whether the person is angry. System 2 is slow and deliberate: you use it to compute 17 × 24 or follow a step-by-step argument.',
-          'LLMs are System 2: they write, reason and explain, but they are slow and expensive for simple decisions. Jev is System 1: a judgment at a glance, in under a second and for a fraction of the cost.',
-          'That is why Jev fits the thousands of small decisions in a system (is it urgent?, which team does it go to?, is it spam?) and not the ones that need several steps of reasoning.',
-        ],
-      },
       {
         id: 'what', kind: 'theory', title: 'What is Jev?',
         theory: [

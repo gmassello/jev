@@ -36,15 +36,14 @@ Variables opcionales: `PORT` (por defecto `3000`) y `JEV_MODEL` (por defecto `ty
 
 ## Cómo usar el playground
 
-El playground es una lección de siete pasos que va de la idea más simple a tu propio código. Se avanza con *Siguiente paso →* y se vuelve con *← Anterior*; la app recuerda dónde quedaste.
+El playground es una lección de seis pasos que va de la idea más simple a tu propio código. Se avanza con *Siguiente paso →* y se vuelve con *← Anterior*; la app recuerda dónde quedaste.
 
-1. **Pensar rápido, pensar despacio**: solo teoría. El Sistema 1 (rápido, automático) y el Sistema 2 (lento, deliberado) de Kahneman; Jev es Sistema 1 y los LLM, Sistema 2.
-2. **¿Qué es Jev?**: solo teoría. Un texto, una pregunta cerrada y una respuesta con probabilidad.
-3. **Sí / No**: un caso de soporte. La respuesta es una probabilidad, y un umbral decide qué se automatiza.
-4. **Elegir una opción**: un mail para clasificar. La probabilidad se reparte entre las opciones.
-5. **Escala**: una reseña puntuada de 1 a 5 estrellas. El score es la posición promedio, desde 0.
-6. **Opciones con definición**: un ticket que se rutea a un equipo, con una descripción corta por opción que viaja en `criteria`.
-7. **Llevalo a tu código**: la llamada a `experimental_evaluate` con la pregunta del paso 6, lista para copiar.
+1. **¿Qué es Jev?**: solo teoría. Un texto, una pregunta cerrada y una respuesta con probabilidad.
+2. **Sí / No**: un caso de soporte. La respuesta es una probabilidad, y un umbral decide qué se automatiza.
+3. **Elegir una opción**: un mail para clasificar. La probabilidad se reparte entre las opciones.
+4. **Escala**: una reseña puntuada de 1 a 5 estrellas. El score es la posición promedio, desde 0.
+5. **Opciones con definición**: un ticket que se rutea a un equipo, con una descripción corta por opción que viaja en `criteria`.
+6. **Llevalo a tu código**: la llamada a `experimental_evaluate` con la pregunta del paso 5, lista para copiar.
 
 Cada paso con pregunta trae una explicación corta, un texto y una pregunta ya cargados (los dos editables), la respuesta con una frase que la explica, y, detrás de *Ver el JSON de la llamada*, el request y la respuesta exactos. La interfaz está en inglés y en español (selector arriba a la derecha) y siempre se ve en modo claro.
 
