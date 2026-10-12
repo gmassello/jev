@@ -62,7 +62,7 @@ test('the similar-projects step has the same rows and links in es and en, led by
   const table = (lang) => I18N[lang].lessons.find((l) => l.id === 'similar').table;
   const [es, en] = [table('es'), table('en')];
   assert.deepEqual(es.rows.map((r) => r[1]), en.rows.map((r) => r[1]));
-  for (const t of [es, en]) for (const r of t.rows) assert.equal(r.length, 4);
+  for (const t of [es, en]) for (const r of t.rows) assert.equal(r.length, t.head.length + 1);
   assert.deepEqual(es.rows.slice(0, 2).map((r) => r[0]), ['Cloudflare Clef', 'AWS Strands Decider 2B']);
 });
 
@@ -72,4 +72,11 @@ test('the code step gives three commands and a runnable evaluate call with a 0.9
     assert.equal(step.commands.length, 3, lang);
     for (const part of ['experimental_evaluate', "model: 'typesafe-ai/jev'", '>= 0.9']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
   }
+});
+
+test('the glossary covers the same terms in es and en, with one definition each', () => {
+  const rows = (lang) => I18N[lang].lessons.find((l) => l.id === 'glossary').table.rows;
+  assert.equal(rows('es').length, rows('en').length);
+  assert.deepEqual(rows('es').map((r) => r.length), rows('en').map((r) => r.length));
+  for (const term of ['state', 'question', 'criteria', 'score', 'usage']) assert.ok(rows('es').some((r) => r[0] === term) && rows('en').some((r) => r[0] === term), term);
 });

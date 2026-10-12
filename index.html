@@ -205,10 +205,9 @@
       ...L.theory.map((p) => h('p', { textContent: p })),
       ...(L.table ? [h('div', { className: 'table-wrap' }, h('table', {},
         h('thead', {}, h('tr', {}, L.table.head.map((c) => h('th', { textContent: c })))),
-        h('tbody', {}, L.table.rows.map(([name, url, what, diff]) => h('tr', {},
+        h('tbody', {}, L.table.rows.map(([name, url, ...cells]) => h('tr', {},
           h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
-          h('td', { textContent: what }),
-          h('td', { textContent: diff }))))))] : []),
+          cells.map((c) => h('td', { textContent: c })))))))] : []),
       ...(L.commands ? [h('ol', { className: 'commands' }, L.commands.map((c) => h('li', {}, h('code', { textContent: c }))))] : []),
       ...(L.code ? [h('div', { className: 'code' },
         h('button', { type: 'button', textContent: t().copy, onclick: async (e) => {

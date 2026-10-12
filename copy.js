@@ -166,6 +166,23 @@ else console.log('A revisión humana:', probabilities);
 `,
         outro: 'Cambiá el texto, las opciones o el umbral, y ya tenés tu primer router con Jev.',
       },
+      {
+        id: 'glossary', kind: 'theory', title: 'Conceptos',
+        theory: ['Un repaso de las palabras que aparecieron en la lección.'],
+        table: {
+          head: ['Concepto', 'Qué es'],
+          rows: [
+            ['state', null, 'El texto (o JSON) que Jev lee.'],
+            ['question', null, 'Lo que le preguntás, con su tipo: boolean, choice o score.'],
+            ['criteria', null, 'Las opciones (choice), los niveles (score) o la definición de sí y de no (boolean).'],
+            ['Probabilidad', null, 'De 0 a 1, qué tan probable es una respuesta.'],
+            ['Confianza', null, 'La probabilidad de la respuesta que eligió Jev.'],
+            ['Umbral', null, 'La confianza mínima para que tu sistema actúe solo; por debajo, revisa una persona.'],
+            ['score', null, 'En una escala, la posición promedio contando desde 0.'],
+            ['usage', null, 'Los tokens que leyó Jev en la llamada; el costo se calcula sobre los de entrada.'],
+          ],
+        },
+      },
     ],
   },
   en: {
@@ -334,6 +351,23 @@ if (probabilities[choice] >= 0.9) console.log('Route to', choice);
 else console.log('Send to human review:', probabilities);
 `,
         outro: 'Change the text, the options or the threshold, and you have your first router with Jev.',
+      },
+      {
+        id: 'glossary', kind: 'theory', title: 'Concepts',
+        theory: ['A recap of the words that showed up in the lesson.'],
+        table: {
+          head: ['Concept', 'What it is'],
+          rows: [
+            ['state', null, 'The text (or JSON) that Jev reads.'],
+            ['question', null, 'What you ask, with its type: boolean, choice or score.'],
+            ['criteria', null, 'The options (choice), the levels (score) or the definition of yes and no (boolean).'],
+            ['Probability', null, 'From 0 to 1, how likely an answer is.'],
+            ['Confidence', null, 'The probability of the answer Jev picked.'],
+            ['Threshold', null, 'The minimum confidence for your system to act on its own; below it, a person reviews.'],
+            ['score', null, 'On a scale, the average position counting from 0.'],
+            ['usage', null, 'The tokens Jev read in the call; cost is computed on the input ones.'],
+          ],
+        },
       },
     ],
   },
