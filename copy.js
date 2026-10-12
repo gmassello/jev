@@ -4,6 +4,8 @@ export const I18N = {
     step2: 'La pregunta',
     step3: 'La respuesta de Jev',
     stepOf: (n, total) => `Paso ${n} de ${total}`,
+    copy: 'Copiar',
+    copied: '¡Copiado!',
     next: 'Siguiente paso →',
     prev: '← Anterior',
     home: '⇤ Inicio',
@@ -133,6 +135,37 @@ export const I18N = {
         },
         outro: 'Los más parecidos son Clef, de Cloudflare (compatible con la API de Jev y de código abierto), y Strands Decider, de AWS (abierto y pensado para correr local). Los demás sirven si tu caso es de un solo tipo, como moderación o etiquetas fijas. En cualquier caso, compará con tus propios datos antes de elegir.',
       },
+      {
+        id: 'code', kind: 'code', title: 'Llevalo a tu código',
+        theory: [
+          'Todo lo que hiciste en el playground es una llamada a experimental_evaluate del AI SDK.',
+          'Este archivo junta lo visto: una pregunta con opciones definidas y el umbral para decidir qué automatizar. Guardalo como jev.mjs y corré estos comandos:',
+        ],
+        commands: ['npm i ai@7.0.113', 'export AI_GATEWAY_API_KEY=...', 'node jev.mjs'],
+        code: `import { experimental_evaluate as evaluate } from 'ai';
+
+const { answers } = await evaluate({
+  model: 'typesafe-ai/jev',
+  state: 'No puedo entrar a mi cuenta desde ayer: me dice que la contraseña es incorrecta.',
+  questions: {
+    area: {
+      type: 'choice',
+      instructions: '¿A qué área va este ticket?',
+      criteria: {
+        facturacion: 'Cobros, facturas y reintegros',
+        tecnica: 'Errores de la web o de la app',
+        cuenta: 'Acceso, seguridad y datos de la cuenta',
+      },
+    },
+  },
+});
+
+const { choice, probabilities } = answers.area;
+if (probabilities[choice] >= 0.9) console.log('Rutear a', choice);
+else console.log('A revisión humana:', probabilities);
+`,
+        outro: 'Cambiá el texto, las opciones o el umbral, y ya tenés tu primer router con Jev.',
+      },
     ],
   },
   en: {
@@ -140,6 +173,8 @@ export const I18N = {
     step2: 'The question',
     step3: 'What Jev answered',
     stepOf: (n, total) => `Step ${n} of ${total}`,
+    copy: 'Copy',
+    copied: 'Copied!',
     next: 'Next step →',
     prev: '← Back',
     home: '⇤ Start',
@@ -268,6 +303,37 @@ export const I18N = {
           ],
         },
         outro: 'The closest ones are Cloudflare Clef (Jev-API compatible and open source) and AWS Strands Decider (open and built to run locally). The others work if your case is a single kind, like moderation or fixed labels. Either way, compare them on your own data before choosing.',
+      },
+      {
+        id: 'code', kind: 'code', title: 'Take it to your code',
+        theory: [
+          'Everything you did in the playground is a call to experimental_evaluate from the AI SDK.',
+          'This file puts it together: a question with defined options and the threshold that decides what to automate. Save it as jev.mjs and run these commands:',
+        ],
+        commands: ['npm i ai@7.0.113', 'export AI_GATEWAY_API_KEY=...', 'node jev.mjs'],
+        code: `import { experimental_evaluate as evaluate } from 'ai';
+
+const { answers } = await evaluate({
+  model: 'typesafe-ai/jev',
+  state: 'I have not been able to log into my account since yesterday: it says my password is wrong.',
+  questions: {
+    area: {
+      type: 'choice',
+      instructions: 'Which team does this ticket go to?',
+      criteria: {
+        billing: 'Charges, invoices and refunds',
+        tech: 'Website or app errors',
+        account: 'Access, security and account data',
+      },
+    },
+  },
+});
+
+const { choice, probabilities } = answers.area;
+if (probabilities[choice] >= 0.9) console.log('Route to', choice);
+else console.log('Send to human review:', probabilities);
+`,
+        outro: 'Change the text, the options or the threshold, and you have your first router with Jev.',
       },
     ],
   },

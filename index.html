@@ -51,7 +51,11 @@
   .nav-next { margin-left: auto; }
   #json { margin-top: 1rem; }
   #json summary { color: var(--accent); }
-  #json pre { background: #101010; color: #f5f6f7; border-color: #101010; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .code { position: relative; margin: 0 0 1rem; }
+  .code button { position: absolute; top: .5rem; right: .5rem; font-size: .8rem; padding: .2rem .6rem; }
+  .commands { padding-left: 1.4rem; line-height: 1.9; }
+  .commands code { font-family: var(--font-mono); background: var(--accent-soft); padding: .1rem .4rem; border-radius: 4px; }
+  .code pre, #json pre { background: #101010; color: #f5f6f7; border-color: #101010; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .opts { display: grid; gap: .4rem; margin-top: .4rem; }
   .opt { display: flex; gap: .4rem; align-items: center; }
   .opt input { flex: 1; }
@@ -205,10 +209,17 @@
           h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
           h('td', { textContent: what }),
           h('td', { textContent: diff }))))))] : []),
+      ...(L.commands ? [h('ol', { className: 'commands' }, L.commands.map((c) => h('li', {}, h('code', { textContent: c }))))] : []),
+      ...(L.code ? [h('div', { className: 'code' },
+        h('button', { type: 'button', textContent: t().copy, onclick: async (e) => {
+          try { await navigator.clipboard.writeText(L.code); e.target.textContent = t().copied; setTimeout(() => (e.target.textContent = t().copy), 1500); } catch {}
+        } }),
+        h('pre', { textContent: L.code }))] : []),
       ...(L.outro ? [h('p', { className: 'explain', textContent: L.outro })] : []),
     );
-    $('ask').hidden = L.kind === 'theory';
-    if (L.kind !== 'theory') {
+    const asks = L.kind === 'ask' || L.kind === 'multi';
+    $('ask').hidden = !asks;
+    if (asks) {
       $('state').value = entry().state;
       lastRun = runs[step] ?? null;
       renderQuestions();

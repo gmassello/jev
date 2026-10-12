@@ -65,3 +65,11 @@ test('the similar-projects step has the same rows and links in es and en, led by
   for (const t of [es, en]) for (const r of t.rows) assert.equal(r.length, 4);
   assert.deepEqual(es.rows.slice(0, 2).map((r) => r[0]), ['Cloudflare Clef', 'AWS Strands Decider 2B']);
 });
+
+test('the code step gives three commands and a runnable evaluate call with a 0.9 threshold', () => {
+  for (const lang of ['es', 'en']) {
+    const step = I18N[lang].lessons.find((l) => l.id === 'code');
+    assert.equal(step.commands.length, 3, lang);
+    for (const part of ['experimental_evaluate', "model: 'typesafe-ai/jev'", '>= 0.9']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
+  }
+});
