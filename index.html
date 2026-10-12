@@ -27,6 +27,8 @@
   textarea { resize: vertical; min-height: 5rem; }
   button { font: inherit; cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: inherit; padding: .4rem .8rem; }
   button:hover { border-color: var(--accent); }
+  .multi-q { margin: 0; font-weight: 600; }
+  .outro { font-weight: 600; }
   .type-badge { display: inline-block; font-size: .8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: .15rem .6rem; margin-bottom: .6rem; }
   .explain { background: var(--accent-soft); border-radius: 6px; padding: .6rem .8rem; margin: .8rem 0 0; line-height: 1.5; }
   .stepper { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin: 1.2rem 0 0; }
@@ -42,7 +44,7 @@
   .nav-next { margin-left: auto; }
   #json { margin-top: 1rem; }
   #json summary { color: var(--accent); }
-  #code pre, #json pre { background: #101010; color: #f5f6f7; border-color: #101010; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  #json pre { background: #101010; color: #f5f6f7; border-color: #101010; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .opts { display: grid; gap: .4rem; margin-top: .4rem; }
   .opt { display: flex; gap: .4rem; align-items: center; }
   .opt input { flex: 1; }
@@ -66,9 +68,6 @@
   details { margin-top: 2rem; }
   summary { cursor: pointer; color: var(--muted); }
   pre { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .75rem; overflow: auto; font: 12px/1.4 ui-monospace, monospace; }
-  .code { position: relative; }
-  .code pre { margin: 0 0 .7rem; padding-top: 2.2rem; }
-  .code button { position: absolute; top: .4rem; right: .4rem; font-size: .8rem; padding: .2rem .6rem; }
   button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 </style>
 </head>
@@ -107,8 +106,6 @@
   </details>
 </div>
 
-<div id="code" hidden></div>
-
 <div class="step-nav">
   <button class="nav-prev" type="button"></button>
   <button class="nav-home" type="button"></button>
@@ -117,7 +114,7 @@
 </main>
 
 <script type="module">
-  import { I18N, resolve, snippetFor } from './copy.js';
+  import { I18N, resolve } from './copy.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -134,11 +131,18 @@
   const t = () => resolve(lang);
   const lessons = () => t().lessons;
   const lesson = () => lessons()[step];
-  const entryAt = (i) => (byStep[i] ??= { state: lessons()[i].state, question: structuredClone(lessons()[i].question) });
+  const entryAt = (i) => (byStep[i] ??= { state: lessons()[i].state, question: structuredClone(lessons()[i].question ?? null) });
+  const isMulti = () => lesson().kind === 'multi';
   const entry = () => entryAt(step);
   const current = () => entry().question;
 
   const renderQuestions = (error) => {
+    if (isMulti()) {
+      return $('questions').replaceChildren(...lesson().questions.map((q) => h('div', { className: 'card' },
+        h('span', { className: 'type-badge', textContent: t().types[q.type] }),
+        h('p', { className: 'multi-q', textContent: q.text }),
+        q.options.length ? h('p', { className: 'hint', textContent: q.options.join(' · ') }) : null)));
+    }
     const q = current();
     const described = Boolean(q.descriptions);
     const opts = q.type === 'boolean' ? null : h('div', { className: 'opts' },
@@ -167,23 +171,17 @@
     return base;
   };
 
-  const toRequest = () => ({ state: entry().state.trim(), questions: { q1: toQuestion(current()) } });
+  const toRequest = () => ({
+    state: entry().state.trim(),
+    questions: isMulti() ? Object.fromEntries(lesson().questions.map((q) => [q.id, toQuestion(q)])) : { q1: toQuestion(current()) },
+  });
 
   const validate = () => {
+    if (isMulti()) return null;
     const q = current();
     if (!q.text.trim()) return t().errNoText;
     if (q.type !== 'boolean' && q.options.filter((o) => o.trim()).length < 2) return t().errOptions;
     return null;
-  };
-
-  const renderCode = () => {
-    const source = lessons().findLastIndex((l, i) => i < step && l.kind === 'ask');
-    const src = snippetFor(toQuestion(entryAt(source).question));
-    $('code').replaceChildren(h('div', { className: 'code' },
-      h('button', { textContent: t().copy, onclick: async (e) => {
-        try { await navigator.clipboard.writeText(src); e.target.textContent = t().copied; setTimeout(() => (e.target.textContent = t().copy), 1500); } catch {}
-      } }),
-      h('pre', { textContent: src })));
   };
 
   const renderStep = () => {
@@ -193,15 +191,13 @@
     $('dots').replaceChildren(...lessons().map((_, i) => h('i', { className: i <= step ? 'on' : '' })));
     $('lesson-title').textContent = L.title;
     $('theory').replaceChildren(...L.theory.map((p) => h('p', { textContent: p })));
-    $('ask').hidden = L.kind !== 'ask';
-    $('code').hidden = L.kind !== 'code';
-    if (L.kind === 'ask') {
+    $('ask').hidden = L.kind === 'theory';
+    if (L.kind !== 'theory') {
       $('state').value = entry().state;
       lastRun = runs[step] ?? null;
       renderQuestions();
       renderResults();
     }
-    if (L.kind === 'code') renderCode();
     const nav = (cls, text, hidden) => document.querySelectorAll(cls).forEach((b) => { b.textContent = text; b.hidden = hidden; });
     nav('.nav-prev', t().prev, step === 0);
     nav('.nav-home', t().home, step === 0);
@@ -262,6 +258,7 @@
       ...Object.entries(req.questions).map(([id, q]) => h('div', { className: 'card answer' },
         h('h3', { textContent: q.instructions }),
         res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) })] : null)),
+      isMulti() ? h('p', { className: 'explain outro', textContent: t().multiOutro }) : null,
     );
   };
 

@@ -1,7 +1,5 @@
 export const I18N = {
   es: {
-    copy: 'Copiar',
-    copied: '¡Copiado!',
     step1: 'El texto',
     step2: 'La pregunta',
     step3: 'La respuesta de Jev',
@@ -33,6 +31,7 @@ export const I18N = {
       choice: (option, p) => `Eligió «${option}» con ${p}%. Las barras muestran cómo repartió la probabilidad entre las opciones.`,
       score: (level, n, total) => `Lo ubicó en «${level}» (nivel ${n} de ${total}). Las barras muestran qué tan seguro está de cada nivel.`,
     },
+    multiOutro: 'Con estas tres respuestas podrías rutear el ticket, priorizarlo y marcar el reembolso en un solo paso.',
     jsonToggle: 'Ver el JSON de la llamada',
     jsonRequest: 'Lo que le mandamos a Jev',
     jsonResponse: 'Lo que respondió Jev',
@@ -94,17 +93,21 @@ export const I18N = {
         },
       },
       {
-        id: 'code', kind: 'code', title: 'Llevalo a tu código',
+        id: 'multi', kind: 'multi', title: 'Todo junto',
         theory: [
-          'Lo que hiciste en el playground es una llamada a experimental_evaluate del AI SDK de Vercel.',
-          'Necesitás la key de AI Gateway en AI_GATEWAY_API_KEY y el paquete ai. Este es el código de la pregunta del paso anterior:',
+          'En una sola llamada podés hacer varias preguntas sobre el mismo texto. Cada una se evalúa por separado y vuelve con su id.',
+          'Así un mismo ticket se clasifica, se prioriza y se marca en un solo paso.',
+        ],
+        state: 'Me cobraron dos veces la suscripción y nadie me responde hace una semana. Quiero que me devuelvan la plata ya.',
+        questions: [
+          { id: 'reembolso', type: 'boolean', text: '¿Pide que le devuelvan plata?', options: [] },
+          { id: 'area', type: 'choice', text: '¿A qué área va este ticket?', options: ['facturacion', 'envios', 'tecnica'] },
+          { id: 'urgencia', type: 'score', text: '¿Qué tan urgente es?', options: ['baja', 'media', 'alta'] },
         ],
       },
     ],
   },
   en: {
-    copy: 'Copy',
-    copied: 'Copied!',
     step1: 'The text',
     step2: 'The question',
     step3: 'What Jev answered',
@@ -136,6 +139,7 @@ export const I18N = {
       choice: (option, p) => `It picked “${option}” with ${p}%. The bars show how it split the probability across the options.`,
       score: (level, n, total) => `It placed it at “${level}” (level ${n} of ${total}). The bars show how sure it is of each level.`,
     },
+    multiOutro: 'With these three answers you could route the ticket, prioritize it and flag the refund in a single step.',
     jsonToggle: 'Show the call JSON',
     jsonRequest: 'What we sent to Jev',
     jsonResponse: 'What Jev answered',
@@ -197,27 +201,20 @@ export const I18N = {
         },
       },
       {
-        id: 'code', kind: 'code', title: 'Take it to your code',
+        id: 'multi', kind: 'multi', title: 'All together',
         theory: [
-          'What you did in the playground is a call to experimental_evaluate from the Vercel AI SDK.',
-          'You need the AI Gateway key in AI_GATEWAY_API_KEY and the ai package. This is the code for the question from the previous step:',
+          'In a single call you can ask several questions about the same text. Each one is evaluated on its own and comes back under its id.',
+          'That way one ticket gets classified, prioritized and flagged in a single step.',
+        ],
+        state: 'I was charged twice for the subscription and nobody has answered me for a week. I want my money back now.',
+        questions: [
+          { id: 'refund', type: 'boolean', text: 'Are they asking for their money back?', options: [] },
+          { id: 'team', type: 'choice', text: 'Which team does this ticket go to?', options: ['billing', 'shipping', 'tech'] },
+          { id: 'urgency', type: 'score', text: 'How urgent is it?', options: ['low', 'medium', 'high'] },
         ],
       },
     ],
   },
 };
-
-export const snippetFor = (question) => `import { experimental_evaluate as evaluate } from 'ai';
-
-const { answers } = await evaluate({
-  model: 'typesafe-ai/jev',
-  state: text,
-  questions: {
-    q1: ${JSON.stringify(question, null, 2).replace(/\n/g, '\n    ')},
-  },
-});
-
-console.log(answers.q1);
-`;
 
 export const resolve = (lang, table = I18N) => ({ ...table.en, ...(table[lang] ?? {}) });

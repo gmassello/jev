@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { I18N, resolve, snippetFor } from '../copy.js';
+import { I18N, resolve } from '../copy.js';
 
 const shape = (value) =>
   value && typeof value === 'object' && !Array.isArray(value)
@@ -40,16 +40,14 @@ test('the playground explains a yes/no answer and a scale answer in plain words'
   assert.match(I18N.en.explain.choice('Shipping', 81), /“Shipping” with 81%/);
 });
 
-test('the lesson has the same steps in es and en, from theory to code, covering the three answer types', () => {
-  const shape = (lang) => I18N[lang].lessons.map((l) => [l.id, l.kind, l.question?.type ?? null, l.question?.options.length ?? 0, l.question?.descriptions?.length ?? 0]);
+test('the lesson has the same steps in es and en, from theory to one call with several questions', () => {
+  const shape = (lang) => I18N[lang].lessons.map((l) => [l.id, l.kind, l.question?.type ?? null, l.question?.options.length ?? 0, l.question?.descriptions?.length ?? 0, (l.questions ?? []).map((q) => [q.type, q.options.length])]);
   assert.deepEqual(shape('es'), shape('en'));
-  const kinds = I18N.es.lessons.map((l) => l.kind);
-  assert.equal(kinds[0], 'theory');
-  assert.equal(kinds.at(-1), 'code');
-  assert.deepEqual([...new Set(I18N.es.lessons.filter((l) => l.kind === 'ask').map((l) => l.question.type))].sort(), ['boolean', 'choice', 'score']);
-});
-
-test('the code step builds a runnable evaluate call around the question', () => {
-  const src = snippetFor({ type: 'choice', instructions: '¿A qué área va?', criteria: { cuenta: 'Acceso' } });
-  for (const part of ['experimental_evaluate', "model: 'typesafe-ai/jev'", '"instructions": "¿A qué área va?"', '"cuenta": "Acceso"']) assert.ok(src.includes(part), part);
+  const lessons = I18N.es.lessons;
+  assert.equal(lessons[0].kind, 'theory');
+  assert.deepEqual([...new Set(lessons.filter((l) => l.kind === 'ask').map((l) => l.question.type))].sort(), ['boolean', 'choice', 'score']);
+  const multi = lessons.at(-1);
+  assert.equal(multi.kind, 'multi');
+  assert.deepEqual(multi.questions.map((q) => q.type).sort(), ['boolean', 'choice', 'score']);
+  assert.equal(new Set(multi.questions.map((q) => q.id)).size, multi.questions.length);
 });
