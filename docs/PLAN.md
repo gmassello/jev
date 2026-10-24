@@ -214,7 +214,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - **Covers:** —
 - **Files:** `.github/workflows/ci.yml`
 - **Depends on:** —
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: push a main → CI en verde.
   - error: un test roto → CI en rojo.
