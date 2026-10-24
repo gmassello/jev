@@ -154,7 +154,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - **Covers:** R7, R8 · F3, F5
 - **Files:** `docs/deck.html`, `docs/deck.pdf`
 - **Depends on:** U14, U15
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el PDF → existe, 1920×1080 por página, con el título nuevo en la portada.
   - edge: cada cifra del deck → sale de `demo-check` o de la respuesta del gateway (costo), no se escribe a mano.
