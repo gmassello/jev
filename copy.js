@@ -140,6 +140,16 @@ export const I18N = {
         outro: 'Si la salida es una decisión cerrada, Jev. Si es texto libre, un LLM. Si es una regla fija, código.',
       },
       {
+        id: 'guard', kind: 'ask', title: 'Jev revisa a un LLM',
+        theory: [
+          'Un chatbot puede inventar: prometer un plazo o una condición que tu política no dice. Jev sirve de control antes de que la respuesta llegue al cliente.',
+          'El texto junta la política y la respuesta del bot, y la pregunta es un sí/no: ¿la respuesta afirma algo que la política no dice?',
+          'Si dice que sí con mucha probabilidad, el bot no manda esa respuesta y la revisa una persona.',
+        ],
+        state: 'Política de la tienda: las devoluciones se aceptan hasta 30 días después de la compra, con el ticket.\nCliente: ¿hasta cuándo puedo devolver?\nAsistente: Tenés hasta 90 días para devolverlo, sin ticket.',
+        question: { type: 'boolean', text: '¿La respuesta del asistente afirma algo que la política no dice?', options: [] },
+      },
+      {
         id: 'similar', kind: 'theory', title: 'Proyectos parecidos',
         theory: ['Jev no es el único. Estos proyectos resuelven el mismo problema, o una parte.'],
         table: {
@@ -395,6 +405,16 @@ else console.log('A revisión humana:', probabilities);
           'Risk 3: numbers, dates and counts are solved in code. "Have more than 30 days passed?" is computed; ask Jev what it needs to read and understand.',
         ],
         outro: 'If the output is a closed decision, Jev. If it is free text, an LLM. If it is a fixed rule, code.',
+      },
+      {
+        id: 'guard', kind: 'ask', title: 'Jev checks an LLM',
+        theory: [
+          'A chatbot can make things up: promise a deadline or a condition your policy does not state. Jev works as a check before the reply reaches the customer.',
+          'The text puts together the policy and the bot reply, and the question is a yes/no: does the reply claim something the policy does not say?',
+          'If it says yes with a high probability, the bot does not send that reply and a person reviews it.',
+        ],
+        state: 'Store policy: returns are accepted up to 30 days after purchase, with the receipt.\nCustomer: how long do I have to return it?\nAssistant: You have up to 90 days to return it, no receipt needed.',
+        question: { type: 'boolean', text: 'Does the assistant reply claim something the policy does not say?', options: [] },
       },
       {
         id: 'similar', kind: 'theory', title: 'Similar projects',

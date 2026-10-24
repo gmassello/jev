@@ -41,7 +41,7 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 ## Tecnología obligatoria
 
 - **Jev en Vercel AI Gateway** (`typesafe-ai/jev`) con `experimental_decide` del AI SDK (`ai` v7, `7.0.153` exacta; `experimental_evaluate` es su alias deprecado).
-- **Cómo se demuestra:** llamados en vivo desde el playground durante la demo (`POST /evaluate`) y el snippet del paso 11, «Llevalo a tu código», del playground.
+- **Cómo se demuestra:** llamados en vivo desde el playground durante la demo (`POST /evaluate`) y el snippet del último paso, «Llevalo a tu código», del playground.
 
 ## Requisitos de entrega
 

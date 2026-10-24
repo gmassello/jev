@@ -45,7 +45,7 @@ Investigado el 2026-10-24.
 - R3. **Para después.** Una pregunta del set que pone a prueba una limitación documentada (contar), mostrada tal cual se midió. [criterion: Entienden qué es Jev y qué no]
 - R4. **Para después.** Un umbral deslizable que reparte el set entre automatizar y revisión humana. [criterion: Costo y riesgos claros]
 - R5. **Para después.** Costo y tiempo de cada corrida del desafío. [criterion: Costo y riesgos claros]
-- R6. Los asistentes tienen un camino para integrar Jev solos después de la charla: el snippet probado del paso 11 y el README. [criterion: Pueden integrarlo solos]
+- R6. Los asistentes tienen un camino para integrar Jev solos después de la charla: el snippet probado del último paso y el README. [criterion: Pueden integrarlo solos]
 - R7. La charla cierra con una consigna para que cada asistente nombre un caso de su trabajo donde usaría Jev, apoyada en el caso de guardrail y en los cookbooks de TypeSafe. [criterion: Detectan un caso propio]
 - R8. Un deck en español (HTML + PDF), con el título de la charla, acompaña los 15 minutos de lección: qué es Jev, Jev vs. LLMs, probabilidad y confianza, integración, costo y riesgos. [criterion: Entienden qué es Jev y qué no]
 - R9. **Para después.** La demo publicada en una URL protegida. [criterion: Costo y riesgos claros]
@@ -64,7 +64,7 @@ Investigado el 2026-10-24.
 ## Flujos principales
 - F1. **Para después.** Desafío en vivo con marcador. (A1, A2; R1, R2, R3)
 - F2. **Para después.** Calibrar el umbral sobre el set. (A1, A2; R4, R5)
-- F3. **De la charla al código** — paso 11 con el snippet → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
+- F3. **De la charla al código** — último paso con el snippet → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
 - F4. **Para después.** Asíncrono sobre la demo deployada. (A3; R9, R10)
 - F5. **Charla de 25 minutos** — 15 de lección en vivo por los 7 pasos, preguntando a Jev en los de práctica → 6 de video → 4 de preguntas con la consigna. (A1, A2; R10, R11, R12, R13, R16, R17, R20)
 
@@ -77,7 +77,7 @@ Investigado el 2026-10-24.
 - AE6. **Covers R9.** Para después.
 - AE7. **Covers R11.** Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla.
 - AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana.
-- AE9. **Covers R15.** Given el snippet copiado del último paso (hoy, el 13) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
+- AE9. **Covers R15.** Given el snippet copiado del último paso (hoy, el 14) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
 - AE10. **Covers R10.** Given el video final, then dura 6 minutos o menos.
 - AE12. **Covers R19.** Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo.
 - AE13. **Covers R20.** Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos.

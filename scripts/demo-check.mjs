@@ -47,4 +47,7 @@ const doubt = (await ask(L7)).q1;
 const conf = doubt.probabilities[doubt.choice];
 check('paso 7 debajo del umbral', conf < L7.threshold, `${doubt.choice} ${conf.toFixed(2)} < ${L7.threshold}`);
 
+const guard = (await ask(byId('guard'))).q1;
+check('paso 9 respuesta inventada', guard.probability >= 0.9, `probability ${guard.probability.toFixed(2)}`);
+
 process.exit(results.every(Boolean) ? 0 : 1);

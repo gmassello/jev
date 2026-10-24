@@ -3,7 +3,7 @@
 Source: `docs/BRIEF.md`, `docs/UX.md`, `docs/ARCHITECTURE.md` · Deadline: 2026-10-30 12:00 -03:00 · Hours left at writing: 137.5 (revisado el 2026-10-24; la versión del 2026-10-10 tenía 284.5 al 22/10)
 
 ## Summary
-Al terminar, el playground es una lección guiada de 13 pasos que se recorre en vivo en 15 minutos (7 pasos), con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, un deck nuevo, una demo grabada de hasta 6 minutos y el guion del presentador por paso. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
+Al terminar, el playground es una lección guiada de 14 pasos que se recorre en vivo en 15 minutos (7 pasos), con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, un deck nuevo, una demo grabada de hasta 6 minutos y el guion del presentador por paso. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
 
 ## Key technical decisions
 - Lección guiada en lugar del desafío, charla de 25 minutos (15 + 6 + 4) con 7 pasos en vivo, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24). Las decisiones de abajo sobre el desafío quedan como historia.
@@ -195,7 +195,7 @@ Al terminar, el playground es una lección guiada de 13 pasos que se recorre en 
 - **Covers:** R18 · F3
 - **Files:** `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
 - **Depends on:** U11
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el ejemplo con un dato inventado → Jev dice que sí con 0,9 o más, verificado por `demo-check`.
   - edge: el ejemplo de inyección → se mide 3 veces antes de sumarlo; si no mueve la respuesta, no entra.

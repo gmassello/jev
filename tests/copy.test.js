@@ -129,3 +129,14 @@ test('the footer shows tokens, cost, model and time, with a dash when the cost i
     assert.ok(noCost.includes('—') && !noCost.includes('undefined') && !noCost.includes('null'), `${lang}: ${noCost}`);
   }
 });
+
+test('the guardrail step comes right after when-to-use: a yes/no over a policy and a chatbot reply', () => {
+  for (const lang of ['es', 'en']) {
+    const ids = I18N[lang].lessons.map((l) => l.id);
+    assert.equal(ids.indexOf('guard'), ids.indexOf('when') + 1, lang);
+    const step = I18N[lang].lessons.find((l) => l.id === 'guard');
+    assert.equal(step.kind, 'ask', lang);
+    assert.equal(step.question.type, 'boolean', lang);
+    assert.match(step.state, lang === 'es' ? /30 días[\s\S]*90 días/ : /30 days[\s\S]*90 days/);
+  }
+});

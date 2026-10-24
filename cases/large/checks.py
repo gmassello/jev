@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 
 LIVE = ["what", "boolean", "criteria", "multi", "doubt", "when", "code"]
-STEPS = 13
+STEPS = 14
 LIVE_MINUTES = 15
 TITLE = "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"
 MAX_VIDEO_SECONDS = 360

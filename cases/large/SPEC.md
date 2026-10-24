@@ -21,7 +21,7 @@ Es la entrega que se juzga: la lección guiada, el snippet, el guion del present
 - **Guion:** `docs/GUION.md`, con un encabezado `### <id del paso>` por paso, en el orden de `copy.js`; los pasos en vivo llevan una línea `Tiempo: <N> min`.
 
 ## Ejemplos de aceptación
-- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 13 pasos con los mismos `id` en el mismo orden, y entre ellos están los 7 pasos en vivo.
+- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 14 pasos con los mismos `id` en el mismo orden, y entre ellos están los 7 pasos en vivo.
 - AE2. **Covers R15.** Given el paso `code`, then su campo `code` importa `experimental_decide` y no contiene `experimental_evaluate`.
 - AE3. **Covers R20.** Given `docs/GUION.md`, then hay un `### <id>` por cada paso de `copy.js`, en el mismo orden, y las líneas `Tiempo:` de los pasos en vivo suman 15.
 - AE4. **Covers R8.** Given `docs/deck.html`, then contiene el título de la charla, y existe `docs/deck.pdf` no vacío.

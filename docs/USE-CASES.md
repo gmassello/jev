@@ -8,14 +8,14 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 
 | IDs | Funcionalidad | Actor | Prioridad (PLAN) | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
-| R11, R12, R13, R14, R19 · F5 | Lección guiada de 13 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
+| R11, R12, R13, R14, R19 · F5 | Lección guiada de 14 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, Jev revisa a un LLM, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
 | R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15, done) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16, done) | Costo y riesgos claros | Sí |
 | R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
 | R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
-| R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17) | Detectan un caso propio | Sí, si llega |
+| R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí, si llega |
 | R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18) | — (respaldo de la demo en vivo) | No |
 | R20 · F5 | Guion del presentador por paso | A1 | must (U20) | Entienden qué es Jev y qué no | No: soporte de la charla |
 | R1, R2, R3, R4, R5, R9 | Desafío con marcador y demo deployada | — | cut (U2–U5 retirados, U7) | — | No |
@@ -34,7 +34,7 @@ Estado inicial: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` cargada, el naveg
 4. Paso 6, "Todo junto": reembolso, área y urgencia en una sola llamada.
 5. Paso 7, "Cuando Jev duda": "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?" → `facturacion` con probabilidad debajo de 0,9 y el aviso de revisión humana.
 6. Paso 8, "Cuándo usar Jev y cuándo no", con los riesgos para producción.
-7. Paso 13, "Llevalo a tu código", con el snippet listo para copiar.
+7. Paso 14, "Llevalo a tu código", con el snippet listo para copiar.
 8. Video de 6 minutos y 4 minutos de preguntas con la consigna.
 
 Criterios de aceptación:
@@ -47,7 +47,7 @@ Criterios de aceptación:
 
 ### F3. De la charla al código — R6, R7, R15, R18
 
-Estado inicial: el navegador en el paso 13, con la key en el entorno de quien copia el snippet.
+Estado inicial: el navegador en el paso 14, con la key en el entorno de quien copia el snippet.
 
 1. El asistente copia el snippet con el botón Copiar y lo guarda como `jev.mjs`.
 2. Corre `npm i ai@<versión del paso>` y `node jev.mjs`.
@@ -56,7 +56,7 @@ Estado inicial: el navegador en el paso 13, con la key en el entorno de quien co
 5. La consigna pide nombrar un caso propio.
 
 Criterios de aceptación:
-- AE9. Given el snippet copiado del último paso (hoy, el 13) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-24 con `experimental_decide` y `ai@7.0.153`; sin la key falla con `GatewayAuthenticationError`) + `python3 cases/large/checks.py .` (`check_snippet_current_api`).
+- AE9. Given el snippet copiado del último paso (hoy, el 14) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-24 con `experimental_decide` y `ai@7.0.153`; sin la key falla con `GatewayAuthenticationError`) + `python3 cases/large/checks.py .` (`check_snippet_current_api`).
 - proposed: Given una política de devoluciones de 30 días, then Jev marca la respuesta "90 días" como inventada (≥ 0,9) y la de "30 días" como fiel (≤ 0,1). — **How it is proven:** `python3 cases/medium/checks.py http://localhost:3001` (`check_guardrail_pair`). Sin ID: se puede sumar al BRIEF con `hackathon-brainstorm --revisar`.
 
 ## Test cases
@@ -95,7 +95,7 @@ Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas real
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
-| Producto | 13 pasos con los mismos ids en es y en, incluidos los 7 en vivo | `check_lesson_steps` |
+| Producto | 14 pasos con los mismos ids en es y en, incluidos los 7 en vivo | `check_lesson_steps` |
 | Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
 | Producto | El guion tiene una entrada por paso y los pasos en vivo suman 15 minutos | `check_guion` (falla hasta U20) |
 | Producto | El deck lleva el título de la charla y existe en PDF | `check_deck` (falla hasta U13) |
