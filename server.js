@@ -32,6 +32,8 @@ createServer(async (req, res) => {
         warnings: result.warnings,
         modelId: result.response.modelId,
         ms: Date.now() - started,
+        confidence: result.providerMetadata?.typesafe?.confidence ?? null,
+        cost: Number.isFinite(Number(result.providerMetadata?.gateway?.cost)) ? Number(result.providerMetadata.gateway.cost) : null,
       });
     } catch (error) {
       return send(res, 500, { error: error.message });

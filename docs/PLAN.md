@@ -164,7 +164,7 @@ Al terminar, el playground es una lección guiada de 13 pasos que se recorre en 
 - **Covers:** R16 · F5
 - **Files:** `server.js`, `index.html`, `copy.js`, `tests/copy.test.js`, `cases/small/checks.py`
 - **Depends on:** U11
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el paso "Cuando Jev duda" → muestra la probabilidad de cada opción y la confianza como valores distintos (spike S2: 0,68 y 0,52). Covers AE11.
   - edge: el gateway no devuelve la confianza → la UI muestra solo la probabilidad, sin hueco ni "undefined".

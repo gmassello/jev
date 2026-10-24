@@ -10,7 +10,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 |---|---|---|---|---|---|
 | R11, R12, R13, R14, R19 · F5 | Lección guiada de 13 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
 | R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
-| R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14) | Costo y riesgos claros | Sí: el paso que duda |
+| R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16) | Costo y riesgos claros | Sí |
 | R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
@@ -40,7 +40,7 @@ Estado inicial: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` cargada, el naveg
 Criterios de aceptación:
 - AE7. Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla. — **How it is proven:** `node scripts/demo-check.mjs --check` (respuestas de los pasos 2 a 7) + `screenshot` de un paso de práctica.
 - AE8. Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana. — **How it is proven:** `node scripts/demo-check.mjs --check` (una corrida) + `python3 cases/medium/checks.py http://localhost:3001` (`check_doubt_stable`, tres corridas) + `screenshot` del aviso.
-- AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`, falla hasta U14) + `screenshot` del paso 7.
+- AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`) + `screenshot` del paso 7.
 - AE12. Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo. — **How it is proven:** `npm test` (test de forma de `arch` y `prod`) + `screenshot` de los dos pasos.
 - AE10. Given el video final, then dura 6 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).
 - AE13. Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_guion`, falla hasta U20).
@@ -70,10 +70,10 @@ Criterios de aceptación:
 | Producto | `boolean` "¿El cliente pide un reembolso?" da probabilidad en [0, 1] y ≥ 0,5 | `check_refund_boolean` |
 | Producto | `choice` de área da `facturacion` con las 4 opciones, que suman 1 | `check_team_choice` |
 | Sistema | Tokens, tiempo, modelo y warnings en cada respuesta; totalTokens = entrada + salida | `check_usage_and_timing` |
-| Sistema | Confianza de TypeSafe por pregunta en [0, 1] y costo de la llamada ≥ 0 | `check_confidence_and_cost` (falla hasta U14) |
+| Sistema | Confianza de TypeSafe por pregunta en [0, 1] y costo de la llamada ≥ 0 | `check_confidence_and_cost` |
 | Sistema | Body inválido → 500 con error legible; ruta inexistente → 404 | `check_invalid_json`, `check_unknown_route` |
 
-Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales). Hoy: 6/7.
+Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales). Hoy: 7/7.
 
 ### Medium — 5 tickets en tanda y los riesgos de la lección
 `cases/medium/` · dominio: tickets de soporte, un mail y una política de devoluciones · PLAN: U14, U15; se vuelve a correr después de U15 y el viernes antes de la charla.
@@ -86,9 +86,9 @@ Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales
 | Producto | La respuesta inventada da sí ≥ 0,9 y la fiel da sí ≤ 0,1 | `check_guardrail_pair` |
 | Sistema | Las 5 llamadas con concurrencia 5 responden 200 con `choice` y las 4 probabilidades | `check_batch_all_answered` |
 | Sistema | La tanda tarda menos de 10 s y su costo estimado de entrada es menor a US$0,001 | `check_batch_fast_and_cheap` |
-| Sistema | La suma del costo que informa el gateway para la tanda es menor a US$0,001 | `check_talk_cost` (falla hasta U14) |
+| Sistema | La suma del costo que informa el gateway para la tanda es menor a US$0,001 | `check_talk_cost` |
 
-Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas reales). Hoy: 6/7.
+Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas reales). Hoy: 7/7.
 
 ### Large — la charla completa
 `cases/large/` · dominio: los artefactos de la charla · PLAN: U11, U15, U20, U13, U9.

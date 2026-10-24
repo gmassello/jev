@@ -76,7 +76,7 @@ graph TB
 { "state": "texto", "questions": { "q1": { "type": "choice", "instructions": "...", "criteria": { "facturacion": "..." } } } }
 ```
 
-Respuesta 200: `{ answers, usage, warnings, modelId, ms }`, y se suma `confidence` (de `providerMetadata.typesafe.confidence`, por id de pregunta) y `cost` (de `providerMetadata.gateway.cost`, en US$). Error: 500 con `{ error }`; la UI lo traduce cuando es de key o de saldo.
+Respuesta 200: `{ answers, usage, warnings, modelId, ms, confidence, cost }`: `confidence` sale de `providerMetadata.typesafe.confidence`, por id de pregunta, y `cost` de `providerMetadata.gateway.cost`, como número en US$; los dos llegan en `null` si el gateway no los trae (U14). Error: 500 con `{ error }`; la UI lo traduce cuando es de key o de saldo.
 
 ### Data
 Nada persistente. En el navegador, `localStorage` guarda el paso actual y el idioma. El server no guarda requests ni respuestas.

@@ -28,10 +28,10 @@ test('a key missing in a language falls back to english without breaking', () =>
   assert.deepEqual(resolve('es', table), { hello: 'Hola', bye: 'Bye' });
 });
 
-test('the UI says confianza, never "de seguridad", for a probability', () => {
+test('the UI says probabilidad, never "de seguridad", for a probability', () => {
   const values = Object.values(I18N.es).map((v) => (typeof v === 'function' ? v(98) : String(v)));
   assert.ok(!values.some((v) => v.includes('de seguridad')), 'found "de seguridad" in the es table');
-  assert.equal(I18N.es.sure(98), '98% de confianza');
+  assert.equal(I18N.es.sure(98), '98% de probabilidad');
 });
 
 test('the playground explains a yes/no answer and a scale answer in plain words', () => {
@@ -53,9 +53,9 @@ test('the lesson has the same steps in es and en, from theory to one call with s
   for (const lang of ['es', 'en']) assert.equal(I18N[lang].lessons.find((l) => l.id === 'doubt')?.threshold, 0.9, lang);
 });
 
-test('the threshold note says whether a confidence would be automated or reviewed', () => {
-  assert.equal(I18N.es.thresholdNote(58, false, 90), 'Confianza 58%: con un umbral de 90%, este ticket iría a revisión humana.');
-  assert.equal(I18N.en.thresholdNote(97, true, 90), 'Confidence 97%: with a 90% threshold, this would be automated.');
+test('the threshold note says whether a probability would be automated or reviewed', () => {
+  assert.equal(I18N.es.thresholdNote(58, false, 90), 'Probabilidad 58%: con un umbral de 90%, este ticket iría a revisión humana.');
+  assert.equal(I18N.en.thresholdNote(97, true, 90), 'Probability 97%: with a 90% threshold, this would be automated.');
 });
 
 test('the similar-projects step has the same rows and links in es and en, led by Clef and Strands Decider', () => {
@@ -96,4 +96,23 @@ test('the architecture and production steps come before the code step, with the 
   assert.equal(step('es', 'arch').table.rows.length, step('en', 'arch').table.rows.length);
   assert.equal(step('es', 'prod').list.length, step('en', 'prod').list.length);
   for (const lang of ['es', 'en']) assert.ok(step(lang, 'prod').list.some((item) => item.includes('jev-1.14.0')), lang);
+});
+
+test('the threshold note talks about probability and confidence has its own line', () => {
+  for (const lang of ['es', 'en']) {
+    const t = I18N[lang];
+    assert.match(t.thresholdNote(68, false, 90), lang === 'es' ? /^Probabilidad 68%/ : /^Probability 68%/);
+    assert.ok(t.confidenceNote(52).includes('52'), `${lang}: confidenceNote`);
+    assert.notEqual(t.confidenceNote(52), t.thresholdNote(52, false, 90));
+  }
+});
+
+test('the footer shows tokens, cost, model and time, with a dash when the cost is missing', () => {
+  for (const lang of ['es', 'en']) {
+    const t = I18N[lang];
+    const full = t.footer({ tokens: 325, cost: 0.00001365, modelId: 'typesafe-ai/jev-1.14.0', ms: 900 });
+    for (const part of ['325', 'US$', 'typesafe-ai/jev-1.14.0', '900']) assert.ok(full.includes(part), `${lang}: ${part} in ${full}`);
+    const noCost = t.footer({ tokens: 325, cost: null, modelId: 'typesafe-ai/jev', ms: 900 });
+    assert.ok(noCost.includes('—') && !noCost.includes('undefined') && !noCost.includes('null'), `${lang}: ${noCost}`);
+  }
 });

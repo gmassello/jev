@@ -114,6 +114,7 @@ Todos los pares de texto dan 4.5:1 o más. `--accent` sobre `--accent-soft` es e
 | Resultado | `.card.answer`, `.verdict`, `.bar-row` | veredicto `.yes` (`--ok`) o `.no` (`--bad`); fila ganadora `.win` en 700 |
 | Explicación | `.explain` | `--accent-soft`; aviso de revisión `.explain.review` en `--warn` sobre `--warn-soft` |
 | Error | `.card.fail`, `.error` | `--bad` sobre `--bad-soft` |
+| Pie de la respuesta | `.footer` | `--muted` en `--fs-xs`: tokens · costo en US$ ("—" si no llega) · modelo · ms |
 | JSON | `details#json` | plegado por defecto; request y respuesta en bloques oscuros |
 
 ## Screens

@@ -16,7 +16,7 @@ Optional: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-ai/jev`). R
 
 ## Before you use it in production
 
-- **Calibrate the threshold on your own data.** Label a few dozen real cases and check how often Jev is right at each confidence level before letting it act on its own.
+- **Calibrate the threshold on your own data.** Label a few dozen real cases and check how often Jev is right at each probability level before letting it act on its own.
 - **Measure the limits, don't read them.** TypeSafe documents counting and dates as weak spots, yet both worked in our tests; your cases may go the other way.
 - **Keep the key on the server.** Call Jev from your backend, never from the browser, and never commit the key.
 
