@@ -45,6 +45,8 @@ export const I18N = {
     errNoText: 'Falta escribir la pregunta.',
     errOptions: 'Necesita al menos 2 opciones con texto.',
     errServer: 'Jev no pudo responder',
+    errKey: 'Jev no respondió: la key no es válida o no hay saldo.',
+    errKeyFix: 'Revisá AI_GATEWAY_API_KEY en el entorno del server y el saldo en Vercel AI Gateway, y reiniciá el server.',
     lessons: [
       {
         id: 'what', kind: 'theory', title: '¿Qué es Jev?',
@@ -312,6 +314,8 @@ else console.log('A revisión humana:', probabilities);
     errNoText: 'The question is missing.',
     errOptions: 'Needs at least 2 options with text.',
     errServer: 'Jev could not answer',
+    errKey: 'Jev did not answer: the key is not valid or there is no credit left.',
+    errKeyFix: 'Check AI_GATEWAY_API_KEY in the server environment and the credit in Vercel AI Gateway, then restart the server.',
     lessons: [
       {
         id: 'what', kind: 'theory', title: 'What is Jev?',
@@ -536,3 +540,5 @@ else console.log('Send to human review:', probabilities);
 };
 
 export const resolve = (lang, table = I18N) => ({ ...table.en, ...(table[lang] ?? {}) });
+
+export const keyOrCredit = (message) => /authentication|api key|credit|insufficient|balance|quota|payment required/i.test(message ?? '');

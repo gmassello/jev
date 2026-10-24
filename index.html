@@ -127,7 +127,7 @@
 </main>
 
 <script type="module">
-  import { I18N, resolve } from './copy.js';
+  import { I18N, resolve, keyOrCredit } from './copy.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -299,6 +299,9 @@
     if (!lastRun) return $('results').replaceChildren();
     const { req, res } = lastRun;
     if (res.error) {
+      if (!res.local && keyOrCredit(res.error)) {
+        return $('results').replaceChildren(h('div', { className: 'card fail' }, h('strong', { textContent: t().errKey }), h('p', { textContent: t().errKeyFix })));
+      }
       return $('results').replaceChildren(h('div', { className: 'card fail' }, res.local ? null : h('strong', { textContent: t().errServer }), h('p', { textContent: res.error })));
     }
     $('results').replaceChildren(

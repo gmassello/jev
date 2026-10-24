@@ -16,7 +16,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
 | R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
 | R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí, si llega |
-| R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18) | — (respaldo de la demo en vivo) | No |
+| R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18, done) | — (respaldo de la demo en vivo) | No |
 | R20 · F5 | Guion del presentador por paso | A1 | must (U20, done) | Entienden qué es Jev y qué no | No: soporte de la charla |
 | R1, R2, R3, R4, R5, R9 | Desafío con marcador y demo deployada | — | cut (U2–U5 retirados, U7) | — | No |
 

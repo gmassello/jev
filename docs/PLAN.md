@@ -205,7 +205,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - **Covers:** R10 · F5
 - **Files:** `index.html`, `copy.js`, `tests/copy.test.js`
 - **Depends on:** U11
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - error: una key inválida → el mensaje en el idioma de la UI, sin el texto crudo del gateway.
 

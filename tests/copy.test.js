@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { I18N, resolve } from '../copy.js';
+import { I18N, resolve, keyOrCredit } from '../copy.js';
 import { readFileSync } from 'node:fs';
 
 const shape = (value) =>
@@ -139,4 +139,16 @@ test('the guardrail step comes right after when-to-use: a yes/no over a policy a
     assert.equal(step.question.type, 'boolean', lang);
     assert.match(step.state, lang === 'es' ? /30 días[\s\S]*90 días/ : /30 days[\s\S]*90 days/);
   }
+});
+
+test('a gateway key or credit error becomes a plain message with what to do', () => {
+  const raw = 'AI Gateway authentication failed: Invalid API key or token.\n\nCreate a new API key: https://vercel.com/d';
+  assert.equal(keyOrCredit(raw), true);
+  assert.equal(keyOrCredit('Insufficient credits: add funds to continue'), true);
+  assert.equal(keyOrCredit('Unexpected token } in JSON at position 3'), false);
+  for (const lang of ['es', 'en']) {
+    assert.ok(I18N[lang].errKey && I18N[lang].errKeyFix, lang);
+    assert.ok(!I18N[lang].errKey.includes('authentication failed'), lang);
+  }
+  assert.match(I18N.es.errKey, /^Jev no respondió: la key no es válida o no hay saldo/);
 });
