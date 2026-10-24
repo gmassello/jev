@@ -133,7 +133,7 @@ Ninguno animado. Se sacaron el contador del marcador y el modo proyector. Para l
 
 ## Rules
 
-- Todo color, tamaño y radio sale de un token de este documento; nada de literales en `index.html` (los que quedan los saca la unidad U21 del PLAN).
+- Todo color, tamaño y radio sale de un token de este documento; nada de literales en `index.html` (U21 los sacó; lo vigila un test de `tests/index.test.js`).
 - Un solo tema, claro. El oscuro y su toggle quedan para después: si vuelven, se agregan con override por `data-theme` y se mide el contraste del tema nuevo.
 - Sin fuentes externas, sin sombras, sin librerías de componentes.
 - Un componente nuevo se agrega a la tabla de Components con sus estados antes de usarse.
@@ -142,7 +142,7 @@ Ninguno animado. Se sacaron el contador del marcador y el modo proyector. Para l
 ## Verification checklist
 
 - [ ] El script de contraste da 4.5:1 o más en todos los pares de la tabla.
-- [ ] `index.html` no tiene literales de color fuera de `:root` (`grep -n '#[0-9a-fA-F]\{6\}' index.html` solo dentro de `:root`, después de U21).
+- [x] `index.html` no tiene literales de color, radio ni escala tipográfica fuera de `:root` (`npm test`, test "styles use the DESIGN.md tokens instead of literals").
 - [ ] A 375 px no hay scroll horizontal de la página; las tablas y los bloques de código hacen scroll propio.
 - [ ] Foco visible con teclado en botones, inputs y puntos del stepper.
 - [ ] Con `prefers-reduced-motion: reduce` no hay transiciones.

@@ -234,7 +234,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - **Covers:** R11 · F5
 - **Files:** `index.html`
 - **Depends on:** —
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: los colores con `#` aparecen solo dentro de `:root`, y las capturas de un paso de teoría y uno de práctica coinciden con las de antes.
 
