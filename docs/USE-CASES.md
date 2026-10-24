@@ -17,7 +17,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
 | R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí, si llega |
 | R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18) | — (respaldo de la demo en vivo) | No |
-| R20 · F5 | Guion del presentador por paso | A1 | must (U20) | Entienden qué es Jev y qué no | No: soporte de la charla |
+| R20 · F5 | Guion del presentador por paso | A1 | must (U20, done) | Entienden qué es Jev y qué no | No: soporte de la charla |
 | R1, R2, R3, R4, R5, R9 | Desafío con marcador y demo deployada | — | cut (U2–U5 retirados, U7) | — | No |
 
 
@@ -43,7 +43,7 @@ Criterios de aceptación:
 - AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`) + `screenshot` del paso 7.
 - AE12. Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo. — **How it is proven:** `npm test` (test de forma de `arch` y `prod`) + `screenshot` de los dos pasos.
 - AE10. Given el video final, then dura 6 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).
-- AE13. Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_guion`, falla hasta U20).
+- AE13. Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_guion`); el guion vive en `docs/GUION.md`.
 
 ### F3. De la charla al código — R6, R7, R15, R18
 
@@ -97,11 +97,11 @@ Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas real
 |---|---|---|
 | Producto | 14 pasos con los mismos ids en es y en, incluidos los 7 en vivo | `check_lesson_steps` |
 | Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
-| Producto | El guion tiene una entrada por paso y los pasos en vivo suman 15 minutos | `check_guion` (falla hasta U20) |
+| Producto | El guion tiene una entrada por paso y los pasos en vivo suman 15 minutos | `check_guion` |
 | Producto | El deck lleva el título de la charla y existe en PDF | `check_deck` (falla hasta U13) |
 | Sistema | El video existe y dura 360 s o menos | `check_video` (falla hasta U9) |
 
-Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 2/5.
+Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 3/5.
 
 ### Validación de las suites (2026-10-24)
 - **Contra algo que funciona:** un server mínimo escrito desde los SPEC (fuera del repo) da 7/7 en el chico y 7/7 en el mediano; un repo armado desde `cases/large/SPEC.md` da 5/5.

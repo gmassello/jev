@@ -224,7 +224,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - **Covers:** R20 · F5
 - **Files:** `docs/GUION.md`
 - **Depends on:** U12, U14, U16, U17
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el guion → tiene una entrada por cada paso de `copy.js`, en el mismo orden, y los tiempos de los pasos en vivo suman 15 minutos. Covers AE13.
   - edge: cada cifra que menciona → sale de `demo-check` o de la respuesta del gateway.
