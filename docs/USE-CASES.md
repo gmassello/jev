@@ -1,122 +1,122 @@
-Source: docs/BRIEF.md · prioridades de la Cut line de docs/PLAN.md
+Source: docs/BRIEF.md · prioridades de la Cut line de docs/PLAN.md (revisado el 2026-10-24)
 
-# Jev para devs — Casos de uso
+# Evaluar con Jev — Casos de uso
 
-El sistema es el playground local (`index.html` + `server.js` → AI SDK → AI Gateway → Jev) más los artefactos de la charla (deck, video, resultados del desafío). Lo prueba oficialmente la demo en vivo del 2026-10-22; no hay suite del evento. Los encabezados `##` quedan en inglés porque los leen los scripts del flujo.
+El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI SDK → AI Gateway → Jev) y los artefactos de la charla del 2026-10-30 (guion, deck y video). Lo prueba la charla en vivo de 25 minutos; no hay suite del evento. Los encabezados `##` quedan en inglés porque los leen los scripts del flujo.
 
 ## Features
 
-| IDs | Funcionalidad | Actor | Prioridad | Criterio | ¿Se ve en el video? |
+| IDs | Funcionalidad | Actor | Prioridad (PLAN) | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
-| R1, R2, R3 · F1 | Desafío con 15 tickets de soporte, marcador y pregunta de conteo | A1, A2 | must (U2, U3) | Entienden qué es Jev y qué no | Sí: es el centro |
-| R4 · F2 | Umbral de confianza recalculado sin llamar a Jev | A1, A2 | must (U4) | Costo y riesgos claros | Sí: es el final |
-| R5 · F2 | Costo y tiempo de cada corrida | A1, A2 | must (U5) | Costo y riesgos claros | Sí: pie de la corrida |
-| R6, R7 · F3 | Camino a integrar (snippet, Docs, slide) y consigna de caso propio | A2 | must (U8; U10 should) | Pueden integrarlo solos; Detectan un caso propio | Parcial: cierre del video |
-| R8 | Deck en español (HTML + PDF) | A1, A2 | must (U8) | Entienden qué es Jev y qué no | No: soporte de la charla |
-| R10 · F4 | Video corto en español | A3 | must (U9) | Pueden integrarlo solos | Es el video |
-| R9 · F4 | Demo deployada y protegida | A3 | cut (U7) | Costo y riesgos claros | No |
+| R11, R12, R13, R14, R19 · F5 | Lección guiada de 13 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
+| R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12) | Entienden qué es Jev y qué no | No |
+| R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14) | Costo y riesgos claros | Sí: el paso que duda |
+| R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15) | Pueden integrarlo solos | Sí: el cierre |
+| R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16) | Costo y riesgos claros | Sí |
+| R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
+| R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
+| R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17) | Detectan un caso propio | Sí, si llega |
+| R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18) | — (respaldo de la demo en vivo) | No |
+| R20 · F5 | Guion del presentador por paso | A1 | must (U20) | Entienden qué es Jev y qué no | No: soporte de la charla |
+| R1, R2, R3, R4, R5, R9 | Desafío con marcador y demo deployada | — | cut (U2–U5 retirados, U7) | — | No |
 
-Sin diferencias con la Cut line del PLAN. Fuera del BRIEF, el código ya tiene el Playground libre y la pestaña Docs: los cubren R6 (Docs) y el soporte del desafío, así que no hace falta un R nuevo.
+
 
 ## Happy paths
 
-### F1. Desafío en vivo — R1, R2, R3
+### F5. Charla de 25 minutos — R11, R12, R16, R17, R19, R20
 
-Estado inicial: playground corriendo en local (`PORT=3001 npm start`) con `AI_GATEWAY_API_KEY` cargada, pestaña Desafío abierta y el set "Tickets de soporte" precargado.
+Estado inicial: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` cargada, el navegador en el paso 1 y la interfaz en español; `node scripts/demo-check.mjs --check` en verde.
 
-1. Se ve la tabla con los 15 tickets y la columna *Esperado*; la pregunta precargada es "¿A qué área va este ticket?" (Facturación / Envíos / Técnica / Cuenta).
-2. El público dicta "¿Pide un reembolso?" y el presentador la elige de las preguntas sugeridas.
-3. Clic en **Evaluar los 15 tickets**: "Evaluando 6/15…" y las filas se completan.
-4. El marcador muestra N/15 y resalta las filas falladas con respuesta de Jev, esperada y confianza.
-5. El presentador elige "¿Cuántos productos distintos menciona?" y la evalúa: el marcador muestra lo que midió frente a la limitación que declara la doc.
-
-Criterios de aceptación:
-- AE1. Given el desafío abierto, when el presentador elige el set de tickets de soporte, then se ven los tickets en español con su respuesta esperada. — **How it is proven:** `node --test tests/tickets.test.js` (forma del set, PLAN U2) + `screenshot` de la pestaña.
-- AE2. Given una pregunta cargada, when se evalúa el set, then el marcador muestra cuántos acertó sobre el total y marca cada caso fallado con la respuesta de Jev, la esperada y su confianza. — **How it is proven:** `node --test tests/score.test.js` (PLAN U3) + `python3 cases/large/checks.py .` (`check_runs_consistent`).
-- AE3. Given el set completo, when se evalúa la pregunta de conteo, then el marcador muestra el resultado medido de esa corrida (aciertos y confianza por ticket) junto a la limitación que declara la doc, sin forzar una falla. — **How it is proven:** `npm run challenge` escribe `challenge/results.json`; `node --test --test-name-pattern="trap"` y `python3 cases/large/checks.py .` (`check_trap_recorded`) verifican que la corrida quede registrada.
-
-### F2. Calibrar el umbral — R4, R5
-
-Estado inicial: el marcador de F1 cargado con la pregunta de área.
-
-1. El slider arranca en 0.5: se ven Automáticos, A revisión humana y Errores que se automatizarían.
-2. El presentador lo lleva a 0.9: bajan los automáticos, suben los de revisión y los números cambian al instante.
-3. El pie muestra 15 tickets, segundos, tokens y costo estimado (entrada) en US$.
+1. Paso 1, "¿Qué es Jev?": dos párrafos de teoría.
+2. Paso 2, "Sí / No": "¿Se le devolvió la plata al cliente?" sobre el ticket del agente que devolvió el dinero → sí, cerca de 1.
+3. Paso 5, "Opciones con definición": el ticket de la contraseña va a `cuenta`.
+4. Paso 6, "Todo junto": reembolso, área y urgencia en una sola llamada.
+5. Paso 7, "Cuando Jev duda": "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?" → `facturacion` con probabilidad debajo de 0,9 y el aviso de revisión humana.
+6. Paso 8, "Cuándo usar Jev y cuándo no", con los riesgos para producción.
+7. Paso 13, "Llevalo a tu código", con el snippet listo para copiar.
+8. Video de 6 minutos y 4 minutos de preguntas con la consigna.
 
 Criterios de aceptación:
-- AE4. Given un marcador cargado, when el umbral pasa de 0.5 a 0.9, then baja la cantidad de casos automatizados, sube la de revisión humana, y los números cambian sin volver a llamar a Jev. — **How it is proven:** `node --test tests/score.test.js` (PLAN U4: función pura, sin red) + `screenshot` antes/después.
-- AE5. Given una corrida terminada, then se muestran los tokens usados, el costo estimado en dólares y el tiempo total. — **How it is proven:** `node --test tests/pricing.test.js` (PLAN U1/U5) + `python3 cases/large/checks.py .` (`check_runs_measured`) + `python3 cases/medium/checks.py http://localhost:3001` (`check_batch_fast_and_cheap`).
+- AE7. Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla. — **How it is proven:** `node scripts/demo-check.mjs --check` (respuestas de los pasos 2 a 7) + `screenshot` de un paso de práctica.
+- AE8. Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana. — **How it is proven:** `node scripts/demo-check.mjs --check` (una corrida) + `python3 cases/medium/checks.py http://localhost:3001` (`check_doubt_stable`, tres corridas) + `screenshot` del aviso.
+- AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`, falla hasta U14) + `screenshot` del paso 7.
+- AE12. Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo. — **How it is proven:** `npm test` (test de forma de `arch` y `prod`) + `screenshot` de los dos pasos.
+- AE10. Given el video final, then dura 6 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).
+- AE13. Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_guion`, falla hasta U20).
 
-### F3. De la charla al código — R6, R7
+### F3. De la charla al código — R6, R7, R15, R18
 
-Estado inicial: el deck en la slide de integración.
+Estado inicial: el navegador en el paso 13, con la key en el entorno de quien copia el snippet.
 
-1. La slide muestra el snippet de `experimental_evaluate`, el mismo que la pestaña Docs › Integración.
-2. El presentador abre Docs desde "Así se hace en código →".
-3. La última slide antes del cierre pide: "Nombrá un caso de tu trabajo donde usarías Jev".
-
-Criterios de aceptación:
-- proposed: Given el snippet de Docs, when se corre tal cual con la key, then imprime una probabilidad entre 0 y 1. — **How it is proven:** `node --test tests/snippet.test.js` (PLAN U10). Sin ID: se puede sumar al BRIEF con `hackathon-brainstorm --revisar`.
-- proposed: Given el deck, then la consigna de caso propio es la última slide antes del cierre. — **How it is proven:** `screenshot` del deck (PLAN U8).
-
-### F4. Asíncrono — R10
-
-Estado inicial: alguien que no fue a la charla, sin nada instalado.
-
-1. Abre el video corto en español.
-2. Ve el desafío completo: pregunta, marcador, resultado de la pregunta de conteo, umbral y costo.
-3. El cierre le dice dónde está el snippet y el repo.
+1. El asistente copia el snippet con el botón Copiar y lo guarda como `jev.mjs`.
+2. Corre `npm i ai@<versión del paso>` y `node jev.mjs`.
+3. La consola imprime la decisión de ruteo.
+4. (should, U17) El presentador muestra a Jev revisando la respuesta de un chatbot contra una política.
+5. La consigna pide nombrar un caso propio.
 
 Criterios de aceptación:
-- proposed: Given el video, then muestra el marcador asentado con una cifra que coincide con `challenge/results.json`. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`) + `screenshot` del fotograma del marcador.
-- AE6 (R9, demo protegida) no aplica: U7 está en cut.
+- AE9. Given el snippet copiado del último paso (hoy, el 13) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-12 con `experimental_evaluate`; se repite en U15) + `python3 cases/large/checks.py .` (`check_snippet_current_api`, falla hasta U15).
+- proposed: Given una política de devoluciones de 30 días, then Jev marca la respuesta "90 días" como inventada (≥ 0,9) y la de "30 días" como fiel (≤ 0,1). — **How it is proven:** `python3 cases/medium/checks.py http://localhost:3001` (`check_guardrail_pair`). Sin ID: se puede sumar al BRIEF con `hackathon-brainstorm --revisar`.
 
 ## Test cases
 
 ### Small — un ticket, dos preguntas
-`cases/small/` · dominio: un ticket de facturación · PLAN: corre sobre lo que ya existe; lo reafirman U1 y U5.
+`cases/small/` · dominio: un ticket de facturación · PLAN: corre sobre lo que existe; U14 completa la última fila.
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
 | Producto | La página sirve el playground | `check_page_serves_playground` |
-| Producto | `boolean` "¿Pide un reembolso?" da probabilidad en [0, 1] y ≥ 0.5 | `check_refund_boolean` |
-| Producto | `choice` de área da `facturacion` con las 4 opciones y suma 1 | `check_team_choice` |
+| Producto | `boolean` "¿El cliente pide un reembolso?" da probabilidad en [0, 1] y ≥ 0,5 | `check_refund_boolean` |
+| Producto | `choice` de área da `facturacion` con las 4 opciones, que suman 1 | `check_team_choice` |
 | Sistema | Tokens, tiempo, modelo y warnings en cada respuesta; totalTokens = entrada + salida | `check_usage_and_timing` |
+| Sistema | Confianza de TypeSafe por pregunta en [0, 1] y costo de la llamada ≥ 0 | `check_confidence_and_cost` (falla hasta U14) |
 | Sistema | Body inválido → 500 con error legible; ruta inexistente → 404 | `check_invalid_json`, `check_unknown_route` |
 
-Correr: `python3 cases/small/checks.py http://localhost:3001` (3 llamadas reales a Jev).
+Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales). Hoy: 6/7.
 
-### Medium — 5 tickets en tanda
-`cases/medium/` · dominio: los cuatro tipos de ticket · PLAN: U2, U3. Se vuelve a correr al cierre como evidencia de que nada se ajustó a mano para el grande.
+### Medium — 5 tickets en tanda y los riesgos de la lección
+`cases/medium/` · dominio: tickets de soporte, un mail y una política de devoluciones · PLAN: U14, U15; se vuelve a correr después de U15 y el viernes antes de la charla.
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
 | Producto | Jev acierta el área de al menos 4 de 5 tickets | `check_accuracy` |
-| Sistema | Las 5 llamadas con concurrencia 5 responden 200, con `choice` y las 4 probabilidades | `check_batch_all_answered` |
-| Sistema | La tanda tarda menos de 10 s y cuesta menos de US$0.001 estimado de entrada | `check_batch_fast_and_cheap` |
+| Producto | El ticket ambiguo queda debajo de 0,9 en las 3 corridas | `check_doubt_stable` |
+| Producto | El mail da `Estafa` con las opciones en dos órdenes | `check_order_independent` |
+| Producto | La respuesta inventada da sí ≥ 0,9 y la fiel da sí ≤ 0,1 | `check_guardrail_pair` |
+| Sistema | Las 5 llamadas con concurrencia 5 responden 200 con `choice` y las 4 probabilidades | `check_batch_all_answered` |
+| Sistema | La tanda tarda menos de 10 s y su costo estimado de entrada es menor a US$0,001 | `check_batch_fast_and_cheap` |
+| Sistema | La suma del costo que informa el gateway para la tanda es menor a US$0,001 | `check_talk_cost` (falla hasta U14) |
 
-Correr: `python3 cases/medium/checks.py http://localhost:3001` (5 llamadas reales).
+Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas reales). Hoy: 6/7.
 
 ### Large — la charla completa
-`cases/large/` · dominio: los 15 tickets del desafío más deck y video · PLAN: U2, U3, U4, U5, U8, U9.
+`cases/large/` · dominio: los artefactos de la charla · PLAN: U11, U15, U20, U13, U9.
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
-| Producto | Cada corrida del desafío tiene 15 filas y `correct` coincide con las filas acertadas | `check_runs_consistent` |
-| Producto | La corrida de conteo (`trap`) está registrada con sus 15 filas medidas | `check_trap_recorded` |
-| Producto | El deck existe en PDF 16:9, en español, y muestra un marcador medido | `check_deck` |
-| Producto | Hay video `.mp4` no vacío | `check_video` |
-| Sistema | Cada corrida registra tokens y tiempo | `check_runs_measured` |
+| Producto | 13 pasos con los mismos ids en es y en, incluidos los 7 en vivo | `check_lesson_steps` |
+| Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` (falla hasta U15) |
+| Producto | El guion tiene una entrada por paso y los pasos en vivo suman 15 minutos | `check_guion` (falla hasta U20) |
+| Producto | El deck lleva el título de la charla y existe en PDF | `check_deck` (falla hasta U13) |
+| Sistema | El video existe y dura 360 s o menos | `check_video` (falla hasta U9) |
 
-Correr: `python3 cases/large/checks.py .` (sin red; lee artefactos). Desde U2 pasa 3/5: `challenge/results.json` ya existe y es consistente; fallan `check_deck` y `check_video` hasta U8 y U9.
+Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 1/5.
 
-### Validación de las suites
-- **Contra algo que funciona:** un server mínimo escrito desde las specs (fuera del repo) da 6/6 en el chico y 3/3 en el mediano; un repo armado desde `cases/large/SPEC.md` da 5/5 en el grande. El playground real da 6/6 y 3/3 (2026-10-10).
-- **Contra algo roto:** responder 200 a un body inválido rompe `check_invalid_json`; un `totalTokens` mal sumado rompe `check_usage_and_timing`; etiquetar todo como `envios` rompe `check_accuracy` (1/5); un `correct` que no coincide con las filas rompe `check_runs_consistent` y `check_deck`.
-- **Uso:** puerto muerto → exit 1 sin traceback; sin argumentos → exit 2.
+### Validación de las suites (2026-10-24)
+- **Contra algo que funciona:** un server mínimo escrito desde los SPEC (fuera del repo) da 7/7 en el chico y 7/7 en el mediano; un repo armado desde `cases/large/SPEC.md` da 5/5.
+- **Contra algo roto:**
+  - una confianza de 1,4 o un costo negativo rompen `check_confidence_and_cost`;
+  - un costo negativo rompe `check_talk_cost`;
+  - elegir siempre la primera opción rompe `check_order_independent` y `check_accuracy`;
+  - decir siempre sí rompe `check_guardrail_pair`;
+  - `experimental_evaluate` en el snippet rompe `check_snippet_current_api`;
+  - un video de 400 s rompe `check_video`.
+- **Uso:** puerto muerto → exit 1 sin traceback; sin argumentos → exit 2, en los tres casos.
 
 ## Out of scope
 
-- R9 / AE6, demo deployada y protegida: U7 está en cut por decisión del presentador.
-- Que cada asistente juegue en su navegador; ranking entre asistentes; set de tickets propio o CSV; varias preguntas a la vez en el desafío (BRIEF y `docs/UX.md`).
-- Probar la UI del desafío con un navegador automatizado: lo visual queda como `screenshot` y la lógica, en tests de funciones puras (`tests/score.test.js`).
+- R1, R2, R3, R4, R5 con AE1, AE2, AE3, AE4, AE5 — el desafío con marcador y umbral deslizable se construyó y se retiró el 2026-10-12; queda para después (BRIEF).
+- R9 con AE6 — la demo deployada y protegida queda para después: la charla corre en local (PLAN U7, cut).
+- Que cada asistente juegue en su propio navegador; integrar Jev en código propio en vivo; datos reales del equipo; comparación en vivo contra un LLM (BRIEF).
+- Probar la UI con un navegador automatizado: lo visual queda como `screenshot` y la lógica, en `npm test` y en los checks contra `/evaluate`.

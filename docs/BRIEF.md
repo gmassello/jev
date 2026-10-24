@@ -59,13 +59,14 @@ Investigado el 2026-10-24.
 - R17. "Cuándo usarlo" suma tres riesgos para producción: el texto que entra no es de confianza, Jev prefiere la primera opción, y números, fechas y conteos se resuelven en código. [criterion: Costo y riesgos claros]
 - R18. Un caso muestra a Jev como guardrail de un LLM: si la respuesta de un chatbot afirma algo que la política no dice. [criterion: Detectan un caso propio]
 - R19. La lección muestra cómo está armado el playground, qué otras formas hay de llamar a Jev y cómo llevarlo a producción con una compuerta de decisión. [criterion: Pueden integrarlo solos]
+- R20. El presentador tiene un guion por paso de la lección: qué decir, qué mostrar y cuánto tiempo, con los 7 pasos en vivo sumando 15 minutos. [criterion: Entienden qué es Jev y qué no]
 
 ## Flujos principales
 - F1. **Para después.** Desafío en vivo con marcador. (A1, A2; R1, R2, R3)
 - F2. **Para después.** Calibrar el umbral sobre el set. (A1, A2; R4, R5)
 - F3. **De la charla al código** — paso 11 con el snippet → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
 - F4. **Para después.** Asíncrono sobre la demo deployada. (A3; R9, R10)
-- F5. **Charla de 25 minutos** — 15 de lección en vivo por los 7 pasos, preguntando a Jev en los de práctica → 6 de video → 4 de preguntas con la consigna. (A1, A2; R10, R11, R12, R13, R16, R17)
+- F5. **Charla de 25 minutos** — 15 de lección en vivo por los 7 pasos, preguntando a Jev en los de práctica → 6 de video → 4 de preguntas con la consigna. (A1, A2; R10, R11, R12, R13, R16, R17, R20)
 
 ## Ejemplos de aceptación
 - AE1. **Covers R1.** Para después.
@@ -76,9 +77,10 @@ Investigado el 2026-10-24.
 - AE6. **Covers R9.** Para después.
 - AE7. **Covers R11.** Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla.
 - AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana.
-- AE9. **Covers R15.** Given el snippet copiado del paso 11 y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
+- AE9. **Covers R15.** Given el snippet copiado del último paso (hoy, el 13) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
 - AE10. **Covers R10.** Given el video final, then dura 6 minutos o menos.
 - AE12. **Covers R19.** Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo.
+- AE13. **Covers R20.** Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos.
 - AE11. **Covers R16.** Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos.
 
 ## Decisiones clave

@@ -1,27 +1,33 @@
 # Caso grande — la charla completa
 
-Es la entrega que se juzga: el desafío con los 15 tickets, el deck y el video, coherentes entre sí. No se prueba contra el server sino contra los artefactos del repo, porque eso es lo que llega a la sala y a quien no fue.
+Es la entrega que se juzga: la lección guiada, el snippet, el guion del presentador, el deck y el video de la charla del 2026-10-30, coherentes entre sí. No se prueba contra el server sino contra los artefactos del repo, porque eso es lo que llega a la sala y a quien no fue.
 
 ## Actores
-- A1. Presentador — da la charla con el deck y el desafío.
-- A2. Asistentes — ven el marcador y el deck.
+- A1. Presentador — da la charla con la lección, el guion y el deck.
+- A2. Asistentes — siguen la lección y copian el snippet.
 - A3. Quien no pudo ir — ve el video.
 
 ## Requerimientos (de `docs/BRIEF.md`)
-- R1, R2, R3: el desafío con 15 tickets, marcador y la pregunta de conteo, registrado en `challenge/results.json`.
-- R5: cada corrida registra tokens y tiempo.
-- R8: el deck en español, en HTML y PDF 16:9.
-- R10: el video en español.
+- R11: la lección tiene los mismos pasos en español y en inglés, e incluye los 7 que se dan en vivo.
+- R15: el snippet del paso de código usa la API vigente del AI SDK.
+- R20: hay un guion con una entrada por paso, y los pasos en vivo suman 15 minutos.
+- R8: el deck lleva el título de la charla y existe en HTML y PDF.
+- R10: el video dura 6 minutos o menos.
+
+## Datos
+- **Pasos:** los arrays `I18N.es.lessons` e `I18N.en.lessons` que exporta `copy.js`, leídos con `node`.
+- **Pasos en vivo:** `what`, `boolean`, `criteria`, `multi`, `doubt`, `when`, `code`.
+- **Título:** "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad".
+- **Guion:** `docs/GUION.md`, con un encabezado `### <id del paso>` por paso, en el orden de `copy.js`; los pasos en vivo llevan una línea `Tiempo: <N> min`.
 
 ## Ejemplos de aceptación
-- AE1. **Covers R1, R2.** Given `challenge/results.json`, then cada corrida tiene `total` = 15, 15 filas, y `correct` es igual a la cantidad de filas con `ok` verdadero.
-- AE2. **Covers R3.** Given `challenge/results.json`, then existe una corrida marcada `trap: true` (la pregunta que pone a prueba una limitación documentada) con sus 15 filas y la confianza de cada una; no se exige una falla.
-- AE3. **Covers R5.** Given cada corrida, then `tokens` y `ms` son enteros > 0.
-- AE4. **Covers R8.** Given `docs/deck.pdf`, then existe y sus páginas son 16:9; `docs/deck.html` tiene `lang="es"` y muestra al menos un marcador `<correct>/15` que coincide con una corrida de `challenge/results.json`.
-- AE5. **Covers R10.** Given `docs/video/`, then hay al menos un `.mp4` no vacío.
+- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 13 pasos con los mismos `id` en el mismo orden, y entre ellos están los 7 pasos en vivo.
+- AE2. **Covers R15.** Given el paso `code`, then su campo `code` importa `experimental_decide` y no contiene `experimental_evaluate`.
+- AE3. **Covers R20.** Given `docs/GUION.md`, then hay un `### <id>` por cada paso de `copy.js`, en el mismo orden, y las líneas `Tiempo:` de los pasos en vivo suman 15.
+- AE4. **Covers R8.** Given `docs/deck.html`, then contiene el título de la charla, y existe `docs/deck.pdf` no vacío.
+- AE5. **Covers R10.** Given `video/out/demo.mp4`, then existe y `ffprobe` informa una duración de 360 s o menos.
 
-## Contrato de los artefactos
-- **`challenge/results.json`:** `{ "runs": [ { "question": "<id>", "trap": bool, "total": 15, "correct": int, "tokens": int, "outputTokens": int, "ms": int, "rows": [ { "id": "<ticket>", "expected": "<label>", "answer": "<label>", "confidence": number, "ok": bool } ] } ] }`. Lo escribe `scripts/run-challenge.mjs` (PLAN U2).
-- **`docs/deck.pdf` y `docs/deck.html`:** los genera `hackathon-deck` (PLAN U8).
-- **`docs/video/*.mp4`:** lo genera `hackathon-record-video` (PLAN U9).
-- **Entrada de los checks:** la ruta del repo, no una URL.
+## Contrato de runtime
+- **Entrada:** la ruta a la raíz del repo (`python3 cases/large/checks.py .`).
+- **Requiere:** `node` (para leer `copy.js`) y `ffprobe` (para el video). Sin red.
+- **Salida:** la línea resumen primero, después una línea por check; exit 0 si todo pasa, 1 si algo falla, 2 si falta el argumento.

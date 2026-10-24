@@ -79,6 +79,16 @@ def check_usage_and_timing(base):
     expect(isinstance(body.get("warnings"), list), f"warnings {body.get('warnings')!r}")
 
 
+def check_confidence_and_cost(base):
+    body = evaluate(base, {"team": {"type": "choice", "instructions": "¿A qué área va este ticket?", "criteria": TEAMS}})
+    confidence = body.get("confidence")
+    expect(isinstance(confidence, dict) and set(confidence) == {"team"}, f"confidence {confidence!r}, want one entry per question id")
+    c = confidence["team"]
+    expect(isinstance(c, (int, float)) and 0 <= c <= 1, f"confidence {c!r} outside [0, 1]")
+    cost = body.get("cost")
+    expect(isinstance(cost, (int, float)) and cost >= 0, f"cost {cost!r}, want a number >= 0")
+
+
 def check_invalid_json(base):
     status, body = call(base, "POST", "/evaluate", raw=b"{")
     expect(status == 500, f"status {status}, want 500")
@@ -96,6 +106,7 @@ CHECKS = [
     check_refund_boolean,
     check_team_choice,
     check_usage_and_timing,
+    check_confidence_and_cost,
     check_invalid_json,
     check_unknown_route,
 ]

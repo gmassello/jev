@@ -28,6 +28,16 @@ TICKETS = [
 ]
 QUESTION = {"team": {"type": "choice", "instructions": "¿A qué área va este ticket?", "criteria": TEAMS}}
 
+DOUBT = "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?"
+DOUBT_Q = {"type": "choice", "instructions": "¿A qué área va este ticket?", "criteria": {"facturacion": None, "envios": None, "tecnica": None}}
+THRESHOLD = 0.9
+MAIL = "¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya"
+MAIL_ORDERS = [["Trabajo", "Personal", "Promoción", "Estafa"], ["Estafa", "Trabajo", "Personal", "Promoción"]]
+POLICY = "Política de la tienda: las devoluciones se aceptan hasta 30 días después de la compra, con el ticket."
+GUARD_Q = {"type": "boolean", "instructions": "¿La respuesta del asistente afirma algo que la política no dice?"}
+INVENTED = "Cliente: ¿hasta cuándo puedo devolver? Asistente: Tenés hasta 90 días para devolverlo, sin ticket."
+FAITHFUL = "Cliente: ¿hasta cuándo puedo devolver? Asistente: Tenés hasta 30 días desde la compra, con el ticket."
+
 _batch = {}
 
 
@@ -84,7 +94,37 @@ def check_batch_fast_and_cheap(base):
     expect(usd < MAX_USD, f"estimated input cost US${usd:.6f}, want < US${MAX_USD}")
 
 
-CHECKS = [check_batch_all_answered, check_accuracy, check_batch_fast_and_cheap]
+def answer(base, state, question):
+    status, body = call(base, "POST", "/evaluate", {"state": state, "questions": {"q": question}})
+    expect(status == 200, f"status {status}, body {body}")
+    return body["answers"]["q"]
+
+
+def check_doubt_stable(base):
+    tops = [max((answer(base, DOUBT, DOUBT_Q).get("probabilities") or {"?": 1}).values()) for _ in range(3)]
+    expect(all(p < THRESHOLD for p in tops), f"top probabilities {tops}, want all < {THRESHOLD}")
+
+
+def check_order_independent(base):
+    picks = [answer(base, MAIL, {"type": "choice", "instructions": "¿Qué tipo de mail es?", "criteria": {o: None for o in order}}).get("choice") for order in MAIL_ORDERS]
+    expect(picks == ["Estafa", "Estafa"], f"choices {picks}, want Estafa in both orders")
+
+
+def check_guardrail_pair(base):
+    invented = answer(base, POLICY + "\n" + INVENTED, GUARD_Q).get("probability")
+    faithful = answer(base, POLICY + "\n" + FAITHFUL, GUARD_Q).get("probability")
+    expect(isinstance(invented, (int, float)) and invented >= 0.9, f"invented answer: probability {invented!r}, want >= 0.9")
+    expect(isinstance(faithful, (int, float)) and faithful <= 0.1, f"faithful answer: probability {faithful!r}, want <= 0.1")
+
+
+def check_talk_cost(base):
+    responses, _ = run_batch(base)
+    costs = [(body or {}).get("cost") for _, body in responses]
+    expect(all(isinstance(c, (int, float)) and c >= 0 for c in costs), f"cost per call {costs}, want numbers >= 0")
+    expect(sum(costs) < MAX_USD, f"batch cost US${sum(costs):.6f}, want < US${MAX_USD}")
+
+
+CHECKS = [check_batch_all_answered, check_accuracy, check_batch_fast_and_cheap, check_doubt_stable, check_order_independent, check_guardrail_pair, check_talk_cost]
 
 
 def main():

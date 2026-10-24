@@ -1,11 +1,15 @@
 import json
-import pathlib
 import re
+import subprocess
 import sys
 import time
+from pathlib import Path
 
-RESET = None
-TOTAL = 15
+LIVE = ["what", "boolean", "criteria", "multi", "doubt", "when", "code"]
+STEPS = 13
+LIVE_MINUTES = 15
+TITLE = "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"
+MAX_VIDEO_SECONDS = 360
 
 
 def expect(cond, message):
@@ -13,74 +17,69 @@ def expect(cond, message):
         raise AssertionError(message)
 
 
-def load_runs(root):
-    path = root / "challenge" / "results.json"
-    expect(path.is_file(), f"{path} not found")
-    runs = json.loads(path.read_text()).get("runs")
-    expect(isinstance(runs, list) and runs, "results.json has no runs")
-    return runs
+def lessons(root):
+    script = "import(process.argv[1]).then(m=>console.log(JSON.stringify({es:m.I18N.es.lessons,en:m.I18N.en.lessons})))"
+    out = subprocess.run(["node", "-e", script, (root / "copy.js").resolve().as_uri()], capture_output=True, text=True, timeout=30)
+    expect(out.returncode == 0, f"node could not read copy.js: {out.stderr.strip()[:200]}")
+    return json.loads(out.stdout)
 
 
-def check_runs_consistent(root):
-    for run in load_runs(root):
-        name = run.get("question")
-        rows = run.get("rows") or []
-        expect(run.get("total") == TOTAL, f"{name}: total {run.get('total')}, want {TOTAL}")
-        expect(len(rows) == TOTAL, f"{name}: {len(rows)} rows, want {TOTAL}")
-        ok = sum(1 for r in rows if r.get("ok") is True)
-        expect(run.get("correct") == ok, f"{name}: correct {run.get('correct')} != {ok} rows ok")
+def check_lesson_steps(root):
+    data = lessons(root)
+    es, en = [l["id"] for l in data["es"]], [l["id"] for l in data["en"]]
+    expect(len(es) == STEPS, f"{len(es)} steps in es, want {STEPS}")
+    expect(es == en, f"es and en step ids differ: {es} vs {en}")
+    missing = [i for i in LIVE if i not in es]
+    expect(not missing, f"live steps missing: {missing}")
 
 
-def check_trap_recorded(root):
-    traps = [r for r in load_runs(root) if r.get("trap") is True]
-    expect(traps, "no run marked trap: true")
-    for run in traps:
-        rows = run.get("rows") or []
-        expect(len(rows) == TOTAL, f"{run.get('question')}: trap run has {len(rows)} rows, want {TOTAL}")
-        missing = [r.get("id") for r in rows if not isinstance(r.get("confidence"), (int, float))]
-        expect(not missing, f"{run.get('question')}: rows without confidence: {missing}")
+def check_snippet_current_api(root):
+    code = next((l for l in lessons(root)["es"] if l["id"] == "code"), {}).get("code", "")
+    expect("experimental_decide" in code, "the code step does not use experimental_decide")
+    expect("experimental_evaluate" not in code, "the code step still uses experimental_evaluate")
 
 
-def check_runs_measured(root):
-    for run in load_runs(root):
-        for field in ("tokens", "ms"):
-            value = run.get(field)
-            expect(isinstance(value, int) and value > 0, f"{run.get('question')}: {field} {value!r}")
+def check_guion(root):
+    path = root / "docs" / "GUION.md"
+    expect(path.is_file(), "docs/GUION.md not found")
+    text = path.read_text()
+    ids = [l["id"] for l in lessons(root)["es"]]
+    found = re.findall(r"^### (\S+)", text, re.M)
+    expect(found == ids, f"guion steps {found}, want {ids}")
+    sections = dict(zip(found, re.split(r"^### \S+.*$", text, flags=re.M)[1:]))
+    minutes = 0.0
+    for step in LIVE:
+        m = re.search(r"^Tiempo:\s*([\d.,]+)\s*min", sections.get(step, ""), re.M)
+        expect(m, f"live step {step} has no 'Tiempo: N min' line")
+        minutes += float(m.group(1).replace(",", "."))
+    expect(abs(minutes - LIVE_MINUTES) < 0.01, f"live steps add up to {minutes} min, want {LIVE_MINUTES}")
 
 
 def check_deck(root):
-    pdf = root / "docs" / "deck.pdf"
     html = root / "docs" / "deck.html"
-    expect(pdf.is_file() and pdf.stat().st_size > 0, f"{pdf} missing or empty")
-    boxes = re.findall(rb"/MediaBox\s*\[\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\]", pdf.read_bytes())
-    expect(boxes, "no /MediaBox found in deck.pdf")
-    for box in boxes:
-        x0, y0, x1, y1 = map(float, box)
-        ratio = (x1 - x0) / (y1 - y0)
-        expect(abs(ratio - 16 / 9) < 0.01, f"page ratio {ratio:.3f}, want 16:9")
-    expect(html.is_file(), f"{html} not found")
-    text = html.read_text()
-    expect(re.search(r'<html[^>]*\blang="es"', text), 'deck.html without lang="es"')
-    scores = {f"{r.get('correct')}/{TOTAL}" for r in load_runs(root)}
-    expect(any(s in text for s in scores), f"deck.html shows none of the measured scores {sorted(scores)}")
+    pdf = root / "docs" / "deck.pdf"
+    expect(html.is_file() and TITLE in html.read_text(), "docs/deck.html does not carry the talk title")
+    expect(pdf.is_file() and pdf.stat().st_size > 0, "docs/deck.pdf missing or empty")
 
 
 def check_video(root):
-    videos = [p for p in (root / "docs" / "video").glob("*.mp4") if p.stat().st_size > 0]
-    expect(videos, "no non-empty .mp4 in docs/video/")
+    video = root / "video" / "out" / "demo.mp4"
+    expect(video.is_file() and video.stat().st_size > 0, "video/out/demo.mp4 missing or empty")
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(video)],
+                         capture_output=True, text=True, timeout=30)
+    expect(out.returncode == 0, f"ffprobe failed: {out.stderr.strip()[:200]}")
+    seconds = float(out.stdout.strip())
+    expect(seconds <= MAX_VIDEO_SECONDS, f"video lasts {seconds:.0f}s, want <= {MAX_VIDEO_SECONDS}s")
 
 
-CHECKS = [check_runs_consistent, check_trap_recorded, check_runs_measured, check_deck, check_video]
+CHECKS = [check_lesson_steps, check_snippet_current_api, check_guion, check_deck, check_video]
 
 
 def main():
     if len(sys.argv) != 2:
-        print("usage: python3 checks.py <repo-path>", file=sys.stderr)
+        print("usage: python3 checks.py <repo-root>", file=sys.stderr)
         return 2
-    root = pathlib.Path(sys.argv[1])
-    if not root.is_dir():
-        print(f"usage: python3 checks.py <repo-path> ({root} is not a directory)", file=sys.stderr)
-        return 2
+    root = Path(sys.argv[1])
     started = time.monotonic()
     results = []
     for check in CHECKS:

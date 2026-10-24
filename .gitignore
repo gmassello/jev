@@ -3,3 +3,4 @@ node_modules
 video/out/
 video/*.mov
 video/*.mp4
+__pycache__/

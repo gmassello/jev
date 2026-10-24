@@ -221,12 +221,12 @@ Al terminar, el playground es una lección guiada de 13 pasos que se recorre en 
 
 ### U20. Guion del presentador por paso
 - **Goal:** `docs/GUION.md` dice, para cada paso de la lección, qué decir en una o dos frases, qué mostrar o tocar en pantalla, el tiempo (los 7 pasos en vivo suman 15 minutos) y la transición al siguiente; los pasos que no van en vivo llevan una línea para el video o para después.
-- **Covers:** R11 · F5
+- **Covers:** R20 · F5
 - **Files:** `docs/GUION.md`
 - **Depends on:** U12, U14, U16, U17
 - **Status:** todo
 - **Tests:**
-  - happy: el guion → tiene una entrada por cada paso de `copy.js`, en el mismo orden, y los tiempos de los pasos en vivo suman 15 minutos.
+  - happy: el guion → tiene una entrada por cada paso de `copy.js`, en el mismo orden, y los tiempos de los pasos en vivo suman 15 minutos. Covers AE13.
   - edge: cada cifra que menciona → sale de `demo-check` o de la respuesta del gateway.
 
 ## Cut line
