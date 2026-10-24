@@ -172,6 +172,50 @@ export const I18N = {
         },
       },
       {
+        id: 'arch', kind: 'theory', title: 'Cómo está armado este playground',
+        theory: [
+          'Tu navegador → este server (guarda la key) → Vercel AI Gateway → Jev. La página nunca ve la key: solo le manda el texto y las preguntas al server.',
+          'Nunca llames a Jev directo desde el navegador: la key quedaría a la vista de cualquiera que abra las herramientas del navegador.',
+          'Hay otras formas de llegar al mismo modelo:',
+        ],
+        table: {
+          head: ['Opción', 'Cómo sería', 'Cuándo conviene'],
+          rows: [
+            ['A · AI Gateway (este proyecto)', 'https://vercel.com/docs/ai-gateway', 'Un server propio llama a Jev con el AI SDK.', 'Para empezar: un solo SDK para Jev y para LLMs, y el costo de cada llamada viene en la respuesta.'],
+            ['B · API nativa de TypeSafe', 'https://docs.typesafe.ai/introduction', 'El server llama a api.typesafe.ai con su SDK.', 'Si necesitás algo que el AI SDK todavía no expone, como imágenes o contexto largo.'],
+            ['C · Cloudflare Workers AI', 'https://developers.cloudflare.com/ai/models/typesafe/jev/', 'Un Worker llama a typesafe/jev, sin server propio.', 'Si ya estás en Cloudflare; tiene menos contexto (32k).'],
+          ],
+        },
+        outro: 'Arrancá con A: es el código del último paso.',
+      },
+      {
+        id: 'prod', kind: 'theory', title: 'Jev en tu sistema',
+        theory: [
+          'Jev va como una compuerta antes de actuar: decide, y tu código compara la probabilidad con el umbral.',
+        ],
+        diagram: `evento (ticket, respuesta de un LLM, tool call)
+        │
+        ▼
+    Jev decide
+        │
+  ¿probabilidad ≥ umbral?
+    │ sí              │ no
+    ▼                 ▼
+acción automática   revisión humana
+    └───────┬─────────┘
+            ▼
+  log de la decisión → recalibrar el umbral`,
+        list: [
+          'La key solo en el server.',
+          'Límite de gasto y rate limit en tu endpoint.',
+          'Timeout con un mensaje claro si Jev no responde.',
+          'El texto que entra no es de confianza: puede traer instrucciones.',
+          'Guardá cada decisión, sin datos personales, para recalibrar el umbral.',
+          'Fijá la versión del modelo en producción (typesafe-ai/jev-1.14.0) y recalibrá al cambiarla.',
+        ],
+        outro: 'Antes de producción, revisá estos puntos.',
+      },
+      {
         id: 'code', kind: 'code', title: 'Llevalo a tu código',
         theory: [
           'Todo lo que hiciste en el playground es una llamada a experimental_evaluate del AI SDK.',
@@ -375,6 +419,50 @@ else console.log('A revisión humana:', probabilities);
             ['usage', null, 'The tokens Jev read in the call; cost is computed on the input ones.'],
           ],
         },
+      },
+      {
+        id: 'arch', kind: 'theory', title: 'How this playground is built',
+        theory: [
+          'Your browser → this server (holds the key) → Vercel AI Gateway → Jev. The page never sees the key: it only sends the text and the questions to the server.',
+          'Never call Jev straight from the browser: the key would be visible to anyone who opens the browser tools.',
+          'There are other ways to reach the same model:',
+        ],
+        table: {
+          head: ['Option', 'What it looks like', 'When it fits'],
+          rows: [
+            ['A · AI Gateway (this project)', 'https://vercel.com/docs/ai-gateway', 'Your own server calls Jev with the AI SDK.', 'To get started: one SDK for Jev and for LLMs, and the cost of each call comes in the response.'],
+            ['B · TypeSafe native API', 'https://docs.typesafe.ai/introduction', 'The server calls api.typesafe.ai with its SDK.', 'When you need something the AI SDK does not expose yet, like images or long context.'],
+            ['C · Cloudflare Workers AI', 'https://developers.cloudflare.com/ai/models/typesafe/jev/', 'A Worker calls typesafe/jev, with no server of your own.', 'When you are already on Cloudflare; it has less context (32k).'],
+          ],
+        },
+        outro: 'Start with A: it is the code in the last step.',
+      },
+      {
+        id: 'prod', kind: 'theory', title: 'Jev in your system',
+        theory: [
+          'Jev works as a gate before acting: it decides, and your code compares the probability with the threshold.',
+        ],
+        diagram: `event (ticket, LLM answer, tool call)
+        │
+        ▼
+    Jev decides
+        │
+  probability ≥ threshold?
+    │ yes             │ no
+    ▼                 ▼
+automatic action    human review
+    └───────┬─────────┘
+            ▼
+  decision log → recalibrate the threshold`,
+        list: [
+          'The key only on the server.',
+          'A spending limit and a rate limit on your endpoint.',
+          'A timeout with a clear message if Jev does not answer.',
+          'Incoming text is not trusted: it can carry instructions.',
+          'Store each decision, without personal data, to recalibrate the threshold.',
+          'Pin the model version in production (typesafe-ai/jev-1.14.0) and recalibrate when you change it.',
+        ],
+        outro: 'Check these points before going to production.',
       },
       {
         id: 'code', kind: 'code', title: 'Take it to your code',

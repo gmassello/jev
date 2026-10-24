@@ -208,6 +208,8 @@
         h('tbody', {}, L.table.rows.map(([name, url, ...cells]) => h('tr', {},
           h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
           cells.map((c) => h('td', { textContent: c })))))))] : []),
+      ...(L.diagram ? [h('div', { className: 'code' }, h('pre', { textContent: L.diagram }))] : []),
+      ...(L.list ? [h('ul', {}, L.list.map((c) => h('li', { textContent: c })))] : []),
       ...(L.commands ? [h('ol', { className: 'commands' }, L.commands.map((c) => h('li', {}, h('code', { textContent: c }))))] : []),
       ...(L.code ? [h('div', { className: 'code' },
         h('button', { type: 'button', textContent: t().copy, onclick: async (e) => {

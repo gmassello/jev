@@ -58,6 +58,7 @@ Investigado el 2026-10-24.
 - R16. La lección distingue la probabilidad de cada opción de la confianza, como la define TypeSafe, y muestra los umbrales que sugiere. [criterion: Costo y riesgos claros]
 - R17. "Cuándo usarlo" suma tres riesgos para producción: el texto que entra no es de confianza, Jev prefiere la primera opción, y números, fechas y conteos se resuelven en código. [criterion: Costo y riesgos claros]
 - R18. Un caso muestra a Jev como guardrail de un LLM: si la respuesta de un chatbot afirma algo que la política no dice. [criterion: Detectan un caso propio]
+- R19. La lección muestra cómo está armado el playground, qué otras formas hay de llamar a Jev y cómo llevarlo a producción con una compuerta de decisión. [criterion: Pueden integrarlo solos]
 
 ## Flujos principales
 - F1. **Para después.** Desafío en vivo con marcador. (A1, A2; R1, R2, R3)
@@ -77,6 +78,7 @@ Investigado el 2026-10-24.
 - AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana.
 - AE9. **Covers R15.** Given el snippet copiado del paso 11 y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
 - AE10. **Covers R10.** Given el video final, then dura 6 minutos o menos.
+- AE12. **Covers R19.** Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo.
 - AE11. **Covers R16.** Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos.
 
 ## Decisiones clave

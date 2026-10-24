@@ -86,3 +86,14 @@ test('the when-to-use step has the same rows in es and en', () => {
   assert.equal(step('es').table.rows.length, step('en').table.rows.length);
   for (const lang of ['es', 'en']) for (const r of step(lang).table.rows) assert.equal(r.length, 3);
 });
+
+test('the architecture and production steps come before the code step, with the same shape in es and en', () => {
+  for (const lang of ['es', 'en']) {
+    const ids = I18N[lang].lessons.map((l) => l.id);
+    assert.ok(ids.indexOf('arch') < ids.indexOf('code') && ids.indexOf('prod') < ids.indexOf('code'), lang);
+  }
+  const step = (lang, id) => I18N[lang].lessons.find((l) => l.id === id);
+  assert.equal(step('es', 'arch').table.rows.length, step('en', 'arch').table.rows.length);
+  assert.equal(step('es', 'prod').list.length, step('en', 'prod').list.length);
+  for (const lang of ['es', 'en']) assert.ok(step(lang, 'prod').list.some((item) => item.includes('jev-1.14.0')), lang);
+});
