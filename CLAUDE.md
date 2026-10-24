@@ -16,6 +16,7 @@ node --test --test-name-pattern="<nombre del test>" # un solo test; sin ruta: no
                                                     # type-check: no hay (JS sin build)
                                                     # deploy: no hay (PLAN U7 en cut; la charla corre en local)
 python3 cases/small/checks.py http://localhost:3001 # caso chico contra el server corriendo (3 llamadas reales a Jev)
+node scripts/demo-check.mjs --check                # antes de grabar el video: cada afirmación del guion contra Jev real
 ```
 
 **Gate antes de dar una tarea por terminada:** `npm test`, y si se tocó `server.js` o el contrato de `/evaluate`, también `python3 cases/small/checks.py http://localhost:3001` con el server levantado.

@@ -1,2 +1,5 @@
 node_modules
 .env
+video/out/
+video/*.mov
+video/*.mp4

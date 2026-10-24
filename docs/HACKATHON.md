@@ -1,10 +1,10 @@
 # Brief del evento
 
-Fuente: respuestas del presentador del 2026-10-10. Es una charla interna sin página pública, así que todos los valores salen de esas respuestas; lo que no se especificó figura como `not published`.
+Fuente: respuestas del presentador del 2026-10-10, 2026-10-19 y 2026-10-24. Es una charla interna sin página pública, así que todos los valores salen de esas respuestas; lo que no se especificó figura como `not published`.
 
 ## Evento
 
-- **Nombre:** Jev para devs — charla interna
+- **Nombre:** Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad (charla interna)
 - **URL:** not published (interna)
 - **Organizador:** gmassello
 - **Público:** compañeros de trabajo, todos programadores
@@ -15,9 +15,11 @@ Fuente: respuestas del presentador del 2026-10-10. Es una charla interna sin pá
 
 | Etapa | Zona del evento | Local (-03:00) |
 |---|---|---|
-| Presentación (deadline) | 2026-10-22 15:00 -03:00 | 2026-10-22 15:00 -03:00 |
+| Presentación (deadline) | 2026-10-30 12:00 -03:00 | 2026-10-30 12:00 -03:00 |
 | Entregables listos | not published (se asume antes de la presentación) | not published |
 | Feedback / seguimiento | not published | not published |
+
+Se movió del 2026-10-22 15:00 por pedido del presentador (2026-10-19).
 
 La zona del evento es la hora argentina (ART, -03:00), la misma que la local del presentador.
 
@@ -39,7 +41,7 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 ## Tecnología obligatoria
 
 - **Jev en Vercel AI Gateway** (`typesafe-ai/jev`) con `experimental_evaluate` del AI SDK (`ai` v7).
-- **Cómo se demuestra:** llamados en vivo desde el playground durante la demo (`POST /evaluate`) y el snippet de integración de la pestaña Docs.
+- **Cómo se demuestra:** llamados en vivo desde el playground durante la demo (`POST /evaluate`) y el snippet del paso 11, «Llevalo a tu código», del playground.
 
 ## Requisitos de entrega
 
@@ -47,7 +49,7 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 |---|---|---|
 | Formato de la sesión | Charla + demo en vivo | Duración: not published |
 | Deck | HTML + PDF | Cantidad de slides / duración: not published |
-| Demo deployada | URL pública del playground, protegida | not published |
+| Demo | Playground en local (`PORT=3001 npm start`); el deploy quedó en cut (PLAN U7) | Respaldo: el video corto |
 | Video corto | Screencast narrado para quien no pueda estar en la charla | Duración máxima y formato: not published |
 | Ejercicio guiado | Un caso real del equipo resuelto con Jev (por ejemplo, clasificar tickets o logs) | not published |
 
@@ -55,7 +57,7 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 
 not published (charla interna, sin reglas).
 
-Restricciones propias que ya están documentadas en el repo (pestaña Docs, "Errores y seguridad"), no reglas del evento:
+Restricciones propias que ya están documentadas en el repo (README, «Before you use it in production»), no reglas del evento:
 
 - La API key nunca llega al navegador ni al repo.
 - Un endpoint público que reenvía a Jev tiene que estar protegido (auth, rate limit, límite de gasto).

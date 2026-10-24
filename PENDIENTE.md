@@ -1,9 +1,11 @@
 # Pendiente — cierre Jev for developers (charla interna)
 
-Cierre: **2026-10-22 15:00 -03:00** (hora argentina, igual a la local). Competencia:
+Charla: **Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad**. Tareas por día en `docs/PRESENTACION.md`.
+
+Cierre: **2026-10-30 12:00 -03:00** (hora argentina, igual a la local). Competencia:
 no publicada (charla interna) · Submission: no aplica · PR: no aplica.
 
-Etapas (respuestas del presentador, sin página de evento): presentación 2026-10-22 15:00 -03:00, entregables listos antes de la presentación (sin fecha), seguimiento no publicado.
+Etapas (respuestas del presentador, sin página de evento): presentación 2026-10-30 12:00 -03:00, entregables listos antes de la presentación (sin fecha), seguimiento no publicado.
 
 Estado del codigo en una linea: <N tests verdes, que esta hecho, que falta>.
 

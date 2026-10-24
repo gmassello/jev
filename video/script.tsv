@@ -1,0 +1,26 @@
+beat	en	es
+0:00 avatar	Soy Germán. Les muestro Jev, un modelo que evalúa.	Soy Germán, y les voy a mostrar Jev, un modelo que evalúa.
+0:00 avatar	Texto y pregunta cerrada: vuelve una respuesta con probabilidad.	Le das un texto y una pregunta cerrada, y te devuelve una respuesta con su probabilidad.
+0:00 avatar	Vamos al playground.	Vamos al playground.
+0:12 paso 1	Jev no conversa: contesta en un formato fijo.	Jev no conversa. Contesta siempre en un formato fijo.
+0:12 paso 1	Sí o no, una opción o un nivel de una escala.	Un sí o no, una opción de una lista, o un nivel de una escala.
+0:28 paso 2	Lo más simple: una pregunta de sí o no.	Empecemos por lo más simple, una pregunta de sí o no.
+0:28 paso 2	¿Se le devolvió la plata al cliente?	¿Se le devolvió la plata al cliente?
+0:28 paso 2	Sí, y casi seguro: la probabilidad está cerca de 1.	Jev dice que sí, y está casi seguro. La probabilidad queda cerca de uno.
+0:45 pasos 3-4	Ahora, elegir una opción de una lista.	Ahora la respuesta es una opción de una lista.
+0:45 pasos 3-4	Este mail es una estafa, sin dudas.	Este mail es una estafa, y Jev no tiene dudas.
+0:45 pasos 3-4	Con una escala, devuelve un nivel: las estrellas.	Con una escala, devuelve un nivel. Acá, cuántas estrellas le daría a unos auriculares.
+1:05 paso 5	Cada opción puede llevar una definición.	Cada opción puede llevar una definición corta.
+1:05 paso 5	Así Jev sabe a qué área va el ticket.	Así Jev sabe qué entra en cada área, y rutea el ticket a cuenta.
+1:20 paso 6	Varias preguntas en una sola llamada.	También podés hacer varias preguntas en una sola llamada.
+1:20 paso 6	El ticket se clasifica, se prioriza y se marca.	El mismo ticket se clasifica, se prioriza y se marca de una vez.
+1:38 paso 7	¿Y cuando el texto es ambiguo?	¿Y qué pasa cuando el texto es ambiguo?
+1:38 paso 7	Habla de un pago, de un pedido y de un error.	Este ticket habla de un pago, de un pedido y de un error de la app.
+1:38 paso 7	La confianza baja del umbral: lo revisa una persona.	La confianza queda por debajo del umbral, así que lo revisa una persona.
+2:00 pasos 8-10	Sirve para decisiones cerradas, no para redactar.	Jev sirve para decisiones cerradas. Para redactar, mejor un LLM.
+2:00 pasos 8-10	Hay proyectos parecidos, y un glosario para repasar.	Hay proyectos parecidos, y un glosario para repasar los conceptos.
+2:20 paso 11	Y el código, listo para copiar.	Y al final, el código listo para copiar.
+2:20 paso 11	Con un umbral: rutea solo o manda a revisión.	Con un umbral decidís qué se rutea solo y qué va a revisión.
+2:40 avatar	El playground está en el repo, para que lo prueben.	El playground está en el repo, para que lo prueben con sus casos.
+2:40 avatar	Este presentador es un avatar con mi voz clonada, hecho con HeyGen.	Una aclaración: este presentador es un avatar con mi voz clonada, hecho con HeyGen.
+2:40 avatar	¡Gracias!	Gracias.
