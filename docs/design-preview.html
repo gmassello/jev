@@ -3,17 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jev — Design preview</title>
-<script>
-  try {
-    var t = localStorage.getItem('theme');
-    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-    if (localStorage.getItem('projector') === 'on') document.documentElement.dataset.projector = 'on';
-  } catch (e) {}
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Evaluar con Jev — Design preview</title>
 <style>
   :root {
     color-scheme: light;
@@ -35,251 +25,117 @@
     --warn-soft: #ab570a15;
     --code-bg: #101010;
     --code-fg: #f5f6f7;
-    --code-muted: #8b949e;
-    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    --fs-score: 4.5rem;
-    --fs-display: 3rem;
-    --fs-h1: 2rem;
-    --fs-h2: 1.25rem;
+    --font-sans: system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    --fs-h1: 1.6rem;
+    --fs-title: 1.5rem;
+    --fs-verdict: 1.4rem;
     --fs-body: 1rem;
-    --fs-sm: 0.875rem;
-    --fs-xs: 0.75rem;
-    --fs-code: 0.875rem;
-    --lh-tight: 1.15;
-    --lh-body: 1.55;
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.5rem;
-    --space-6: 2rem;
-    --space-7: 2.5rem;
-    --space-8: 4rem;
+    --fs-sm: .9rem;
+    --fs-xs: .8rem;
+    --fs-code: 13px;
     --radius-sm: 6px;
     --radius-md: 10px;
-    --radius-pill: 9999px;
+    --radius-pill: 99px;
     --dur-fast: 150ms;
-    --dur-count: 700ms;
-    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      color-scheme: dark;
-      --bg: #151517;
-      --card: #202024;
-      --text: #eeeeee;
-      --muted: #999999;
-      --line: #333333;
-      --border-strong: #707070;
-      --accent: #6b9bff;
-      --accent-soft: #6b9bff26;
-      --on-accent: #0b1020;
-      --ring: #6b9bff;
-      --ok: #4cc27f;
-      --ok-soft: #4cc27f1f;
-      --bad: #ff6b6b;
-      --bad-soft: #ff6b6b1a;
-      --warn: #f5a623;
-      --warn-soft: #f5a6231f;
-    }
-  }
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --bg: #151517;
-    --card: #202024;
-    --text: #eeeeee;
-    --muted: #999999;
-    --line: #333333;
-    --border-strong: #707070;
-    --accent: #6b9bff;
-    --accent-soft: #6b9bff26;
-    --on-accent: #0b1020;
-    --ring: #6b9bff;
-    --ok: #4cc27f;
-    --ok-soft: #4cc27f1f;
-    --bad: #ff6b6b;
-    --bad-soft: #ff6b6b1a;
-    --warn: #f5a623;
-    --warn-soft: #f5a6231f;
-  }
-  :root[data-projector="on"] { font-size: 125%; }
-
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: var(--fs-body)/var(--lh-body) var(--font-sans); }
-  .wrap { max-width: 820px; margin: 0 auto; padding: var(--space-6) var(--space-4) var(--space-8); }
-  header { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
-  .eyebrow { font: 500 var(--fs-xs)/1.35 var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin: var(--space-6) 0 var(--space-3); }
-  .display { font-size: var(--fs-display); font-weight: 600; line-height: var(--lh-tight); letter-spacing: -0.05em; margin: 0; }
-  .h1 { font-size: var(--fs-h1); font-weight: 600; line-height: 1.25; letter-spacing: -0.04em; margin: var(--space-4) 0 var(--space-2); }
-  .h2 { font-size: var(--fs-h2); font-weight: 600; line-height: 1.4; letter-spacing: -0.02em; margin: 0 0 var(--space-2); }
-  p { margin: 0 0 var(--space-3); }
-  .muted { color: var(--muted); }
-  .small { font-size: var(--fs-sm); }
-  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-3); }
-  .swatch { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; background: var(--card); }
-  .swatch i { display: block; height: 3rem; border-bottom: 1px solid var(--line); }
-  .swatch span { display: block; padding: var(--space-2); font: var(--fs-xs)/1.35 var(--font-mono); color: var(--muted); }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3); }
-  .row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
-  button { font: 500 var(--fs-sm)/1.2 var(--font-sans); cursor: pointer; border-radius: var(--radius-sm); transition: border-color var(--dur-fast), filter var(--dur-fast); }
-  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-  button:disabled { opacity: .5; cursor: not-allowed; }
-  .btn-primary { background: var(--accent); color: var(--on-accent); border: 0; padding: var(--space-3) var(--space-5); font-weight: 600; font-size: var(--fs-body); }
-  .btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
-  .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--line); padding: var(--space-2) var(--space-3); }
-  .btn-secondary:hover:not(:disabled) { border-color: var(--accent); }
-  label { display: block; font-size: var(--fs-sm); font-weight: 500; margin-bottom: var(--space-1); }
-  input, select { font: var(--fs-body)/1.3 var(--font-sans); color: var(--text); background: var(--card); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: var(--space-2); width: 100%; }
-  input:hover, select:hover { border-color: var(--text); }
-  input.invalid { border-color: var(--bad); }
-  .err { color: var(--bad); font-size: var(--fs-sm); margin-top: var(--space-1); }
-  .badge { display: inline-block; border-radius: var(--radius-pill); font: 500 var(--fs-xs)/1.35 var(--font-sans); padding: var(--space-1) var(--space-2); }
-  .badge.ok { color: var(--ok); background: var(--ok-soft); }
-  .badge.bad { color: var(--bad); background: var(--bad-soft); }
-  .badge.warn { color: var(--warn); background: var(--warn-soft); }
+  body { margin: 0 auto; max-width: 820px; padding: 1.5rem 1rem 4rem; background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: var(--fs-body); }
+  h1 { font-size: var(--fs-h1); margin: 0 0 1rem; }
+  h2 { font-size: var(--fs-sm); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 2rem 0 .6rem; }
+  .title { font-size: var(--fs-title); margin: .4rem 0 .8rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1rem; margin-bottom: .8rem; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: .5rem; }
+  .sw { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--card); font-size: var(--fs-xs); overflow: hidden; }
+  .sw i { display: block; height: 2.5rem; }
+  .sw span { display: block; padding: .3rem .5rem; font-family: var(--font-mono); }
+  .stepper { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: var(--fs-sm); }
+  .dots { display: flex; gap: .35rem; }
+  .dots i { width: .6rem; height: .6rem; border-radius: var(--radius-pill); background: var(--line); }
+  .dots i.on { background: var(--accent); }
+  .nav { display: flex; justify-content: space-between; gap: .8rem; }
+  button { font: inherit; cursor: pointer; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--card); color: inherit; padding: .4rem .8rem; transition: border-color var(--dur-fast); }
+  button:hover { border-color: var(--accent); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  button:disabled { opacity: .6; cursor: wait; }
+  .primary { display: block; width: 100%; padding: .8rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
+  input { font: inherit; width: 100%; background: var(--card); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: .5rem; }
+  .badge { display: inline-block; font-size: var(--fs-xs); font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: var(--radius-pill); padding: .15rem .6rem; }
+  .verdict { font-size: var(--fs-verdict); font-weight: 700; margin: .2rem 0 .6rem; color: var(--ok); }
+  .verdict.no { color: var(--bad); }
+  .bar-row { display: grid; grid-template-columns: minmax(6rem, 30%) 1fr 3.2rem; gap: .5rem; align-items: center; font-size: var(--fs-sm); margin: .25rem 0; }
+  .bar { height: .7rem; background: var(--accent-soft); border-radius: var(--radius-pill); overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); }
+  .win { font-weight: 700; }
+  .pct { text-align: right; font-variant-numeric: tabular-nums; }
+  .explain { background: var(--accent-soft); border-radius: var(--radius-sm); padding: .6rem .8rem; line-height: 1.5; margin: .8rem 0 0; }
+  .explain.review { background: var(--warn-soft); color: var(--warn); font-weight: 600; }
+  .fail { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
   .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
-  th, td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { color: var(--muted); font-weight: 500; }
-  tr.fail td { background: var(--bad-soft); }
-  .score { font: 700 var(--fs-score)/var(--lh-tight) var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-  .score-label { font-size: var(--fs-h2); color: var(--muted); }
-  .terminal { position: relative; background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--space-4); padding-top: var(--space-7); font: var(--fs-code)/1.45 var(--font-mono); overflow-x: auto; margin: 0; white-space: pre; }
-  .terminal .c { color: var(--code-muted); }
-  .terminal-copy { position: absolute; top: var(--space-2); right: var(--space-2); }
-  @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; }
-  }
+  table { border-collapse: collapse; width: 100%; font-size: var(--fs-sm); background: var(--card); }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; }
+  td:first-child { font-weight: 600; }
+  a { color: var(--accent); }
+  .code { position: relative; }
+  .code pre { background: var(--code-bg); color: var(--code-fg); font-family: var(--font-mono); font-size: var(--fs-code); border-radius: var(--radius-md); padding: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+  .code button { position: absolute; top: .5rem; right: .5rem; font-size: var(--fs-xs); padding: .2rem .6rem; }
+  ol.commands code { font-family: var(--font-mono); background: var(--accent-soft); padding: .1rem .4rem; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <p class="eyebrow" style="margin:0">Design preview</p>
-      <h1 class="display">Jev para devs</h1>
-    </div>
-    <div class="row">
-      <button class="btn-secondary" id="theme" type="button">Cambiar tema</button>
-      <button class="btn-secondary" id="projector" type="button" aria-pressed="false">Modo proyector</button>
-    </div>
-  </header>
+<h1>Evaluar con Jev — Design preview</h1>
 
-  <p class="eyebrow">Colores</p>
-  <div class="swatches" id="swatches"></div>
-
-  <p class="eyebrow">Tipografía</p>
-  <div class="card">
-    <p class="h1">Desafío: 15 tickets de soporte</p>
-    <p class="h2">¿A qué área va este ticket?</p>
-    <p>Jev clasifica cada ticket y lo comparamos con la respuesta correcta. Arriba del umbral decide solo; abajo, lo mira una persona.</p>
-    <p class="small muted">Confianza, tokens, segundos y US$ van en mono: <span class="num">0.97 · 1923 tokens · 0.61 s</span></p>
-  </div>
-
-  <p class="eyebrow">Controles</p>
-  <div class="card">
-    <label for="q">Pregunta para todos los tickets</label>
-    <input id="q" value="¿A qué área va este ticket?">
-    <div style="height:var(--space-3)"></div>
-    <label for="q2">Pregunta vacía (estado de error)</label>
-    <input id="q2" class="invalid" value="" aria-describedby="q2err">
-    <p class="err" id="q2err">Escribí una pregunta para evaluar los tickets.</p>
-    <div class="row" style="margin-top:var(--space-4)">
-      <button class="btn-primary" type="button">Evaluar los 5 tickets</button>
-      <button class="btn-secondary" type="button">Ver JSON</button>
-      <button class="btn-secondary" type="button" disabled>Deshabilitado</button>
-    </div>
-  </div>
-
-  <p class="eyebrow">Marcador (efecto protagonista)</p>
-  <div class="card">
-    <div class="row" style="align-items:baseline">
-      <span class="score" id="score" data-value="5" data-total="5">5/5</span>
-      <span class="score-label">aciertos</span>
-    </div>
-    <p class="small muted num">5 tickets · 0.61 s · 1923 tokens · US$0.000081 (entrada) — caso mediano, corrida real del 2026-10-10</p>
-    <button class="btn-secondary" id="replay" type="button">Repetir animación</button>
-    <div class="table-wrap" style="margin-top:var(--space-4)">
-      <table>
-        <thead><tr><th>Ticket</th><th>Esperado</th><th>Jev</th><th>Resultado</th></tr></thead>
-        <tbody>
-          <tr><td>Me debitaron dos veces la cuota de noviembre…</td><td>facturacion</td><td>facturacion</td><td><span class="badge ok">Acierto</span></td></tr>
-          <tr><td>El paquete sigue figurando "en preparación"…</td><td>envios</td><td>envios</td><td><span class="badge ok">Acierto</span></td></tr>
-          <tr class="fail"><td>Fila de ejemplo de una falla (estilo)</td><td>tecnica</td><td>cuenta</td><td><span class="badge bad">Falló</span></td></tr>
-          <tr><td>Fila de ejemplo bajo el umbral (estilo)</td><td>cuenta</td><td>cuenta</td><td><span class="badge warn">A revisión</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <p class="eyebrow">Bloque terminal</p>
-  <pre class="terminal"><button class="btn-secondary terminal-copy" type="button">Copiar</button><span class="c">// npm i ai</span>
-import { experimental_evaluate as evaluate } from 'ai';
-
-const { answers } = await evaluate({
-  model: 'typesafe-ai/jev',
-  state: ticketText,
-  questions: {
-    urgent: { type: 'boolean', instructions: 'Is this ticket urgent?' },
-  },
-});</pre>
+<h2>Tokens</h2>
+<div class="swatches">
+  <div class="sw"><i style="background:var(--bg)"></i><span>--bg</span></div>
+  <div class="sw"><i style="background:var(--card)"></i><span>--card</span></div>
+  <div class="sw"><i style="background:var(--text)"></i><span>--text</span></div>
+  <div class="sw"><i style="background:var(--muted)"></i><span>--muted</span></div>
+  <div class="sw"><i style="background:var(--accent)"></i><span>--accent</span></div>
+  <div class="sw"><i style="background:var(--accent-soft)"></i><span>--accent-soft</span></div>
+  <div class="sw"><i style="background:var(--ok)"></i><span>--ok</span></div>
+  <div class="sw"><i style="background:var(--bad)"></i><span>--bad</span></div>
+  <div class="sw"><i style="background:var(--warn)"></i><span>--warn</span></div>
+  <div class="sw"><i style="background:var(--code-bg)"></i><span>--code-bg</span></div>
 </div>
 
-<script>
-  const tokens = ['--bg', '--card', '--text', '--muted', '--line', '--border-strong', '--accent', '--on-accent', '--ok', '--bad', '--warn', '--code-bg'];
-  const box = document.getElementById('swatches');
-  const paint = () => {
-    const css = getComputedStyle(document.documentElement);
-    box.replaceChildren(...tokens.map((t) => {
-      const s = document.createElement('div');
-      s.className = 'swatch';
-      const i = document.createElement('i');
-      i.style.background = `var(${t})`;
-      const label = document.createElement('span');
-      label.textContent = `${t} ${css.getPropertyValue(t).trim()}`;
-      s.append(i, label);
-      return s;
-    }));
-  };
+<h2>Stepper y navegación</h2>
+<div class="nav"><span><button>← Anterior</button> <button>⇤ Inicio</button></span><button>Siguiente paso →</button></div>
+<p class="stepper"><span>Paso 7 de 13</span><span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></span></p>
+<p class="title"><strong>Cuando Jev duda</strong></p>
 
-  const root = document.documentElement;
-  const save = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
-  document.getElementById('theme').onclick = () => {
-    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-    root.dataset.theme = dark ? 'light' : 'dark';
-    save('theme', root.dataset.theme);
-    paint();
-  };
-  const proj = document.getElementById('projector');
-  const syncProj = () => proj.setAttribute('aria-pressed', String(root.dataset.projector === 'on'));
-  proj.onclick = () => {
-    if (root.dataset.projector === 'on') delete root.dataset.projector; else root.dataset.projector = 'on';
-    save('projector', root.dataset.projector === 'on' ? 'on' : 'off');
-    syncProj();
-  };
+<h2>Práctica</h2>
+<div class="card">
+  <span class="badge">Elegir una opción</span>
+  <p><input value="¿A qué área va este ticket?" aria-label="Pregunta"></p>
+</div>
+<button class="primary">Preguntarle a Jev</button>
+<p><button class="primary" disabled>Pensando…</button></p>
 
-  const score = document.getElementById('score');
-  const countUp = () => {
-    const target = Number(score.dataset.value);
-    const total = score.dataset.total;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { score.textContent = `${target}/${total}`; return; }
-    const dur = parseFloat(getComputedStyle(root).getPropertyValue('--dur-count')) || 700;
-    const start = performance.now();
-    const ease = (x) => 1 - Math.pow(1 - x, 3);
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / dur);
-      score.textContent = `${Math.round(ease(p) * target)}/${total}`;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  document.getElementById('replay').onclick = countUp;
+<h2>Resultado</h2>
+<div class="card">
+  <p class="verdict">facturacion</p>
+  <div class="bar-row win"><span>facturacion</span><span class="bar"><i style="width:68%"></i></span><span class="pct">68%</span></div>
+  <div class="bar-row"><span>envios</span><span class="bar"><i style="width:25%"></i></span><span class="pct">25%</span></div>
+  <div class="bar-row"><span>tecnica</span><span class="bar"><i style="width:7%"></i></span><span class="pct">7%</span></div>
+  <p class="explain">Eligió «facturacion». Las barras muestran cómo repartió la probabilidad entre las opciones.</p>
+  <p class="explain review">Con un umbral de 90%, este ticket iría a revisión humana.</p>
+</div>
+<div class="card fail"><strong>Jev no pudo responder</strong><p>La key no es válida o no hay saldo.</p></div>
 
-  paint();
-  syncProj();
-  countUp();
-</script>
+<h2>Teoría con tabla</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Sirve para</th><th>Mejor otra cosa</th></tr></thead>
+  <tbody><tr><td>Rutear tickets a un área</td><td>Redactar la respuesta al cliente (un LLM)</td></tr>
+  <tr><td><a href="#">Moderar contenido</a></td><td>Cálculos exactos (código)</td></tr></tbody>
+</table></div>
+
+<h2>Código y diagrama</h2>
+<ol class="commands"><li><code>npm i ai</code></li><li><code>node jev.mjs</code></li></ol>
+<div class="code"><button>Copiar</button><pre>import { experimental_decide as decide } from 'ai';</pre></div>
+<p></p>
+<div class="code"><pre>evento → Jev decide → ¿probabilidad ≥ umbral? → acción / revisión humana</pre></div>
 </body>
 </html>
