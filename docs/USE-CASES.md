@@ -9,7 +9,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | IDs | Funcionalidad | Actor | Prioridad (PLAN) | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
 | R11, R12, R13, R14, R19 · F5 | Lección guiada de 13 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
-| R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12) | Entienden qué es Jev y qué no | No |
+| R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14) | Costo y riesgos claros | Sí: el paso que duda |
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16) | Costo y riesgos claros | Sí |

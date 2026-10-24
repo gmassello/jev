@@ -98,7 +98,7 @@ Todos los pares de texto dan 4.5:1 o más. `--accent` sobre `--accent-soft` es e
 
 | Componente | Clase / id | Estados |
 |---|---|---|
-| Stepper | `.stepper`, `#step-of`, `#dots` | punto hecho (`--accent`), pendiente (`--line`); con U12, cada punto es un botón con foco visible y el título del paso como nombre |
+| Stepper | `.stepper`, `#step-of`, `#dots` | cada punto es un botón que salta a su paso (U12): hecho (`--accent`), pendiente (`--line`), hover; foco visible, el título como tooltip y `<n>. <título>` como nombre accesible, dentro de un `nav` |
 | Navegación | `.step-nav` (arriba `.top` y abajo) | Anterior e Inicio ocultos en el paso 1; Siguiente oculto en el último; "Empezar" en el paso 1; hover con borde `--accent` |
 | Botón | `button` | normal (`--card`, borde `--line`), hover (borde `--accent`), deshabilitado (opacidad .6, cursor de espera) |
 | Botón principal | `#run` | `--accent` con `--on-accent`, ancho completo; "Pensando…" mientras espera |

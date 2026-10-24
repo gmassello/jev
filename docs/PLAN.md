@@ -144,7 +144,7 @@ Al terminar, el playground es una lección guiada de 13 pasos que se recorre en 
 - **Covers:** R11 · F5
 - **Files:** `index.html`
 - **Depends on:** U11
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: clic en el séptimo punto → se abre "Cuando Jev duda" y el paso queda guardado.
   - edge: teclado → cada punto es un botón con su nombre accesible.

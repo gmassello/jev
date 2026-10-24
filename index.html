@@ -40,8 +40,9 @@
   .explain { background: var(--accent-soft); border-radius: 6px; padding: .6rem .8rem; margin: .8rem 0 0; line-height: 1.5; }
   .stepper { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .9rem; margin: 1.2rem 0 0; }
   #dots { display: flex; gap: .35rem; }
-  #dots i { width: .6rem; height: .6rem; border-radius: 99px; background: var(--line); }
-  #dots i.on { background: var(--accent); }
+  #dots button { width: .6rem; height: .6rem; padding: 0; border: 0; border-radius: 99px; background: var(--line); }
+  #dots button.on { background: var(--accent); }
+  #dots button:hover { background: var(--accent); opacity: .7; }
   .lesson-title { font-size: 1.5rem; margin: .4rem 0 .8rem; }
   .theory p { line-height: 1.6; margin: 0 0 .7rem; }
   #view-playground h3 { font-size: .95rem; margin: 1.4rem 0 .4rem; }
@@ -96,7 +97,7 @@
   <button class="nav-home" type="button"></button>
   <button class="nav-next" type="button"></button>
 </div>
-<p class="stepper"><span id="step-of"></span><span id="dots" aria-hidden="true"></span></p>
+<div class="stepper"><span id="step-of"></span><nav id="dots" aria-label="Steps"></nav></div>
 <h2 id="lesson-title" class="lesson-title"></h2>
 <div id="theory" class="theory"></div>
 
@@ -199,7 +200,8 @@
     const L = lesson();
     const total = lessons().length;
     $('step-of').textContent = t().stepOf(step + 1, total);
-    $('dots').replaceChildren(...lessons().map((_, i) => h('i', { className: i <= step ? 'on' : '' })));
+    $('dots').ariaLabel = t().stepsNav;
+    $('dots').replaceChildren(...lessons().map((l, i) => h('button', { type: 'button', className: i <= step ? 'on' : '', title: l.title, ariaLabel: `${i + 1}. ${l.title}`, ariaCurrent: i === step ? 'step' : null, onclick: () => go(i) })));
     $('lesson-title').textContent = L.title;
     $('theory').replaceChildren(
       ...L.theory.map((p) => h('p', { textContent: p })),
