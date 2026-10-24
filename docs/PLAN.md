@@ -1,11 +1,12 @@
 # Jev para devs — Plan
 
-Source: `docs/BRIEF.md`, `docs/UX.md` · Deadline: 2026-10-22 15:00 -03:00 · Hours left at writing: 284.5
+Source: `docs/BRIEF.md`, `docs/UX.md`, `docs/ARCHITECTURE.md` · Deadline: 2026-10-30 12:00 -03:00 · Hours left at writing: 137.5 (revisado el 2026-10-24; la versión del 2026-10-10 tenía 284.5 al 22/10)
 
 ## Summary
-Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de soporte etiquetados, marcador, umbral y costo por corrida, todo en local; hay un deck en español y un video corto para quien no esté. La unidad que desbloquea la demo es U2 (el dataset con sus etiquetas validadas contra Jev): sin ella el marcador no dice nada.
+Al terminar, el playground es una lección guiada de 13 pasos que se recorre en vivo en 15 minutos (7 pasos), con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, un deck nuevo, una demo grabada de hasta 6 minutos y el guion del presentador por paso. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
 
 ## Key technical decisions
+- Lección guiada en lugar del desafío, charla de 25 minutos (15 + 6 + 4) con 7 pasos en vivo, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24). Las decisiones de abajo sobre el desafío quedan como historia.
 - Desafío, enfoque, casos sintéticos, dominio tickets de soporte, presentador proyecta, todo en español — settled: inherited from BRIEF.
 - Sin deploy: la charla corre en local por screen-share y el acceso asincrónico es el video — chosen over clave compartida en la app y Vercel Deployment Protection because el presentador lo eligió al resolver la pregunta abierta del BRIEF. R9 queda en cut. settled: user-directed
 - El desafío reusa `POST /evaluate` desde el navegador, una llamada por ticket con concurrencia limitada (5), sin endpoint nuevo — chosen over un endpoint que corra el set en el server because no toca `server.js` y la medición de 15 llamadas dio 0 errores en ~1.1 s con concurrencia 15 y con 5. settled: plan-time
@@ -106,14 +107,14 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
   - edge: la consigna de caso propio → es la última slide antes del cierre.
 
 ### U9. Video corto en español
-- **Goal:** un screencast narrado en español recorre el desafío (pregunta, marcador, resultado de la pregunta de conteo, umbral, costo) y cierra con dónde ver el snippet; es el acceso asincrónico, porque no hay deploy.
-- **Covers:** R10 · F4
-- **Files:** `docs/video/` (guion, audio, mp4)
-- **Depends on:** U3, U4, U5
+- **Goal:** una demo grabada de hasta 6 minutos, en español, narrada por un avatar con la voz clonada del presentador (HeyGen) y declarada como tal, recorre la lección; se proyecta en la charla y queda para quien no estuvo. (Reescrita el 2026-10-24: antes recorría el desafío.)
+- **Covers:** R10 · F5
+- **Files:** `video/script.tsv`, `video/out/demo.mp4`, `docs/AI_DISCLOSURE.md`
+- **Depends on:** U12, U14, U15, U16, U17
 - **Status:** todo
 - **Tests:**
-  - happy: el mp4 → muestra el marcador ya asentado (sin animación a medio camino) con la misma cifra que `challenge/results.json`.
-  - edge: la narración → está en español y no usa cifras que no estén en el JSON de resultados.
+  - happy: el video final → dura 6 minutos o menos (`ffprobe`). Covers AE10.
+  - edge: cada cifra de los subtítulos → coincide con la salida de `demo-check`.
 
 ### U10. Snippet de integración ejecutable
 - **Goal:** el snippet de la pestaña Docs existe como archivo ejecutable y un comando lo corre contra Jev, para que "pueden integrarlo solos" se apoye en algo que anda tal cual.
@@ -126,12 +127,116 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
   - happy: correr el ejemplo con la key → imprime una probabilidad entre 0 y 1.
   - error: sin `AI_GATEWAY_API_KEY` → falla con el mensaje de autenticación del gateway, no con un stack trace mudo.
 
+### U11. Lección guiada de 13 pasos
+- **Goal:** el playground es una lección paso a paso, bilingüe, con un tema y un tipo de respuesta por paso: qué es, sí/no, opción, escala, opciones con definición, todo junto, cuando Jev duda (umbral 0,9), cuándo usarlo, proyectos parecidos, glosario, arquitectura, Jev en tu sistema y código; reemplaza al desafío.
+- **Covers:** R11, R12, R13, R14, R19 · F5
+- **Files:** `index.html`, `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
+- **Depends on:** U1
+- **Status:** done
+- **Tests:**
+  - happy: un paso de práctica → "Preguntarle a Jev" muestra la respuesta, la probabilidad de cada opción y la explicación (verificado en Chrome con llamadas reales). Covers AE7.
+  - happy: el paso "Cuando Jev duda" → `node scripts/demo-check.mjs --check` lo da por debajo de 0,9 con el aviso de revisión humana. Covers AE8.
+  - happy: los pasos de arquitectura y producción → el test de forma exige las tres opciones, la compuerta y la versión fija `jev-1.14.0` en es y en. Covers AE12.
+  - edge: un idioma con una clave o un paso de menos → el test de paridad falla.
+
+### U12. Saltar a un paso
+- **Goal:** los puntos del stepper llevan directo a cada paso, con el título como tooltip, para recorrer en vivo los 7 pasos de la charla sin pasar por los otros.
+- **Covers:** R11 · F5
+- **Files:** `index.html`
+- **Depends on:** U11
+- **Status:** todo
+- **Tests:**
+  - happy: clic en el séptimo punto → se abre "Cuando Jev duda" y el paso queda guardado.
+  - edge: teclado → cada punto es un botón con su nombre accesible.
+
+### U13. Deck nuevo
+- **Goal:** `docs/deck.html` y `docs/deck.pdf` con el título "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad" acompañan los 15 minutos de lección: qué es Jev, Jev vs. LLMs, probabilidad y confianza, integración, costo, riesgos y la consigna de caso propio; sin el desafío ni System One.
+- **Covers:** R7, R8 · F3, F5
+- **Files:** `docs/deck.html`, `docs/deck.pdf`
+- **Depends on:** U14, U15
+- **Status:** todo
+- **Tests:**
+  - happy: el PDF → existe, 1920×1080 por página, con el título nuevo en la portada.
+  - edge: cada cifra del deck → sale de `demo-check` o de la respuesta del gateway (costo), no se escribe a mano.
+
+### U14. Probabilidad, confianza y costo desde el gateway
+- **Goal:** `/evaluate` devuelve también la confianza de TypeSafe y el costo de la llamada que trae el gateway; la UI llama "probabilidad" a lo que hoy dice confianza, muestra la confianza aparte cuando llega, y un pie con tokens, costo en US$, versión del modelo y tiempo.
+- **Covers:** R16 · F5
+- **Files:** `server.js`, `index.html`, `copy.js`, `tests/copy.test.js`, `cases/small/checks.py`
+- **Depends on:** U11
+- **Status:** todo
+- **Tests:**
+  - happy: el paso "Cuando Jev duda" → muestra la probabilidad de cada opción y la confianza como valores distintos (spike S2: 0,68 y 0,52). Covers AE11.
+  - edge: el gateway no devuelve la confianza → la UI muestra solo la probabilidad, sin hueco ni "undefined".
+  - error: sin costo en la respuesta → el pie muestra "—".
+
+### U15. API vigente del AI SDK
+- **Goal:** `ai` sube a 7.0.153 en versión exacta y el server, el snippet del último paso y `demo-check` usan `experimental_decide`.
+- **Covers:** R6, R15 · F3
+- **Files:** `package.json`, `package-lock.json`, `server.js`, `copy.js`, `scripts/demo-check.mjs`
+- **Depends on:** U11
+- **Status:** todo
+- **Tests:**
+  - happy: el snippet copiado del último paso, con la key, corrido con node → imprime "Rutear a cuenta". Covers AE9.
+  - happy: `npm test`, `python3 cases/small/checks.py` y `demo-check` → en verde con la versión nueva.
+  - error: sin `AI_GATEWAY_API_KEY` → el snippet falla con el mensaje de autenticación del gateway.
+
+### U16. Riesgos en "Cuándo usar Jev"
+- **Goal:** el paso "Cuándo usar Jev y cuándo no" suma tres riesgos para producción: el texto que entra no es de confianza, Jev prefiere la primera opción, y números, fechas y conteos se resuelven en código.
+- **Covers:** R17 · F5
+- **Files:** `copy.js`, `tests/copy.test.js`
+- **Depends on:** U11
+- **Status:** todo
+- **Tests:**
+  - happy: el paso en es y en → tiene los tres riesgos, con la misma cantidad de filas.
+
+### U17. Jev revisa a un LLM
+- **Goal:** un paso de práctica sí/no donde el texto es una política y la respuesta de un chatbot, y Jev dice si la respuesta afirma algo que la política no dice; un segundo ejemplo con instrucciones metidas en el texto entra solo si una corrida real muestra que mueve la respuesta.
+- **Covers:** R18 · F3
+- **Files:** `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
+- **Depends on:** U11
+- **Status:** todo
+- **Tests:**
+  - happy: el ejemplo con un dato inventado → Jev dice que sí con 0,9 o más, verificado por `demo-check`.
+  - edge: el ejemplo de inyección → se mide 3 veces antes de sumarlo; si no mueve la respuesta, no entra.
+
+### U18. Errores del gateway en lenguaje llano
+- **Goal:** si el gateway responde error de key o de saldo, la vista muestra "Jev no respondió: la key no es válida o no hay saldo" con qué hacer, en vez del mensaje crudo en inglés.
+- **Covers:** R10 · F5
+- **Files:** `index.html`, `copy.js`, `tests/copy.test.js`
+- **Depends on:** U11
+- **Status:** todo
+- **Tests:**
+  - error: una key inválida → el mensaje en el idioma de la UI, sin el texto crudo del gateway.
+
+### U19. CI and uptime
+- **Goal:** cada push corre `npm test` en GitHub Actions. Uptime no aplica: no hay superficie pública (la charla corre en local y R9 está en cut).
+- **Covers:** —
+- **Files:** `.github/workflows/ci.yml`
+- **Depends on:** —
+- **Status:** todo
+- **Tests:**
+  - happy: push a main → CI en verde.
+  - error: un test roto → CI en rojo.
+
+### U20. Guion del presentador por paso
+- **Goal:** `docs/GUION.md` dice, para cada paso de la lección, qué decir en una o dos frases, qué mostrar o tocar en pantalla, el tiempo (los 7 pasos en vivo suman 15 minutos) y la transición al siguiente; los pasos que no van en vivo llevan una línea para el video o para después.
+- **Covers:** R11 · F5
+- **Files:** `docs/GUION.md`
+- **Depends on:** U12, U14, U16, U17
+- **Status:** todo
+- **Tests:**
+  - happy: el guion → tiene una entrada por cada paso de `copy.js`, en el mismo orden, y los tiempos de los pasos en vivo suman 15 minutos.
+  - edge: cada cifra que menciona → sale de `demo-check` o de la respuesta del gateway.
+
 ## Cut line
 | Tier | Units | Why |
 |---|---|---|
-| must | U1, U2, U3, U4, U5, U8, U9 | sin el dataset, el desafío, el umbral y el costo no hay charla; el deck es el soporte de la charla y el video es el único acceso asincrónico |
-| should | U6, U10 | suman legibilidad en la sala y respaldo a "Pueden integrarlo solos", pero el snippet ya fue probado a mano y la UI ya se lee |
+| must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20 | la lección en vivo, lo que dice de la confianza y el código vigente son la charla; el deck y el guion la sostienen; el video ocupa 6 de los 25 minutos; CI avisa si algo se rompe antes del viernes |
+| should | U17, U18, U6 | suman un caso fuerte para la consigna, un error legible si falla el gateway y legibilidad en la sala, pero la charla anda sin ellos |
+| cut | U2, U3, U4, U5 | construidos y retirados el 2026-10-12 al pasar a la lección guiada; R1–R5 quedan para después |
 | cut | U7 | el presentador eligió no deployar; R9 queda sin cubrir y AE6 no se ejecuta |
+| cut | U8, U10 | U8 es el deck del desafío, reemplazado por U13; U10 queda absorbida por U15 |
 
 ## Risks
 - La red de la sala no llega al gateway — likelihood: media — mitigation: probar la red el día anterior desde la sala — fallback: mostrar el video (U9) y las cifras de `challenge/results.json`.
@@ -140,6 +245,9 @@ Al terminar, el playground tiene una pestaña **Desafío** con 15 tickets de sop
 - `experimental_evaluate` cambia en una versión nueva de `ai` — likelihood: baja — mitigation: pinnear `ai` a la versión exacta instalada (regla común de dependencias) en U1.
 - El costo real es mayor que el estimado si AI Gateway cobra tokens de salida — likelihood: media — mitigation: rotular el costo como estimado de entrada y contrastarlo con el consumo del dashboard de AI Gateway después de una corrida — fallback: decir en la charla que es una cota inferior.
 - Los tokens y el costo cambian entre corridas — likelihood: alta — mitigation: el deck y el video toman las cifras del JSON de una corrida y lo dicen; en vivo se muestran las de esa corrida.
+
+- `jev-latest` cambia de versión y el caso dudoso del paso 7 pasa el umbral — likelihood: media — mitigation: `demo-check` antes de cada ensayo y el viernes a las 11:00 — fallback: fijar `typesafe-ai/jev-1.14.0` o cambiar el texto y volver a medir.
+- El video no llega a tiempo (HeyGen, tomas, armado) — likelihood: media — mitigation: U9 arranca apenas estén U12 y U14 — fallback: estirar la lección en vivo a 21 minutos y dejar el video para después.
 
 ## Out of scope
 - Que cada asistente juegue el desafío en su navegador; ranking entre asistentes (BRIEF, Para después).
