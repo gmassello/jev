@@ -47,10 +47,10 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 
 | Entregable | Formato | Límites |
 |---|---|---|
-| Formato de la sesión | Charla + demo en vivo | Duración: not published |
+| Formato de la sesión | Lección en vivo + demo grabada + preguntas | 25 minutos: 15 de lección, 6 de demo grabada y 4 de preguntas |
 | Deck | HTML + PDF | Cantidad de slides / duración: not published |
 | Demo | Playground en local (`PORT=3001 npm start`); el deploy quedó en cut (PLAN U7) | Respaldo: el video corto |
-| Video corto | Screencast narrado para quien no pueda estar en la charla | Duración máxima y formato: not published |
+| Video corto | Demo grabada, narrada por un avatar con la voz clonada del presentador (HeyGen); se proyecta en la charla y queda para quien no estuvo | Hasta 6 minutos; formato: not published |
 | Ejercicio guiado | Un caso real del equipo resuelto con Jev (por ejemplo, clasificar tickets o logs) | not published |
 
 ## Descalificadores

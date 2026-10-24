@@ -1,65 +1,120 @@
-# Jev para devs — Brief
+# Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad — Brief
 
 ## Resumen
-Una charla con demo en vivo donde el presentador proyecta un desafío: un set de tickets de soporte de ejemplo con su respuesta correcta, preguntas que el público dicta y un marcador que muestra en qué acierta Jev, con qué confianza y dónde falla. Los devs se van sabiendo qué es Jev, cuándo usarlo y cómo integrarlo.
+Una charla de 25 minutos para devs: 15 de lección guiada en vivo sobre el playground, con llamadas reales a Jev; 6 de demo grabada y 4 de preguntas. Se van sabiendo qué es Jev, cuándo conviene y cuándo no, cómo leer la probabilidad y la confianza, y cómo llamarlo desde su código.
 
 ## Marco del problema
-Los compañeros son programadores que no conocen Jev. El riesgo es que lo vean como "otro chatbot" y lo usen donde no corresponde, o que no se animen a meterlo en su código. Una explicación teórica no alcanza: lo que hace falta entender (dónde falla, qué significa la confianza, cuánto cuesta) se aprende viéndolo acertar y equivocarse sobre casos concretos. El repo ya tiene el playground, la pestaña Docs técnica y la interfaz bilingüe (`index.html`, `server.js`); faltan el desafío, el deck, la demo deployada y el video (`docs/HACKATHON.md`).
+Los compañeros son programadores que no conocen Jev. El riesgo es que lo vean como "otro chatbot" y lo usen donde no corresponde, o que no se animen a meterlo en su código. Una explicación teórica no alcanza: qué significa la confianza, dónde duda y cuánto cuesta se entiende viéndolo responder sobre casos concretos. El repo ya tiene el playground como lección paso a paso, bilingüe, con un paso de código listo para copiar (`index.html`, `copy.js`, `server.js`).
+
+## Discovery
+Investigado el 2026-10-24.
+
+- D1. El AI SDK renombró la función: `experimental_evaluate` es un alias `@deprecated` de `experimental_decide` desde `ai@7.0.128` (verificado en el `index.d.ts` de 7.0.128, 7.0.140 y 7.0.153; la 7.0.120 todavía no lo tiene). El playground pinnea 7.0.113 y enseña el nombre viejo. — https://ai-sdk.dev/docs/ai-sdk-core/evaluation
+- D2. Para TypeSafe, la confianza no es la probabilidad de la opción elegida: es un número de 0 a 1 que resume la forma de la distribución (1 si todo cae en una opción, 0 si se reparte parejo). Sugiere 0,5 como piso para derivar a una persona, 0,9 para actuar solo en algo riesgoso, y en Noul arrancar con 0,7 para sí y 0,3 para no. — https://docs.typesafe.ai/confidence.md
+- D3. Jev 1.14 está disponible desde el 2026-10-14 y es `jev-latest`. Cuesta US$0,042 por millón de tokens de entrada; la salida no se cobra. Contexto de 64k por request y 32k por pregunta (262k con long context); solo texto. — https://docs.typesafe.ai/models.md · https://vercel.com/i/what-is-jev
+- D4. TypeSafe publica las debilidades de jev-1.13: lectura literal, números, conteos, fechas, indirección, state grande con ruido, contenido adversario (no trata el state como hostil), criterios contradictorios, sesgo hacia la primera opción y generación de texto. — https://docs.typesafe.ai/model-jaggedness/jev-1.13.md
+- D5. Jev también se puede llamar desde Cloudflare Workers AI (`typesafe/jev`, 32k de contexto, sin retención de datos), al mismo precio por token de entrada. — https://developers.cloudflare.com/ai/models/typesafe/jev/
+- D6. TypeSafe publica 22 cookbooks de uso: guardrails de LLM, chequeo de citas, clasificación de pasajes de RAG, function calling, re-ranking, entre otros. — https://docs.typesafe.ai/llms.txt
+
+## Impact
+- **Persona**: los devs del equipo que van a la charla; sin contactar
+- **Pierde hoy**: "no sé si para esto va un LLM o un clasificador, y parsear la respuesta libre de un LLM me rompe el código"
+- **La cifra**: sin medir: es una charla interna; al final se cuenta cuántos asistentes nombran un caso propio con la consigna
+- **Despues del evento**: pilotear con Jev uno de los casos que nombró el equipo
+
+## Safety
+- **Accion irreversible**: sin accion irreversible: la lección solo evalúa texto y muestra la respuesta; no escribe ni dispara nada
+- **Quien la autoriza**: no aplica
+- **A quien nunca se le aplica**: no aplica
+- **Forzado en**: no aplica
+
+## Demo surface
+- **Que ejecuta el jurado**: un asistente dicta o escribe su propio texto en un paso de práctica y el presentador aprieta "Preguntar a Jev"
+- **Que resultado nuevo sale**: una respuesta de Jev sobre ese texto, con la probabilidad de cada opción y el aviso de revisión humana si no supera el umbral
+- **Que apuesta demuestra**: ver dudar al modelo enseña más que verlo acertar: el caso ambiguo bajo el umbral es lo que hace entender para qué sirve la probabilidad
+- **Donde**: `PORT=3001 npm start` (local, proyectado en la charla)
 
 ## Actores
-- A1. Presentador — proyecta el desafío, carga las preguntas que dicta el público y explica los resultados.
-- A2. Asistentes (devs) — dictan preguntas, interpretan el marcador y proponen dónde usarían Jev.
-- A3. Quien no pudo ir — ve el video y prueba la demo deployada por su cuenta.
+- A1. Presentador — conduce la lección, corre las preguntas y explica los resultados.
+- A2. Asistentes (devs) — dictan textos, interpretan las respuestas y nombran dónde usarían Jev.
+- A3. Quien no pudo ir — ve el video y prueba el playground en local siguiendo el README.
 
 ## Requerimientos
-- R1. El presentador puede correr un desafío con un set de tickets de soporte de ejemplo en español, cada uno con su respuesta esperada. [criterion: Entienden qué es Jev y qué no]
-- R2. El público ve un marcador con los aciertos, la confianza de cada respuesta y los casos en que Jev se equivocó. [criterion: Entienden qué es Jev y qué no]
-- R3. El set incluye una pregunta que pone a prueba una limitación que TypeSafe documenta (contar productos), y el desafío muestra el resultado medido tal cual: dónde acierta, dónde duda (confianza baja) y que las limitaciones se verifican midiendo, no leyendo la doc. [criterion: Entienden qué es Jev y qué no]
-- R4. El presentador puede mover un umbral de confianza y el marcador muestra cuántos casos se automatizarían y cuántos irían a revisión humana. [criterion: Costo y riesgos claros]
-- R5. Cada corrida del desafío muestra lo que costó y cuánto tardó. [criterion: Costo y riesgos claros]
-- R6. Los asistentes tienen un camino para integrar Jev solos después de la charla: el snippet probado, la pestaña Docs y una slide de integración. [criterion: Pueden integrarlo solos]
-- R7. La charla cierra con una consigna para que cada asistente nombre un caso de su trabajo donde usaría Jev, apoyada en el patrón visto en el desafío. [criterion: Detectan un caso propio]
-- R8. Un deck en español (HTML + PDF) cubre qué es Jev, Jev vs. LLMs, System One, integración, costo y riesgos. [criterion: Entienden qué es Jev y qué no]
-- R9. La demo está publicada en una URL protegida, para que se pueda probar sin instalar nada y sin exponer la key. [criterion: Costo y riesgos claros]
-- R10. Un video corto en español recorre el desafío para quien no estuvo en la charla. [criterion: Pueden integrarlo solos]
+- R1. **Para después.** Un desafío con un set de tickets de ejemplo con su respuesta esperada. [criterion: Entienden qué es Jev y qué no]
+- R2. **Para después.** Un marcador con aciertos, confianza y errores sobre el set. [criterion: Entienden qué es Jev y qué no]
+- R3. **Para después.** Una pregunta del set que pone a prueba una limitación documentada (contar), mostrada tal cual se midió. [criterion: Entienden qué es Jev y qué no]
+- R4. **Para después.** Un umbral deslizable que reparte el set entre automatizar y revisión humana. [criterion: Costo y riesgos claros]
+- R5. **Para después.** Costo y tiempo de cada corrida del desafío. [criterion: Costo y riesgos claros]
+- R6. Los asistentes tienen un camino para integrar Jev solos después de la charla: el snippet probado del paso 11 y el README. [criterion: Pueden integrarlo solos]
+- R7. La charla cierra con una consigna para que cada asistente nombre un caso de su trabajo donde usaría Jev, apoyada en el caso de guardrail y en los cookbooks de TypeSafe. [criterion: Detectan un caso propio]
+- R8. Un deck en español (HTML + PDF), con el título de la charla, acompaña los 15 minutos de lección: qué es Jev, Jev vs. LLMs, probabilidad y confianza, integración, costo y riesgos. [criterion: Entienden qué es Jev y qué no]
+- R9. **Para después.** La demo publicada en una URL protegida. [criterion: Costo y riesgos claros]
+- R10. Una demo grabada de hasta 6 minutos, en español, narrada por un avatar con la voz clonada del presentador (HeyGen) y declarada como tal; se proyecta en la charla y sirve para quien no estuvo. [criterion: Pueden integrarlo solos]
+- R11. La lección en vivo entra en 15 minutos y recorre 7 pasos, cada uno con un tema y un tipo de respuesta: qué es, sí/no, opción con definición, todo junto, cuando Jev duda, cuándo usarlo y código; el resto de los pasos queda en el playground y en el video. [criterion: Entienden qué es Jev y qué no]
+- R12. Un caso ambiguo muestra la respuesta por debajo del umbral y la derivación a una persona. [criterion: Costo y riesgos claros]
+- R13. Un paso compara cuándo conviene Jev y cuándo otra herramienta, y nombra los proyectos parecidos. [criterion: Entienden qué es Jev y qué no]
+- R14. Un glosario repasa los conceptos de la lección. [criterion: Entienden qué es Jev y qué no]
+- R15. El snippet de integración usa la API vigente del AI SDK. [criterion: Pueden integrarlo solos]
+- R16. La lección distingue la probabilidad de cada opción de la confianza, como la define TypeSafe, y muestra los umbrales que sugiere. [criterion: Costo y riesgos claros]
+- R17. "Cuándo usarlo" suma tres riesgos para producción: el texto que entra no es de confianza, Jev prefiere la primera opción, y números, fechas y conteos se resuelven en código. [criterion: Costo y riesgos claros]
+- R18. Un caso muestra a Jev como guardrail de un LLM: si la respuesta de un chatbot afirma algo que la política no dice. [criterion: Detectan un caso propio]
 
 ## Flujos principales
-- F1. **Desafío en vivo** — el presentador abre el desafío → el público dicta una pregunta sobre los tickets → Jev evalúa todo el set → el marcador muestra aciertos, confianza y errores → se comenta por qué falló donde falló. (A1, A2; R1, R2, R3)
-- F2. **Calibrar el umbral** — con el marcador cargado, el presentador mueve el umbral → cambia cuántos casos se automatizan y cuántos se revisan → se discute dónde poner el corte. (A1, A2; R4, R5)
-- F3. **De la charla al código** — al final, slide de integración y snippet de Docs → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7)
-- F4. **Asíncrono** — quien no fue ve el video → abre la demo deployada → prueba el desafío o el playground. (A3; R9, R10)
+- F1. **Para después.** Desafío en vivo con marcador. (A1, A2; R1, R2, R3)
+- F2. **Para después.** Calibrar el umbral sobre el set. (A1, A2; R4, R5)
+- F3. **De la charla al código** — paso 11 con el snippet → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
+- F4. **Para después.** Asíncrono sobre la demo deployada. (A3; R9, R10)
+- F5. **Charla de 25 minutos** — 15 de lección en vivo por los 7 pasos, preguntando a Jev en los de práctica → 6 de video → 4 de preguntas con la consigna. (A1, A2; R10, R11, R12, R13, R16, R17)
 
 ## Ejemplos de aceptación
-- AE1. **Covers R1.** Given el desafío abierto, when el presentador elige el set de tickets de soporte, then se ven los tickets en español con su respuesta esperada.
-- AE2. **Covers R2.** Given una pregunta cargada, when se evalúa el set, then el marcador muestra cuántos acertó sobre el total y marca cada caso fallado con la respuesta de Jev, la esperada y su confianza.
-- AE3. **Covers R3.** Given el set completo, when se evalúa la pregunta de conteo, then el marcador muestra el resultado medido de esa corrida (aciertos y confianza por ticket) junto a la limitación que declara la doc, sin forzar una falla.
-- AE4. **Covers R4.** Given un marcador cargado, when el umbral pasa de 0.5 a 0.9, then baja la cantidad de casos automatizados, sube la de revisión humana, y los números cambian sin volver a llamar a Jev.
-- AE5. **Covers R5.** Given una corrida terminada, then se muestran los tokens usados, el costo estimado en dólares y el tiempo total.
-- AE6. **Covers R9.** Given la URL de la demo, when alguien sin acceso la abre, then no puede llamar a Jev.
+- AE1. **Covers R1.** Para después.
+- AE2. **Covers R2.** Para después.
+- AE3. **Covers R3.** Para después.
+- AE4. **Covers R4.** Para después.
+- AE5. **Covers R5.** Para después.
+- AE6. **Covers R9.** Para después.
+- AE7. **Covers R11.** Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla.
+- AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana.
+- AE9. **Covers R15.** Given el snippet copiado del paso 11 y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
+- AE10. **Covers R10.** Given el video final, then dura 6 minutos o menos.
+- AE11. **Covers R16.** Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos.
 
 ## Decisiones clave
-- Desafío con casos etiquetados — chosen over charla clásica y reemplazo en vivo de un LLM because enseña diseño de preguntas, fallas y calibración haciéndolo, y cubre los cuatro criterios. settled: user-approved
+- Lección guiada paso a paso — chosen over el desafío con marcador because es más simple y pedagógica: un tema y un tipo de respuesta por paso. settled: user-directed
+- Charla de 25 minutos: 15 de lección, 6 de demo grabada y 4 de preguntas — chosen over 20 minutos con 10 de lección because la lección necesita aire para el caso que duda y el código. settled: user-directed
+- Lección en vivo de 7 pasos — chosen over los 11 pasos because en 15 minutos son unos 2 por paso; el resto queda en el playground y el video. settled: user-directed
 - Casos de ejemplo sintéticos — chosen over datos reales del equipo because evita la aprobación para mandar datos internos a un proveedor externo. settled: user-directed
-- Dominio: tickets de soporte — chosen over fallas de tests y logs de producción because es el dominio que eligió el presentador. settled: user-directed
-- El presentador proyecta y el público dicta — chosen over que cada asistente juegue en su navegador because no hacen falta keys ni accesos individuales durante la charla. settled: user-directed
-- Mostrar el resultado real de la pregunta de conteo — chosen over buscar casos hasta que falle o cambiar a una trampa de plazos hábiles because forzar la falla sería elegir casos a medida; el mensaje pasa a ser "las limitaciones se miden con tus casos". settled: user-directed
+- La charla corre en local — chosen over una demo deployada because no hay que proteger una URL ni exponer la key; el respaldo es el video y el PDF. settled: user-directed
+- ~~Desafío con casos etiquetados~~ — reemplazada por la lección guiada (2026-10-12).
 - Todo el material de la charla en español — chosen over inglés (regla común de hackathon) because el público habla español; ver `CLAUDE.md`. settled: user-directed
 
 ## Scope boundaries
 ### Para después
-- Que cada asistente juegue el desafío en su propio navegador durante la charla.
-- Ranking o competencia entre asistentes.
+- El desafío con marcador y umbral deslizable (R1–R5, F1, F2) — se sacó por complejo para una primera charla.
+- La demo deployada (R9, F4) — hace falta protegerla y pagar el gasto de terceros.
+- Que cada asistente juegue en su propio navegador durante la charla — necesita keys o una demo compartida.
 ### Fuera de este producto
-- Integrar Jev en código propio en vivo durante la charla.
-- Datos reales del equipo.
-- Keys de AI Gateway individuales.
-- Comparación en vivo contra un LLM.
+- Integrar Jev en código propio en vivo — la charla enseña el patrón; el código de cada equipo es su piloto.
+- Datos reales del equipo — necesitan aprobación para salir a un proveedor externo.
+- Comparación en vivo contra un LLM — el paso "Cuándo usarlo" lo explica sin gastar tiempo de la charla.
 
 ## Supuestos
-- Entre 10 y 20 tickets alcanzan para que el marcador diga algo y se evalúen en pocos segundos; si son pocos, un solo error mueve demasiado el porcentaje.
-- ~~Jev falla en conteos y fechas como dice su documentación.~~ Refutado el 2026-10-10: acertó 15/15 contando productos (agrupado y exacto), conteos de 6 a 9 ítems y tres preguntas de fechas; la única duda real fue un plazo en días hábiles (confianza 0.64). R3 se reescribió para mostrar el dato medido.
-- La red de la sala deja llegar a la demo deployada; si no, fallback a local por screen-share (`PENDIENTE.md`).
+- La demo corre en local y se proyecta; si falla la red o el gateway, el respaldo es el video y `docs/deck.pdf`.
+- ~~Jev falla en conteos y fechas como dice su documentación.~~ Refutado el 2026-10-10: acertó 15/15 contando productos y tres preguntas de fechas; la única duda real fue un plazo en días hábiles (confianza 0.64). Igual se enseña a resolverlos en código (R17), porque TypeSafe los lista como débiles (D4).
 
 ## Preguntas abiertas
-- Cuánto dura la charla — blocks: R8, F1 | resolve before planning: no
-- Cómo se protege la URL de la demo (Vercel Deployment Protection u otra) y si los asistentes van a tener acceso después — blocks: R9, F4 | resolve before planning: yes
+- ~~Cuánto dura la charla~~ — resuelta: 25 minutos (15 + 6 + 4).
+- ~~Cómo se protege la URL de la demo~~ — resuelta: no hay deploy.
+
+## Alternativas a Jev
+
+| Alternativa | Qué hace | En qué se diferencia de Jev |
+|---|---|---|
+| [Jev en Cloudflare Workers AI](https://developers.cloudflare.com/ai/models/typesafe/jev/) | El mismo modelo, servido por Cloudflare | Otra puerta al mismo Jev: 32k de contexto, sin retención de datos |
+| [Cloudflare Clef](https://blog.cloudflare.com/clef-decision-models/) | Modelos de decisión con los mismos tipos de pregunta y probabilidades | Código abierto, se puede autohospedar, acepta imágenes y tiene más contexto |
+| [AWS Strands Decider 2B](https://strandsagents.com/blog/introducing-strands-decider) | Modelo de decisión abierto: elige opciones, responde sí/no y puntúa con una confianza | Corre local en CPU o GPU, sin API hosteada, y se puede reentrenar con tus datos |
+| [Galileo Luna](https://galileo.ai/research) | Modelos chicos para evaluar salidas de LLM: alucinaciones y métricas de calidad | Métricas fijas o entrenadas, no preguntas libres |
+| [Jina Classifier](https://jina.ai/news/jina-classifier-for-high-performance-zero-shot-and-few-shot-classification) | API zero-shot: le pasás etiquetas y devuelve una con un score | Solo elegir una etiqueta; no tiene sí/no ni escalas |
+| [Hugging Face zero-shot](https://huggingface.co/docs/inference-providers/tasks/zero-shot-classification) | Modelos abiertos como bart-large-mnli: un score por etiqueta | Se puede correr local, pero rinde menos con instrucciones complejas |
+| [OpenAI Moderation](https://developers.openai.com/api/docs/guides/moderation) | Gratis: un score de 0 a 1 por categoría de contenido dañino | Categorías fijas: solo sirve para moderar |
+| LLM con salida estructurada | Un modelo general responde en JSON siguiendo un schema | Genera texto aunque lo encorsetes, y la confianza no viene como dato |
