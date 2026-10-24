@@ -242,9 +242,10 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 | Tier | Units | Why |
 |---|---|---|
 | must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20 | la lección en vivo, lo que dice de la confianza y el código vigente son la charla; el deck y el guion la sostienen; el video ocupa 6 de los 25 minutos; CI avisa si algo se rompe antes del viernes |
-| should | U17, U18, U6, U21 | suman un caso fuerte para la consigna, un error legible si falla el gateway y legibilidad en la sala, pero la charla anda sin ellos |
+| should | U17, U18, U21 | suman un caso fuerte para la consigna, un error legible si falla el gateway y legibilidad en la sala, pero la charla anda sin ellos |
 | cut | U2, U3, U4, U5 | construidos y retirados el 2026-10-12 al pasar a la lección guiada; R1–R5 quedan para después |
 | cut | U7 | el presentador eligió no deployar; R9 queda sin cubrir y AE6 no se ejecuta |
+| cut | U6 | un solo tema claro y zoom del navegador al 125–150 %, decidido en la revisión del design system (2026-10-24); el desafío que nombran sus tests se retiró |
 | cut | U8, U10 | U8 es el deck del desafío, reemplazado por U13; U10 queda absorbida por U15 |
 
 ## Risks
