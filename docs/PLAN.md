@@ -175,7 +175,7 @@ Al terminar, el playground es una lección guiada de 13 pasos que se recorre en 
 - **Covers:** R6, R15 · F3
 - **Files:** `package.json`, `package-lock.json`, `server.js`, `copy.js`, `scripts/demo-check.mjs`
 - **Depends on:** U11
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el snippet copiado del último paso, con la key, corrido con node → imprime "Rutear a cuenta". Covers AE9.
   - happy: `npm test`, `python3 cases/small/checks.py` y `demo-check` → en verde con la versión nueva.

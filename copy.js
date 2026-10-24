@@ -221,13 +221,13 @@ acción automática   revisión humana
       {
         id: 'code', kind: 'code', title: 'Llevalo a tu código',
         theory: [
-          'Todo lo que hiciste en el playground es una llamada a experimental_evaluate del AI SDK.',
+          'Todo lo que hiciste en el playground es una llamada a experimental_decide del AI SDK.',
           'Este archivo junta lo visto: una pregunta con opciones definidas y el umbral para decidir qué automatizar. Guardalo como jev.mjs y corré estos comandos:',
         ],
-        commands: ['npm i ai@7.0.113', 'export AI_GATEWAY_API_KEY=...', 'node jev.mjs'],
-        code: `import { experimental_evaluate as evaluate } from 'ai';
+        commands: ['npm i ai@7.0.153', 'export AI_GATEWAY_API_KEY=...', 'node jev.mjs'],
+        code: `import { experimental_decide as decide } from 'ai';
 
-const { answers } = await evaluate({
+const { answers } = await decide({
   model: 'typesafe-ai/jev',
   state: 'No puedo entrar a mi cuenta desde ayer: me dice que la contraseña es incorrecta.',
   questions: {
@@ -473,13 +473,13 @@ automatic action    human review
       {
         id: 'code', kind: 'code', title: 'Take it to your code',
         theory: [
-          'Everything you did in the playground is a call to experimental_evaluate from the AI SDK.',
+          'Everything you did in the playground is a call to experimental_decide from the AI SDK.',
           'This file puts it together: a question with defined options and the threshold that decides what to automate. Save it as jev.mjs and run these commands:',
         ],
-        commands: ['npm i ai@7.0.113', 'export AI_GATEWAY_API_KEY=...', 'node jev.mjs'],
-        code: `import { experimental_evaluate as evaluate } from 'ai';
+        commands: ['npm i ai@7.0.153', 'export AI_GATEWAY_API_KEY=...', 'node jev.mjs'],
+        code: `import { experimental_decide as decide } from 'ai';
 
-const { answers } = await evaluate({
+const { answers } = await decide({
   model: 'typesafe-ai/jev',
   state: 'I have not been able to log into my account since yesterday: it says my password is wrong.',
   questions: {

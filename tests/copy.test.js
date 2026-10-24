@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { I18N, resolve } from '../copy.js';
+import { readFileSync } from 'node:fs';
 
 const shape = (value) =>
   value && typeof value === 'object' && !Array.isArray(value)
@@ -70,7 +71,9 @@ test('the code step gives three commands and a runnable evaluate call with a 0.9
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'code');
     assert.equal(step.commands.length, 3, lang);
-    for (const part of ['experimental_evaluate', "model: 'typesafe-ai/jev'", '>= 0.9']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
+    for (const part of ['experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.9']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
+    assert.ok(!step.code.includes('experimental_evaluate'), `${lang}: deprecated experimental_evaluate`);
+    assert.equal(step.commands[0], `npm i ai@${JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).dependencies.ai}`, lang);
   }
 });
 

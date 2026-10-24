@@ -11,7 +11,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | R11, R12, R13, R14, R19 · F5 | Lección guiada de 13 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
 | R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
-| R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15) | Pueden integrarlo solos | Sí: el cierre |
+| R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15, done) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16) | Costo y riesgos claros | Sí |
 | R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
 | R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
@@ -56,7 +56,7 @@ Estado inicial: el navegador en el paso 13, con la key en el entorno de quien co
 5. La consigna pide nombrar un caso propio.
 
 Criterios de aceptación:
-- AE9. Given el snippet copiado del último paso (hoy, el 13) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-12 con `experimental_evaluate`; se repite en U15) + `python3 cases/large/checks.py .` (`check_snippet_current_api`, falla hasta U15).
+- AE9. Given el snippet copiado del último paso (hoy, el 13) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-24 con `experimental_decide` y `ai@7.0.153`; sin la key falla con `GatewayAuthenticationError`) + `python3 cases/large/checks.py .` (`check_snippet_current_api`).
 - proposed: Given una política de devoluciones de 30 días, then Jev marca la respuesta "90 días" como inventada (≥ 0,9) y la de "30 días" como fiel (≤ 0,1). — **How it is proven:** `python3 cases/medium/checks.py http://localhost:3001` (`check_guardrail_pair`). Sin ID: se puede sumar al BRIEF con `hackathon-brainstorm --revisar`.
 
 ## Test cases
@@ -76,7 +76,7 @@ Criterios de aceptación:
 Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales). Hoy: 7/7.
 
 ### Medium — 5 tickets en tanda y los riesgos de la lección
-`cases/medium/` · dominio: tickets de soporte, un mail y una política de devoluciones · PLAN: U14, U15; se vuelve a correr después de U15 y el viernes antes de la charla.
+`cases/medium/` · dominio: tickets de soporte, un mail y una política de devoluciones · PLAN: U14, U15; corrido después de U15 (7/7, 2026-10-24); se vuelve a correr el viernes antes de la charla.
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
@@ -96,12 +96,12 @@ Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas real
 | Layer | Criterion | How it is proven |
 |---|---|---|
 | Producto | 13 pasos con los mismos ids en es y en, incluidos los 7 en vivo | `check_lesson_steps` |
-| Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` (falla hasta U15) |
+| Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
 | Producto | El guion tiene una entrada por paso y los pasos en vivo suman 15 minutos | `check_guion` (falla hasta U20) |
 | Producto | El deck lleva el título de la charla y existe en PDF | `check_deck` (falla hasta U13) |
 | Sistema | El video existe y dura 360 s o menos | `check_video` (falla hasta U9) |
 
-Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 1/5.
+Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 2/5.
 
 ### Validación de las suites (2026-10-24)
 - **Contra algo que funciona:** un server mínimo escrito desde los SPEC (fuera del repo) da 7/7 en el chico y 7/7 en el mediano; un repo armado desde `cases/large/SPEC.md` da 5/5.

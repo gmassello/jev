@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { experimental_evaluate as evaluate } from 'ai';
+import { experimental_decide as decide } from 'ai';
 
 const PORT = process.env.PORT ?? 3000;
 const MODEL = process.env.JEV_MODEL ?? 'typesafe-ai/jev';
@@ -25,7 +25,7 @@ createServer(async (req, res) => {
       for await (const chunk of req) raw += chunk;
       const { state, questions } = JSON.parse(raw);
       const started = Date.now();
-      const result = await evaluate({ model: MODEL, state, questions });
+      const result = await decide({ model: MODEL, state, questions });
       return send(res, 200, {
         answers: result.answers,
         usage: result.usage,
