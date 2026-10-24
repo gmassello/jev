@@ -12,7 +12,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15, done) | Pueden integrarlo solos | Sí: el cierre |
-| R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16) | Costo y riesgos claros | Sí |
+| R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16, done) | Costo y riesgos claros | Sí |
 | R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
 | R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
 | R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17) | Detectan un caso propio | Sí, si llega |

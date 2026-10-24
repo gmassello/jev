@@ -186,7 +186,7 @@ Al terminar, el playground es una lección guiada de 13 pasos que se recorre en 
 - **Covers:** R17 · F5
 - **Files:** `copy.js`, `tests/copy.test.js`
 - **Depends on:** U11
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - happy: el paso en es y en → tiene los tres riesgos, con la misma cantidad de filas.
 

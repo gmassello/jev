@@ -90,6 +90,16 @@ test('the when-to-use step has the same rows in es and en', () => {
   for (const lang of ['es', 'en']) for (const r of step(lang).table.rows) assert.equal(r.length, 3);
 });
 
+test('the when-to-use step lists the three production risks in es and en', () => {
+  const step = (lang) => I18N[lang].lessons.find((l) => l.id === 'when');
+  assert.equal(step('es').list?.length, 3);
+  assert.equal(step('en').list?.length, 3);
+  const [untrusted, firstOption, numbers] = step('es').list;
+  assert.match(untrusted, /no es de confianza/);
+  assert.match(firstOption, /primera opción/);
+  assert.match(numbers, /números, fechas y conteos/);
+});
+
 test('the architecture and production steps come before the code step, with the same shape in es and en', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
