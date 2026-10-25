@@ -186,3 +186,13 @@ test('the architecture step shows the current configuration, with the pinned ai 
     for (const part of [`ai ${dependencies.ai}`, 'experimental_decide', 'AI_GATEWAY_API_KEY', 'JEV_MODEL', 'typesafe-ai/jev']) assert.ok(diagram.includes(part), `${lang}: ${part}`);
   }
 });
+
+test('the first step frames Jev as the System One model, with a two-row comparison', () => {
+  for (const lang of ['es', 'en']) {
+    const step = I18N[lang].lessons.find((l) => l.id === 'what');
+    const text = step.theory.join(' ');
+    assert.ok(text.includes('Kahneman') && text.includes('System One'), lang);
+    assert.equal(step.table?.rows.length, 2, lang);
+    for (const r of step.table.rows) assert.equal(r.length, step.table.head.length + 1, lang);
+  }
+});
