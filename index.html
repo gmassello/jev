@@ -110,6 +110,7 @@
   <textarea id="state" rows="3"></textarea>
   <h3 data-i18n="step2"></h3>
   <div id="questions"></div>
+  <p id="edit-hint" class="hint"></p>
   <button id="run" data-i18n="run"></button>
   <h3 id="results-title" data-i18n="step3" hidden></h3>
   <div id="results"></div>
@@ -228,6 +229,7 @@
     $('ask').hidden = !asks;
     if (asks) {
       $('state').value = entry().state;
+      $('edit-hint').textContent = isMulti() ? t().editHintMulti : t().editHint;
       lastRun = runs[step] ?? null;
       renderQuestions();
       renderResults();

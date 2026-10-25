@@ -21,3 +21,8 @@ test('styles use the DESIGN.md tokens instead of literals', () => {
   assert.deepEqual(outside.match(/font-size:\s*(1\.6rem|1\.5rem|1\.4rem|1rem|\.9rem|\.8rem|13px)/g) ?? [], []);
   for (const token of ['--code-bg', '--code-fg', '--radius-sm', '--radius-md', '--radius-pill', '--fs-sm']) assert.ok(outside.includes(`var(${token})`), token);
 });
+
+test('an edit hint sits before the run button and changes for the multi step', () => {
+  assert.match(html, /<p id="edit-hint" class="hint"><\/p>\s*<button id="run"/);
+  assert.match(html, /\$\('edit-hint'\)\.textContent = isMulti\(\) \? t\(\)\.editHintMulti : t\(\)\.editHint;/);
+});

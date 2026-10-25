@@ -152,3 +152,10 @@ test('a gateway key or credit error becomes a plain message with what to do', ()
   }
   assert.match(I18N.es.errKey, /^Jev no respondió: la key no es válida o no hay saldo/);
 });
+
+test('the ask block tells that the text, question and options can be edited', () => {
+  for (const lang of ['es', 'en']) {
+    assert.ok(I18N[lang].editHint?.trim(), `${lang}: editHint`);
+    assert.ok(I18N[lang].editHintMulti?.trim(), `${lang}: editHintMulti`);
+  }
+});
