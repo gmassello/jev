@@ -47,10 +47,10 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 
 | Entregable | Formato | Límites |
 |---|---|---|
-| Formato de la sesión | Video grabado + preguntas en vivo | Unos 20 minutos de video en tres partes (qué es, impacto y dónde usarlo) y después preguntas; pedido del 2026-10-24, antes eran 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) |
+| Formato de la sesión | En vivo sobre el playground + preguntas | Unos 20 minutos en vivo en tres partes (qué es, impacto y dónde usarlo) y después preguntas; el video queda de respaldo (decidido el 2026-10-25; el 2026-10-24 era todo en video, antes eran 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) |
 | Deck | HTML + PDF | Cantidad de slides / duración: not published |
-| Demo | Playground en local (`PORT=3001 npm start`); el deploy quedó en cut (PLAN U7) | Respaldo: el video corto |
-| Video | La charla entera, narrada por un avatar con la voz clonada del presentador (HeyGen); se proyecta antes de las preguntas y queda para quien no estuvo | Hasta 21 minutos; formato: not published |
+| Demo | Playground en local (`PORT=3001 npm start`); el deploy quedó en cut (PLAN U7) | Respaldo: el video |
+| Video | La charla con el mismo guion, narrada por un avatar con la voz clonada del presentador (HeyGen); respaldo si falla la red o el gateway, y para quien no pueda asistir | Hasta 21 minutos; formato: not published |
 | Ejercicio guiado | Un caso real del equipo resuelto con Jev (por ejemplo, clasificar tickets o logs) | not published |
 
 ## Descalificadores

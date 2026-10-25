@@ -1,7 +1,7 @@
 # Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad — Brief
 
 ## Resumen
-Un segmento de unos 20 minutos para devs, todo en video grabado y narrado por un avatar con la voz clonada del presentador, seguido de preguntas en vivo. Cuenta tres cosas: qué es Jev, cómo puede impactar (con cifras medidas) y dónde lo podríamos usar (tres casos, uno del trabajo del equipo). Se van sabiendo qué es Jev, cuándo conviene y cuándo no, cómo leer la probabilidad y cómo llamarlo desde su código.
+Un segmento de unos 20 minutos para devs, en vivo sobre el playground, seguido de preguntas. Un video grabado con el mismo guion, narrado por un avatar con la voz clonada del presentador, queda de respaldo y para quien no pueda asistir. Cuenta tres cosas: qué es Jev, cómo puede impactar (con cifras medidas) y dónde lo podríamos usar (tres casos, uno del trabajo del equipo). Se van sabiendo qué es Jev, cuándo conviene y cuándo no, cómo leer la probabilidad y cómo llamarlo desde su código.
 
 ## Marco del problema
 Los compañeros son programadores que no conocen Jev. El riesgo es que lo vean como "otro chatbot" y lo usen donde no corresponde, o que no se animen a meterlo en su código. Una explicación teórica no alcanza: qué significa la confianza, dónde duda y cuánto cuesta se entiende viéndolo responder sobre casos concretos. El repo ya tiene el playground como lección paso a paso, bilingüe, con un paso de código listo para copiar (`index.html`, `copy.js`, `server.js`).
@@ -49,8 +49,8 @@ Investigado el 2026-10-24.
 - R7. La charla cierra con una consigna para que cada asistente nombre un caso de su trabajo donde usaría Jev, apoyada en el caso de guardrail y en los cookbooks de TypeSafe. [criterion: Detectan un caso propio]
 - R8. Un deck en español (HTML + PDF), con el título de la charla, aporta las slides que aparecen en el video: qué es Jev, Jev vs. LLMs, probabilidad, impacto, riesgos, dónde usarlo e integración. [criterion: Entienden qué es Jev y qué no]
 - R9. **Para después.** La demo publicada en una URL protegida. [criterion: Costo y riesgos claros]
-- R10. La charla es un video de hasta 21 minutos, en español, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal; se proyecta en la sesión antes de las preguntas y sirve para quien no estuvo. [criterion: Pueden integrarlo solos]
-- R11. El video recorre en el playground 10 pasos de la lección: qué es, sí/no, opción, opción con definición, todo junto, cuando Jev duda, cuándo usarlo, Jev revisa a un LLM, qué tan grave es un defecto y código; los mismos pasos existen en español y en inglés, y el resto queda en el playground. [criterion: Entienden qué es Jev y qué no]
+- R10. Hay un video de hasta 21 minutos, en español, con el mismo guion de la charla, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal; es el respaldo si falla la red o el gateway en la sala y sirve para quien no pueda asistir. [criterion: Pueden integrarlo solos]
+- R11. La charla en vivo, y el video, recorren en el playground 10 pasos de la lección: qué es, sí/no, opción, opción con definición, todo junto, cuando Jev duda, cuándo usarlo, Jev revisa a un LLM, qué tan grave es un defecto y código; los mismos pasos existen en español y en inglés, y el resto queda en el playground. [criterion: Entienden qué es Jev y qué no]
 - R12. Un caso ambiguo muestra la respuesta por debajo del umbral y la derivación a una persona. [criterion: Costo y riesgos claros]
 - R13. Un paso compara cuándo conviene Jev y cuándo otra herramienta, y nombra los proyectos parecidos. [criterion: Entienden qué es Jev y qué no]
 - R14. Un glosario repasa los conceptos de la lección. [criterion: Entienden qué es Jev y qué no]
@@ -66,7 +66,7 @@ Investigado el 2026-10-24.
 - F2. **Para después.** Calibrar el umbral sobre el set. (A1, A2; R4, R5)
 - F3. **De la charla al código** — último paso con el snippet → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
 - F4. **Para después.** Asíncrono sobre la demo deployada. (A3; R9, R10)
-- F5. **Sesión de unos 20 minutos + preguntas** — el video (qué es → impacto → dónde usarlo → consigna) → preguntas en vivo. (A1, A2; R10, R11, R12, R13, R16, R17, R20)
+- F5. **Sesión de unos 20 minutos + preguntas** — la charla en vivo sobre el playground y el deck (qué es → impacto → dónde usarlo → consigna) → preguntas; el video, de respaldo y para quien no asista. (A1, A2; R10, R11, R12, R13, R16, R17, R20)
 
 ## Ejemplos de aceptación
 - AE1. **Covers R1.** Para después.
@@ -85,8 +85,8 @@ Investigado el 2026-10-24.
 
 ## Decisiones clave
 - Lección guiada paso a paso — chosen over el desafío con marcador because es más simple y pedagógica: un tema y un tipo de respuesta por paso. settled: user-directed
-- Sesión de unos 20 minutos, toda en video grabado, + preguntas en vivo — chosen over 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) because así lo pidieron (qué es, impacto, dónde usarlo y preguntas) y el video no depende de la red en la sala. settled: user-directed (2026-10-24)
-- 10 pasos en el video — chosen over los 7 de la lección en vivo because sin vivo hay lugar para los casos de uso (guard y defectos; el caso de regresión se retiró el 2026-10-25). settled: user-directed (2026-10-24)
+- Sesión de unos 20 minutos en vivo sobre el playground + preguntas, con el video como respaldo y para quien no asista — chosen over la charla entera en video (2026-10-24) y over 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) because así lo pidieron (qué es, impacto, dónde usarlo y preguntas) y el presentador prefirió darla en vivo; el video cubre la red de la sala y a quien no pueda ir. settled: user-directed (2026-10-25)
+- 10 pasos en la charla y en el video — chosen over los 7 de la lección de 15 minutos because en 20 minutos hay lugar para los casos de uso (guard y defectos; el caso de regresión se retiró el 2026-10-25). settled: user-directed (2026-10-24)
 - Casos de ejemplo sintéticos — chosen over datos reales del equipo because evita la aprobación para mandar datos internos a un proveedor externo. settled: user-directed
 - La charla corre en local — chosen over una demo deployada because no hay que proteger una URL ni exponer la key; el respaldo es el video y el PDF. settled: user-directed
 - ~~Desafío con casos etiquetados~~ — reemplazada por la lección guiada (2026-10-12).
@@ -107,7 +107,7 @@ Investigado el 2026-10-24.
 - ~~Jev falla en conteos y fechas como dice su documentación.~~ Refutado el 2026-10-10: acertó 15/15 contando productos y tres preguntas de fechas; la única duda real fue un plazo en días hábiles (confianza 0.64). Igual se enseña a resolverlos en código (R17), porque TypeSafe los lista como débiles (D4).
 
 ## Preguntas abiertas
-- ~~Cuánto dura la charla~~ — resuelta: unos 20 minutos de video + preguntas en vivo (2026-10-24).
+- ~~Cuánto dura la charla~~ — resuelta: unos 20 minutos en vivo + preguntas, con el video de respaldo (2026-10-25).
 - ~~Cómo se protege la URL de la demo~~ — resuelta: no hay deploy.
 
 ## Alternativas a Jev

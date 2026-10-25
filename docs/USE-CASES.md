@@ -2,7 +2,7 @@ Source: docs/BRIEF.md · prioridades de la Cut line de docs/PLAN.md (revisado el
 
 # Evaluar con Jev — Casos de uso
 
-El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI SDK → AI Gateway → Jev) y los artefactos de la charla del 2026-10-30 (guion, deck y video). Lo prueba la sesión: un video de unos 20 minutos y después preguntas en vivo; no hay suite del evento. Los encabezados `##` quedan en inglés porque los leen los scripts del flujo.
+El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI SDK → AI Gateway → Jev) y los artefactos de la charla del 2026-10-30 (guion, deck y video). Lo prueba la sesión: unos 20 minutos en vivo sobre el playground y después preguntas, con el video de respaldo; no hay suite del evento. Los encabezados `##` quedan en inglés porque los leen los scripts del flujo.
 
 ## Features
 
@@ -15,7 +15,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15, done) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16, done) | Costo y riesgos claros | Sí |
 | R7, R8 · F3 | Deck con el título de la charla, impacto, dónde usarlo y consigna de caso propio | A1, A2 | must (U13, U23, done) | Entienden qué es Jev y qué no; Detectan un caso propio; Costo y riesgos claros | Sí: las slides de impacto, riesgos, casos y consigna |
-| R10 · F5 | La charla entera en video, de hasta 21 minutos, con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
+| R10 · F5 | Video de respaldo con el guion de la charla, de hasta 21 minutos, con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
 | R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí: "dónde usarlo" |
 | R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18, done) | — (respaldo al grabar y al probar después) | No |
 | R20 · F5 | Guion completo del video en español | A1 | must (U20, U24, done) | Entienden qué es Jev y qué no | Es la narración |

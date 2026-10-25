@@ -1,10 +1,10 @@
 # Caso grande — la charla completa
 
-Es la entrega que se juzga: la lección del playground, el snippet, el guion del video, el deck y el video de unos 20 minutos que se proyecta el 2026-10-30 antes de las preguntas, coherentes entre sí. No se prueba contra el server sino contra los artefactos del repo, porque eso es lo que llega a la sala y a quien no fue.
+Es la entrega que se juzga: la lección del playground, el snippet, el guion del video, el deck y el video de respaldo de unos 20 minutos de la charla en vivo del 2026-10-30, coherentes entre sí. No se prueba contra el server sino contra los artefactos del repo, porque eso es lo que llega a la sala y a quien no fue.
 
 ## Actores
-- A1. Presentador — graba el video con el guion y el deck, y responde las preguntas.
-- A2. Asistentes — ven el video, después abren el playground y copian el snippet.
+- A1. Presentador — da la charla en vivo con el guion y el deck, graba el video de respaldo y responde las preguntas.
+- A2. Asistentes — ven la charla en vivo, después abren el playground y copian el snippet.
 - A3. Quien no pudo ir — ve el mismo video.
 
 ## Requerimientos (de `docs/BRIEF.md`)

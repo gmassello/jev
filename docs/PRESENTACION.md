@@ -7,7 +7,7 @@
 ## Esta semana (lun 19 – vie 23/10)
 
 - [ ] Mandar la invitación de calendario y reservar la sala, o el link de la reunión
-- [x] Definir la duración: unos 20 minutos de video (qué es, impacto y dónde usarlo) y después preguntas en vivo
+- [x] Definir la duración: unos 20 minutos en vivo sobre el playground (qué es, impacto y dónde usarlo) y después preguntas; el video queda de respaldo
 - [x] Rehacer el deck: slides de impacto, costo, riesgos, dónde usarlo y consigna para el video
 - [ ] Poner el título nuevo en la portada del deck y regenerar `docs/deck.pdf`
 - [ ] Pedir aprobación para usar datos internos en el ejercicio, o confirmar que va con datos sintéticos
@@ -33,7 +33,7 @@
 
 ## Semana siguiente (lun 26 – jue 29/10)
 
-- [ ] Ensayo 1: ver el video entero en la sala y practicar respuestas a preguntas
+- [ ] Ensayo 1: dar la charla entera en vivo con el cronómetro del playground y practicar respuestas a preguntas
 - [ ] Ajustar el deck y el guion con lo que salió del ensayo
 - [ ] Ensayo 2, cronometrado
 - [ ] `node scripts/demo-check.mjs --check` en verde

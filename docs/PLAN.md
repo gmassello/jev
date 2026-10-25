@@ -3,10 +3,10 @@
 Source: `docs/BRIEF.md`, `docs/UX.md`, `docs/ARCHITECTURE.md` · Deadline: 2026-10-30 12:00 -03:00 · Hours left at writing: 137.5 (revisado el 2026-10-24; la versión del 2026-10-10 tenía 284.5 al 22/10)
 
 ## Summary
-Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde usarlo) seguido de preguntas en vivo. El video recorre 10 de los 15 pasos del playground, con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, las slides del deck y un guion completo en español (`video/script.tsv`). Hasta el 2026-10-24 el plan era una lección en vivo de 15 minutos, 6 de video y 4 de preguntas. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
+Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es, impacto y dónde usarlo) seguidos de preguntas, con un video de respaldo para quien no pueda asistir. La charla y el video recorren 10 de los 15 pasos del playground, con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, las slides del deck y un guion completo en español (`video/script.tsv`). Hasta el 2026-10-24 el plan era una lección en vivo de 15 minutos, 6 de video y 4 de preguntas; ese día pasó a ser todo en video, y el 2026-10-25 volvió a ser en vivo con el video de respaldo. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
 
 ## Key technical decisions
-- Lección guiada en lugar del desafío, sesión de unos 20 minutos toda en video + preguntas en vivo, 10 pasos en el video, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24; la charla de 25 minutos con 7 pasos en vivo quedó reemplazada ese mismo día). Las decisiones de abajo sobre el desafío quedan como historia.
+- Lección guiada en lugar del desafío, sesión de unos 20 minutos en vivo + preguntas con el video de respaldo, 10 pasos en la charla, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24; la charla de 25 minutos con 7 pasos en vivo quedó reemplazada ese mismo día; el 2026-10-25 la charla volvió a ser en vivo y el video pasó a respaldo). Las decisiones de abajo sobre el desafío quedan como historia.
 - Desafío, enfoque, casos sintéticos, dominio tickets de soporte, presentador proyecta, todo en español — settled: inherited from BRIEF.
 - Sin deploy: la charla corre en local por screen-share y el acceso asincrónico es el video — chosen over clave compartida en la app y Vercel Deployment Protection because el presentador lo eligió al resolver la pregunta abierta del BRIEF. R9 queda en cut. settled: user-directed
 - El desafío reusa `POST /evaluate` desde el navegador, una llamada por ticket con concurrencia limitada (5), sin endpoint nuevo — chosen over un endpoint que corra el set en el server because no toca `server.js` y la medición de 15 llamadas dio 0 errores en ~1.1 s con concurrencia 15 y con 5. settled: plan-time
@@ -107,7 +107,7 @@ Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde
   - edge: la consigna de caso propio → es la última slide antes del cierre.
 
 ### U9. Video corto en español
-- **Goal:** la charla entera es un video de hasta 21 minutos, en español, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal, sobre el guion de `video/script.tsv` (U24); se proyecta antes de las preguntas y queda para quien no estuvo. (Reescrita el 2026-10-24: primero recorría el desafío, después era una demo de 6 minutos.)
+- **Goal:** un video de hasta 21 minutos, en español, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal, sobre el guion de `video/script.tsv` (U24); es el respaldo de la charla en vivo y queda para quien no pueda asistir. (Reescrita el 2026-10-24: primero recorría el desafío, después era una demo de 6 minutos; el 2026-10-25 pasó de ser la charla a ser su respaldo.)
 - **Covers:** R10 · F5
 - **Files:** `video/script.tsv`, `video/out/demo.mp4`, `docs/AI_DISCLOSURE.md`
 - **Depends on:** U12, U14, U15, U16, U17, U22, U23, U24
@@ -271,7 +271,7 @@ Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde
 ## Cut line
 | Tier | Units | Why |
 |---|---|---|
-| must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20, U22, U23, U24 | el video es la charla: la lección, los casos del equipo, las slides de impacto y el guion son lo que se graba; CI avisa si algo se rompe antes del viernes |
+| must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20, U22, U23, U24 | la lección, los casos del equipo, las slides de impacto y el guion son lo que se muestra en vivo y lo que se graba de respaldo; CI avisa si algo se rompe antes del viernes |
 | should | U17, U18, U21 | suman un caso fuerte para la consigna, un error legible si falla el gateway y legibilidad en la sala, pero la charla anda sin ellos |
 | cut | U2, U3, U4, U5 | construidos y retirados el 2026-10-12 al pasar a la lección guiada; R1–R5 quedan para después |
 | cut | U7 | el presentador eligió no deployar; R9 queda sin cubrir y AE6 no se ejecuta |
@@ -287,7 +287,7 @@ Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde
 - Los tokens y el costo cambian entre corridas — likelihood: alta — mitigation: el deck y el video toman las cifras del JSON de una corrida y lo dicen; en vivo se muestran las de esa corrida.
 
 - `jev-latest` cambia de versión y el caso dudoso del paso 7 pasa el umbral — likelihood: media — mitigation: `demo-check` antes de cada ensayo y el viernes a las 11:00 — fallback: fijar `typesafe-ai/jev-1.14.0` o cambiar el texto y volver a medir.
-- El video no llega a tiempo (HeyGen, tomas, armado) — likelihood: media — mitigation: U9 arranca apenas estén U12 y U14 — fallback: dar la charla en vivo leyendo el guion sobre el playground y el deck.
+- El video no llega a tiempo (HeyGen, tomas, armado) — likelihood: media — mitigation: U9 arranca apenas estén U12 y U14 — fallback: la charla en vivo no lo necesita; para quien no asista, compartir la grabación de la reunión.
 
 ## Out of scope
 - Que cada asistente juegue el desafío en su navegador; ranking entre asistentes (BRIEF, Para después).

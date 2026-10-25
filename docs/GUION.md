@@ -1,6 +1,6 @@
 # Guion del video
 
-Charla "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad", viernes 2026-10-30 12:00. Se proyecta un video grabado de unos 20 minutos, narrado por un avatar con la voz clonada del presentador (HeyGen), y después hay preguntas en vivo.
+Charla "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad", viernes 2026-10-30 12:00. Se da en vivo sobre el playground, unos 20 minutos, y después hay preguntas. Este mismo guion es el del video de respaldo, narrado por un avatar con la voz clonada del presentador (HeyGen), para quien no pueda asistir o por si falla la red.
 
 La narración completa, una oración por fila, está en `video/script.tsv`: `beat` es la toma, `en` el subtítulo y `es` lo que dice el avatar. Este archivo dice qué se ve en cada toma y de dónde sale cada cifra.
 
