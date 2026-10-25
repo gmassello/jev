@@ -159,3 +159,18 @@ test('the ask block tells that the text, question and options can be edited', ()
     assert.ok(I18N[lang].editHintMulti?.trim(), `${lang}: editHintMulti`);
   }
 });
+
+test('regression and defects come right after guard: choices with four defined options', () => {
+  for (const lang of ['es', 'en']) {
+    const ids = I18N[lang].lessons.map((l) => l.id);
+    assert.deepEqual(ids.slice(ids.indexOf('guard'), ids.indexOf('guard') + 3), ['guard', 'regression', 'defects'], lang);
+    for (const id of ['regression', 'defects']) {
+      const step = I18N[lang].lessons.find((l) => l.id === id);
+      assert.equal(step.kind, 'ask', `${lang} ${id}`);
+      assert.equal(step.question.type, 'choice', `${lang} ${id}`);
+      assert.equal(step.question.options.length, 4, `${lang} ${id}`);
+      assert.equal(step.question.descriptions.length, 4, `${lang} ${id}`);
+    }
+  }
+  assert.equal(I18N.es.lessons.length, 16);
+});

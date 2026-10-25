@@ -64,7 +64,7 @@ code { font-family: var(--font-mono); }
 <section class="slide" style="justify-content:center">
   <p class="kicker">Charla interna · viernes 2026-10-30 · 12:00</p>
   <h1>Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad</h1>
-  <p class="lead">15 minutos de lección en vivo con el playground, 6 de video y 4 de preguntas.</p>
+  <p class="lead">Un video de unos 20 minutos en tres partes (qué es, impacto y dónde usarlo) y después preguntas en vivo.</p>
   <p class="muted">Germán Massello · github.com/gmassello/jev</p>
 </section>
 
@@ -113,6 +113,69 @@ code { font-family: var(--font-mono); }
 </section>
 
 <section class="slide">
+  <p class="kicker">Impacto</p>
+  <h2>Lo obvio sale solo; la duda va a una persona</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Hoy</h3>
+      <p class="big">100 %</p>
+      <p>Una persona lee cada ticket, cada falla y cada defecto, aunque la mayoría sean obvios.</p>
+    </div>
+    <div class="card">
+      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (línea impact: 5/5 tickets >= 0.9, 2026-10-24) y check_doubt_stable (0,63–0,71) -->
+      <h3>Con Jev y umbral 0,9</h3>
+      <p class="big">5 de 5</p>
+      <p>tickets claros se rutean solos; el ambiguo queda debajo del umbral en cada corrida y va a revisión.</p>
+    </div>
+  </div>
+  <p class="muted">Son 5 tickets de prueba, no una estadística: con datos reales el porcentaje se mide.</p>
+</section>
+
+<section class="slide">
+  <p class="kicker">Costo</p>
+  <h2>Se paga la entrada; la salida es gratis</h2>
+  <div class="cols">
+    <div class="card">
+      <!-- src: pie de la respuesta del playground (providerMetadata.gateway.cost), 2026-10-24 -->
+      <p class="big">US$0,0000137</p>
+      <p>Una llamada del paso que duda: 371 tokens de entrada.</p>
+    </div>
+    <div class="card">
+      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (línea impact: US$0.0162 per 1000 tickets, 2026-10-24) -->
+      <p class="big">US$0,0162</p>
+      <p>Cada 1000 tickets, con el costo que informa el gateway para la tanda; la tanda de 5 tarda menos de 3 s.</p>
+    </div>
+  </div>
+  <p class="muted">Precio publicado: US$0,042 por millón de tokens de entrada.</p>
+</section>
+
+<section class="slide">
+  <p class="kicker">Riesgos</p>
+  <h2>Antes de producción</h2>
+  <ul>
+    <li><b>El texto que entra no es de confianza.</b> Tratalo como dato, nunca como instrucción, y no automatices una acción irreversible.</li>
+    <li><b>Jev prefiere la primera opción cuando duda.</b> Probá tus preguntas con las opciones en otro orden.</li>
+    <li><b>Números, fechas y conteos se resuelven en código.</b> "¿Pasaron más de 30 días?" se calcula.</li>
+    <li><b>Las probabilidades no vienen calibradas.</b> Medí con tus propios casos dónde poner el umbral.</li>
+  </ul>
+  <p class="muted">La key vive en el server, nunca en el navegador ni en el repo.</p>
+</section>
+
+<section class="slide">
+  <p class="kicker">Dónde usarlo</p>
+  <h2>Una persona lee y elige entre opciones conocidas</h2>
+  <table>
+    <tr><th>Caso</th><th>Texto que entra</th><th>Pregunta</th><th>Jev</th></tr>
+    <!-- src: node scripts/demo-check.mjs --check (pasos 5, 9, 10 y 11, 2026-10-24) -->
+    <tr><td>Tickets de soporte</td><td>El mensaje del cliente</td><td>¿A qué área va?</td><td>cuenta 1,00</td></tr>
+    <tr><td>Revisar a un LLM</td><td>Política + respuesta del bot</td><td>¿Afirma algo que la política no dice?</td><td>sí 0,98</td></tr>
+    <tr><td>Fallas de regresión</td><td>El log de la suite</td><td>¿Ambiente, test roto, dato o bug?</td><td>ambiente 1,00</td></tr>
+    <tr><td>Triage de defectos</td><td>La descripción del defecto</td><td>¿Crítica, alta, media o baja?</td><td>crítica 0,93–0,97</td></tr>
+  </table>
+  <p class="muted">Textos sintéticos: usar logs o defectos reales necesita aprobación, porque viajan a un proveedor externo.</p>
+</section>
+
+<section class="slide">
   <p class="kicker">Integración</p>
   <h2>Una llamada del AI SDK</h2>
   <pre>npm i ai@7.0.153
@@ -142,35 +205,6 @@ else console.log('A revisión humana:', probabilities);</pre>
     <li>Jev va como una compuerta antes de actuar: decide, y tu código compara la probabilidad con el umbral.</li>
     <li>Fijá la versión del modelo (<code>typesafe-ai/jev-1.14.0</code>) para que el umbral calibrado no cambie solo.</li>
     <li>Límite de gasto, timeout y un log de decisiones sin datos personales.</li>
-  </ul>
-</section>
-
-<section class="slide">
-  <p class="kicker">Costo</p>
-  <h2>Se paga la entrada; la salida es gratis</h2>
-  <div class="cols">
-    <div class="card">
-      <!-- src: pie de la respuesta del playground (providerMetadata.gateway.cost), 2026-10-24 -->
-      <p class="big">US$0,0000137</p>
-      <p>Una llamada del paso que duda: 371 tokens de entrada.</p>
-    </div>
-    <div class="card">
-      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (check_talk_cost) -->
-      <p class="big">&lt; US$0,001</p>
-      <p>Una tanda de 5 tickets, sumando el costo que informa el gateway.</p>
-    </div>
-  </div>
-  <p class="muted">Precio publicado: US$0,042 por millón de tokens de entrada.</p>
-</section>
-
-<section class="slide">
-  <p class="kicker">Riesgos</p>
-  <h2>Antes de producción</h2>
-  <ul>
-    <li><b>El texto que entra no es de confianza.</b> Tratalo como dato, nunca como instrucción, y no automatices una acción irreversible.</li>
-    <li><b>Jev prefiere la primera opción cuando duda.</b> Probá tus preguntas con las opciones en otro orden.</li>
-    <li><b>Números, fechas y conteos se resuelven en código.</b> "¿Pasaron más de 30 días?" se calcula.</li>
-    <li><b>Las probabilidades no vienen calibradas.</b> Medí con tus propios casos dónde poner el umbral.</li>
   </ul>
 </section>
 

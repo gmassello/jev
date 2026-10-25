@@ -41,16 +41,16 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 ## Tecnología obligatoria
 
 - **Jev en Vercel AI Gateway** (`typesafe-ai/jev`) con `experimental_decide` del AI SDK (`ai` v7, `7.0.153` exacta; `experimental_evaluate` es su alias deprecado).
-- **Cómo se demuestra:** llamados en vivo desde el playground durante la demo (`POST /evaluate`) y el snippet del último paso, «Llevalo a tu código», del playground.
+- **Cómo se demuestra:** llamados reales desde el playground, filmados en el video (`POST /evaluate`) y el snippet del último paso, «Llevalo a tu código», del playground.
 
 ## Requisitos de entrega
 
 | Entregable | Formato | Límites |
 |---|---|---|
-| Formato de la sesión | Lección en vivo + demo grabada + preguntas | 25 minutos: 15 de lección, 6 de demo grabada y 4 de preguntas |
+| Formato de la sesión | Video grabado + preguntas en vivo | Unos 20 minutos de video en tres partes (qué es, impacto y dónde usarlo) y después preguntas; pedido del 2026-10-24, antes eran 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) |
 | Deck | HTML + PDF | Cantidad de slides / duración: not published |
 | Demo | Playground en local (`PORT=3001 npm start`); el deploy quedó en cut (PLAN U7) | Respaldo: el video corto |
-| Video corto | Demo grabada, narrada por un avatar con la voz clonada del presentador (HeyGen); se proyecta en la charla y queda para quien no estuvo | Hasta 6 minutos; formato: not published |
+| Video | La charla entera, narrada por un avatar con la voz clonada del presentador (HeyGen); se proyecta antes de las preguntas y queda para quien no estuvo | Hasta 21 minutos; formato: not published |
 | Ejercicio guiado | Un caso real del equipo resuelto con Jev (por ejemplo, clasificar tickets o logs) | not published |
 
 ## Descalificadores

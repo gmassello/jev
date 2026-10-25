@@ -50,4 +50,10 @@ check('paso 7 debajo del umbral', conf < L7.threshold, `${doubt.choice} ${conf.t
 const guard = (await ask(byId('guard'))).q1;
 check('paso 9 respuesta inventada', guard.probability >= 0.9, `probability ${guard.probability.toFixed(2)}`);
 
+const regression = (await ask(byId('regression'))).q1;
+check('paso 10 ambiente', regression.choice === 'ambiente' && regression.probabilities.ambiente >= 0.9, `${regression.choice} ${regression.probabilities[regression.choice].toFixed(2)}`);
+
+const defects = (await ask(byId('defects'))).q1;
+check('paso 11 critica', defects.choice === 'critica', `${defects.choice} ${defects.probabilities[defects.choice].toFixed(2)}`);
+
 process.exit(results.every(Boolean) ? 0 : 1);

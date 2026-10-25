@@ -5,11 +5,11 @@ import sys
 import time
 from pathlib import Path
 
-LIVE = ["what", "boolean", "criteria", "multi", "doubt", "when", "code"]
-STEPS = 14
-LIVE_MINUTES = 15
+VIDEO = ["what", "boolean", "choice", "criteria", "multi", "doubt", "when", "guard", "regression", "defects", "code"]
+STEPS = 16
+SPOKEN_WORDS = (2700, 3100)
 TITLE = "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"
-MAX_VIDEO_SECONDS = 360
+MAX_VIDEO_SECONDS = 1260
 
 
 def expect(cond, message):
@@ -29,8 +29,8 @@ def check_lesson_steps(root):
     es, en = [l["id"] for l in data["es"]], [l["id"] for l in data["en"]]
     expect(len(es) == STEPS, f"{len(es)} steps in es, want {STEPS}")
     expect(es == en, f"es and en step ids differ: {es} vs {en}")
-    missing = [i for i in LIVE if i not in es]
-    expect(not missing, f"live steps missing: {missing}")
+    missing = [i for i in VIDEO if i not in es]
+    expect(not missing, f"video steps missing: {missing}")
 
 
 def check_snippet_current_api(root):
@@ -47,12 +47,20 @@ def check_guion(root):
     found = re.findall(r"^### (\S+)", text, re.M)
     expect(found == ids, f"guion steps {found}, want {ids}")
     sections = dict(zip(found, re.split(r"^### \S+.*$", text, flags=re.M)[1:]))
-    minutes = 0.0
-    for step in LIVE:
-        m = re.search(r"^Tiempo:\s*([\d.,]+)\s*min", sections.get(step, ""), re.M)
-        expect(m, f"live step {step} has no 'Tiempo: N min' line")
-        minutes += float(m.group(1).replace(",", "."))
-    expect(abs(minutes - LIVE_MINUTES) < 0.01, f"live steps add up to {minutes} min, want {LIVE_MINUTES}")
+    for step in VIDEO:
+        expect(re.search(r"^Bloque:", sections.get(step, ""), re.M), f"video step {step} has no 'Bloque:' line")
+    for step in set(ids) - set(VIDEO):
+        expect(re.search(r"^Fuera del video:", sections.get(step, ""), re.M), f"step {step} has no 'Fuera del video:' line")
+
+
+def check_script(root):
+    path = root / "video" / "script.tsv"
+    expect(path.is_file(), "video/script.tsv not found")
+    rows = [line.split("\t") for line in path.read_text().splitlines()[1:] if line.strip()]
+    expect(all(len(r) == 3 for r in rows), "every script row needs beat, en and es")
+    words = sum(len(r[2].split()) for r in rows)
+    low, high = SPOKEN_WORDS
+    expect(low <= words <= high, f"{words} spoken words, want {low}-{high} (~20 min)")
 
 
 def check_deck(root):
@@ -72,7 +80,7 @@ def check_video(root):
     expect(seconds <= MAX_VIDEO_SECONDS, f"video lasts {seconds:.0f}s, want <= {MAX_VIDEO_SECONDS}s")
 
 
-CHECKS = [check_lesson_steps, check_snippet_current_api, check_guion, check_deck, check_video]
+CHECKS = [check_lesson_steps, check_snippet_current_api, check_guion, check_script, check_deck, check_video]
 
 
 def main():

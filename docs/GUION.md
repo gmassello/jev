@@ -1,70 +1,92 @@
-# Guion del presentador
+# Guion del video
 
-Charla "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad", viernes 2026-10-30 12:00. Lección en vivo de 15 minutos por 7 pasos, 6 de video y 4 de preguntas.
+Charla "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad", viernes 2026-10-30 12:00. Se proyecta un video grabado de unos 20 minutos, narrado por un avatar con la voz clonada del presentador (HeyGen), y después hay preguntas en vivo.
 
-Antes de empezar: `PORT=3001 npm start`, `node scripts/demo-check.mjs --check` en verde, navegador al 125–150 % y la interfaz en español. Para saltar entre pasos se usan los puntos del stepper: el título de cada uno aparece al pasar el mouse.
+La narración completa, una oración por fila, está en `video/script.tsv`: `beat` es la toma, `en` el subtítulo y `es` lo que dice el avatar. Este archivo dice qué se ve en cada toma y de dónde sale cada cifra.
 
-Las cifras salen de `node scripts/demo-check.mjs --check` (2026-10-24), de `python3 cases/medium/checks.py http://localhost:3001` (SPEC medido el 2026-10-24) y del pie que muestra el gateway en cada respuesta. Si el viernes dan otro número, se dice el de la pantalla.
+## Bloques
+
+| Bloque | Tomas (`beat`) | Pantalla | Min |
+|---|---|---|---|
+| Apertura | apertura | avatar | 1,2 |
+| Qué es | qué es · pasos 1, 2, 3, 5, 6 y 7 | playground | 6,2 |
+| Jev y un LLM | cuándo · paso 8 | playground | 1,6 |
+| Impacto | impacto · slides antes y después, costo y riesgos | deck | 3,9 |
+| Dónde usarlo | dónde · pasos 5, 9, 10 y 11, y slide casos | playground y deck | 5,9 |
+| Integración | código · paso 16 | playground | 0,5 |
+| Cierre | cierre · slide consigna y avatar | deck y avatar | 1,1 |
+
+Los minutos salen de contar las palabras de la columna `es` a 2,3 por segundo; el clip real de HeyGen manda.
+
+## Cifras y su fuente
+
+| Cifra | Comando |
+|---|---|
+| Sí 0,98 (paso 2), estafa 1,00 (paso 3), cuenta 1,00 (paso 5), facturación entre 0,63 y 0,71 (paso 7), inventada 0,98 (paso 9), ambiente 1,00 (paso 10), crítica entre 0,93 y 0,97 (paso 11, 0,93 en el playground) | `node scripts/demo-check.mjs --check`, tres corridas del 2026-10-24 |
+| Reembolso 0,98, facturación 1, urgencia alta 0,86 (paso 6) | la respuesta del paso 6 en el playground, 2026-10-24 |
+| Respuesta fiel 0,07, estafa en los dos órdenes | `python3 cases/medium/checks.py http://localhost:3001` (`cases/medium/SPEC.md`, medido el 2026-10-24) |
+| 5 de 5 tickets claros con 0,9 o más; US$0,0162 cada 1000 tickets; tanda en menos de 3 s | `python3 cases/medium/checks.py http://localhost:3001`, línea `impact:` y resumen, tres corridas del 2026-10-24 |
+| US$0,042 por millón de tokens de entrada | precio publicado del gateway |
+
+Si al grabar la pantalla muestra otra cifra, se regraba la frase con la de la pantalla.
+
+## Pasos
 
 ### what — ¿Qué es Jev?
-Tiempo: 2 min
-- **Decir:** "Jev no conversa: evalúa. Le das un texto y una pregunta cerrada, y te devuelve una respuesta con un número que dice qué tan probable es."
-- **Mostrar:** los dos párrafos y la barra de pasos arriba.
-- **Transición:** "Arranquemos por la pregunta más simple." → punto 2.
+Bloque: Qué es, toma "qué es · paso 1".
+- **Mostrar:** los dos párrafos y la barra de pasos.
 
 ### boolean — Sí / No
-Tiempo: 2 min
-- **Decir:** "Un sí o no, con una probabilidad de 0 a 1. Vos elegís el umbral: arriba actúa solo, abajo lo mira una persona."
-- **Mostrar:** apretar "Preguntarle a Jev". Sale sí, cerca de 1 (0,98 en `demo-check`).
-- **Transición:** "Con sí o no no alcanza para rutear un ticket: necesitamos opciones." → punto 5.
+Bloque: Qué es, toma "qué es · paso 2".
+- **Mostrar:** apretar "Preguntarle a Jev", el sí con 0,98 y el pie con tokens, costo, modelo y tiempo. Al final, apuntar la línea "Podés cambiar el texto…".
 
 ### choice — Elegir una opción
-Fuera de vivo: queda en el playground y en el video; se salta con el punto 5.
+Bloque: Qué es, toma "qué es · paso 3".
+- **Mostrar:** apretar el botón, las barras con estafa en 1,00.
 
 ### score — Escala
-Fuera de vivo: TypeSafe dice que el score está poco calibrado, así que no se muestra en vivo; queda en el playground.
+Fuera del video: TypeSafe dice que el score está poco calibrado; queda en el playground.
 
 ### criteria — Opciones con definición
-Tiempo: 2 min
-- **Decir:** "Un nombre de opción suelto es ambiguo. Si cada opción lleva una descripción corta, Jev sabe qué entra en cada una. Así se rutea un ticket a un equipo."
-- **Mostrar:** las opciones con su descripción y apretar el botón. El ticket de la contraseña va a `cuenta` (1,00 en `demo-check`).
-- **Transición:** "¿Y si quiero más de una respuesta del mismo ticket?" → punto 6.
+Bloque: Qué es, toma "qué es · paso 5", y repaso en "dónde · paso 5".
+- **Mostrar:** las opciones con su descripción, apretar el botón y ver `cuenta` en 1,00. En el repaso no se aprieta nada: se recorre la pantalla ya respondida.
 
 ### multi — Todo junto
-Tiempo: 2 min
-- **Decir:** "En una sola llamada, varias preguntas sobre el mismo texto: ¿pide reembolso?, ¿a qué área va?, ¿qué tan urgente es? Cada una vuelve con su id."
-- **Mostrar:** las tres respuestas y el pie con tokens, costo en US$, modelo y tiempo. El costo de una llamada ronda los US$0,00001.
-- **Transición:** "Hasta acá Jev estaba seguro. Veamos qué pasa cuando no." → punto 7.
+Bloque: Qué es, toma "qué es · paso 6".
+- **Mostrar:** las tres respuestas y el pie con el costo.
 
 ### doubt — Cuando Jev duda
-Tiempo: 3 min
-- **Decir:** "Este ticket habla de un pago, de un pedido y de un error de la app a la vez. Mirá cómo se reparten las barras: la probabilidad de la elegida queda debajo de 0,9 y el ticket va a revisión humana. Y abajo, la confianza de TypeSafe es otro número: mide qué tan concentrada está la distribución."
-- **Mostrar:** apretar el botón. Ver `facturacion` debajo de 0,9 (entre 0,63 y 0,71 en las corridas del caso mediano y de `demo-check`), el aviso naranja de revisión y la línea de confianza aparte.
-- **Transición:** "Entonces, ¿cuándo conviene Jev y cuándo no?" → punto 8.
+Bloque: Qué es, toma "qué es · paso 7".
+- **Mostrar:** apretar el botón, las barras repartidas, `facturacion` debajo de 0,9, el aviso naranja de revisión y la línea de confianza aparte.
 
 ### when — Cuándo usar Jev y cuándo no
-Tiempo: 2 min
-- **Decir:** "Si la salida es una decisión cerrada, Jev. Si es texto libre, un LLM. Si es una regla fija, código. Y antes de producción, tres riesgos: el texto que entra no es de confianza, Jev prefiere la primera opción cuando duda, y los números y fechas se calculan en código."
-- **Mostrar:** la tabla y la lista de los tres riesgos.
-- **Transición:** "Ahora, cómo lo llevás a tu código." → punto 14.
+Bloque: Jev y un LLM, toma "cuándo · paso 8".
+- **Mostrar:** la tabla y la frase final; los riesgos se cuentan después, sobre la slide.
 
 ### guard — Jev revisa a un LLM
-Fuera de vivo: va en el video y sirve de ejemplo para la consigna del caso propio. Jev marca como inventada la respuesta del bot que promete 90 días cuando la política dice 30 (0,98 en `demo-check`).
+Bloque: Dónde usarlo, toma "dónde · paso 9".
+- **Mostrar:** la política y la respuesta del bot en el texto, apretar el botón, el sí con 0,98.
+
+### regression — Por qué falló esta suite
+Bloque: Dónde usarlo, toma "dónde · paso 10".
+- **Mostrar:** el log en el texto (timeout, 503 y "pasó ayer"), las cuatro causas con su definición, apretar el botón y ver `ambiente` en 1,00.
+
+### defects — Qué tan grave es este defecto
+Bloque: Dónde usarlo, toma "dónde · paso 11".
+- **Mostrar:** la descripción del defecto, las cuatro severidades, apretar el botón y ver `critica` con más de 0,9.
 
 ### similar — Proyectos parecidos
-Fuera de vivo: queda en el playground. Si preguntan por alternativas, Clef (Cloudflare) y Strands Decider (AWS) son las más parecidas.
+Fuera del video: queda en el playground. Si preguntan por alternativas, Clef (Cloudflare) y Strands Decider (AWS) son las más parecidas.
 
 ### glossary — Conceptos
-Fuera de vivo: queda en el playground como repaso.
+Fuera del video: queda en el playground como repaso.
 
 ### arch — Cómo está armado este playground
-Fuera de vivo: va en el video. Si preguntan dónde vive la key: en el server, nunca en el navegador.
+Fuera del video: si preguntan dónde vive la key, en el server y nunca en el navegador.
 
 ### prod — Jev en tu sistema
-Fuera de vivo: va en el video. La checklist (key en el server, límite de gasto, timeout, versión fija del modelo) sirve de respuesta para las preguntas de producción.
+Fuera del video: la checklist (key en el server, límite de gasto, timeout, versión fija del modelo) sirve para las preguntas de producción.
 
 ### code — Llevalo a tu código
-Tiempo: 2 min
-- **Decir:** "Todo lo que hicimos es una llamada a `experimental_decide` del AI SDK. Este archivo es el ruteo del paso 5 con el umbral: lo copian, instalan `ai`, exportan la key y lo corren."
-- **Mostrar:** los tres comandos y el botón Copiar. Corrido con la key, imprime "Rutear a cuenta".
-- **Transición:** "Ahora, 6 minutos de video con lo que no vimos en vivo, y después preguntas." → video → consigna: "nombren un caso de su trabajo donde una pregunta cerrada decide algo".
+Bloque: Integración, toma "código · paso 16".
+- **Mostrar:** los tres comandos, el snippet y el botón Copiar. Corrido con la key, imprime "Rutear a cuenta".

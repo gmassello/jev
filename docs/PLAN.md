@@ -3,10 +3,10 @@
 Source: `docs/BRIEF.md`, `docs/UX.md`, `docs/ARCHITECTURE.md` · Deadline: 2026-10-30 12:00 -03:00 · Hours left at writing: 137.5 (revisado el 2026-10-24; la versión del 2026-10-10 tenía 284.5 al 22/10)
 
 ## Summary
-Al terminar, el playground es una lección guiada de 14 pasos que se recorre en vivo en 15 minutos (7 pasos), con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, un deck nuevo, una demo grabada de hasta 6 minutos y el guion del presentador por paso. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
+Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde usarlo) seguido de preguntas en vivo. El video recorre 11 de los 16 pasos del playground, con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, las slides del deck y un guion completo en español (`video/script.tsv`). Hasta el 2026-10-24 el plan era una lección en vivo de 15 minutos, 6 de video y 4 de preguntas. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
 
 ## Key technical decisions
-- Lección guiada en lugar del desafío, charla de 25 minutos (15 + 6 + 4) con 7 pasos en vivo, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24). Las decisiones de abajo sobre el desafío quedan como historia.
+- Lección guiada en lugar del desafío, sesión de unos 20 minutos toda en video + preguntas en vivo, 11 pasos en el video, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24; la charla de 25 minutos con 7 pasos en vivo quedó reemplazada ese mismo día). Las decisiones de abajo sobre el desafío quedan como historia.
 - Desafío, enfoque, casos sintéticos, dominio tickets de soporte, presentador proyecta, todo en español — settled: inherited from BRIEF.
 - Sin deploy: la charla corre en local por screen-share y el acceso asincrónico es el video — chosen over clave compartida en la app y Vercel Deployment Protection because el presentador lo eligió al resolver la pregunta abierta del BRIEF. R9 queda en cut. settled: user-directed
 - El desafío reusa `POST /evaluate` desde el navegador, una llamada por ticket con concurrencia limitada (5), sin endpoint nuevo — chosen over un endpoint que corra el set en el server because no toca `server.js` y la medición de 15 llamadas dio 0 errores en ~1.1 s con concurrencia 15 y con 5. settled: plan-time
@@ -107,13 +107,13 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
   - edge: la consigna de caso propio → es la última slide antes del cierre.
 
 ### U9. Video corto en español
-- **Goal:** una demo grabada de hasta 6 minutos, en español, narrada por un avatar con la voz clonada del presentador (HeyGen) y declarada como tal, recorre la lección; se proyecta en la charla y queda para quien no estuvo. (Reescrita el 2026-10-24: antes recorría el desafío.)
+- **Goal:** la charla entera es un video de hasta 21 minutos, en español, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal, sobre el guion de `video/script.tsv` (U24); se proyecta antes de las preguntas y queda para quien no estuvo. (Reescrita el 2026-10-24: primero recorría el desafío, después era una demo de 6 minutos.)
 - **Covers:** R10 · F5
 - **Files:** `video/script.tsv`, `video/out/demo.mp4`, `docs/AI_DISCLOSURE.md`
-- **Depends on:** U12, U14, U15, U16, U17
+- **Depends on:** U12, U14, U15, U16, U17, U22, U23, U24
 - **Status:** todo
 - **Tests:**
-  - happy: el video final → dura 6 minutos o menos (`ffprobe`). Covers AE10.
+  - happy: el video final → dura 21 minutos o menos (`ffprobe`). Covers AE10.
   - edge: cada cifra de los subtítulos → coincide con la salida de `demo-check`.
 
 ### U10. Snippet de integración ejecutable
@@ -150,7 +150,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
   - edge: teclado → cada punto es un botón con su nombre accesible.
 
 ### U13. Deck nuevo
-- **Goal:** `docs/deck.html` y `docs/deck.pdf` con el título "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad" acompañan los 15 minutos de lección: qué es Jev, Jev vs. LLMs, probabilidad y confianza, integración, costo, riesgos y la consigna de caso propio; sin el desafío ni System One.
+- **Goal:** `docs/deck.html` y `docs/deck.pdf` con el título "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad" acompañaban los 15 minutos de lección (reencuadrado por U23 el 2026-10-24): qué es Jev, Jev vs. LLMs, probabilidad y confianza, integración, costo, riesgos y la consigna de caso propio; sin el desafío ni System One.
 - **Covers:** R7, R8 · F3, F5
 - **Files:** `docs/deck.html`, `docs/deck.pdf`
 - **Depends on:** U14, U15
@@ -220,13 +220,13 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
   - error: un test roto → CI en rojo.
 
 ### U20. Guion del presentador por paso
-- **Goal:** `docs/GUION.md` dice, para cada paso de la lección, qué decir en una o dos frases, qué mostrar o tocar en pantalla, el tiempo (los 7 pasos en vivo suman 15 minutos) y la transición al siguiente; los pasos que no van en vivo llevan una línea para el video o para después.
+- **Goal:** (reemplazada por U24 el 2026-10-24) `docs/GUION.md` decía, para cada paso de la lección, qué decir en una o dos frases, qué mostrar o tocar en pantalla, el tiempo (los 7 pasos en vivo suman 15 minutos) y la transición al siguiente; los pasos que no van en vivo llevan una línea para el video o para después.
 - **Covers:** R20 · F5
 - **Files:** `docs/GUION.md`
 - **Depends on:** U12, U14, U16, U17
 - **Status:** done
 - **Tests:**
-  - happy: el guion → tiene una entrada por cada paso de `copy.js`, en el mismo orden, y los tiempos de los pasos en vivo suman 15 minutos. Covers AE13.
+  - happy: el guion → tiene una entrada por cada paso de `copy.js`, en el mismo orden (los tiempos ahora los prueba U24).
   - edge: cada cifra que menciona → sale de `demo-check` o de la respuesta del gateway.
 
 ### U21. Tokens en index.html
@@ -238,10 +238,40 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - **Tests:**
   - happy: los colores con `#` aparecen solo dentro de `:root`, y las capturas de un paso de teoría y uno de práctica coinciden con las de antes.
 
+### U22. Casos del equipo: por qué falló una suite y qué tan grave es un defecto
+- **Goal:** dos pasos de práctica nuevos después de "Jev revisa a un LLM", con datos sintéticos parecidos a los del equipo: el log de una suite caída (`ambiente`, `test_roto`, `dato` o `bug`) y la descripción de un defecto (`critica`, `alta`, `media` o `baja`), cada opción con su definición, para la parte "dónde usarlo" del video.
+- **Covers:** R11 · F5
+- **Files:** `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
+- **Depends on:** U17
+- **Status:** done
+- **Tests:**
+  - happy: `regression` y `defects` van justo después de `guard`, en es y en, como `choice` con 4 opciones definidas.
+  - edge: `demo-check` → la suite da `ambiente` con 0,9 o más y el defecto da `critica` (medido 2026-10-24: 1,00 y 0,95–0,97 en tres corridas; 0,93 en el playground).
+
+### U23. Deck en tres ejes: qué es, impacto y dónde usarlo
+- **Goal:** el deck aporta las slides que aparecen en el video: impacto (hoy el 100 % a mano contra 5 de 5 tickets claros ruteados solos y el ambiguo a revisión), costo cada 1000 tickets, riesgos con la key en el server, y los cuatro casos de "dónde usarlo".
+- **Covers:** R8 · F5
+- **Files:** `docs/deck.html`, `docs/deck.pdf`, `cases/medium/checks.py`
+- **Depends on:** U22
+- **Status:** done
+- **Tests:**
+  - happy: `python3 cases/medium/checks.py http://localhost:3001` imprime la línea `impact:` con los tickets sobre el umbral y el costo cada 1000, y esas cifras son las de la slide.
+  - edge: el PDF exporta OK, una página por slide.
+
+### U24. Guion completo del video
+- **Goal:** `video/script.tsv` tiene la narración entera en español, una oración por fila, en tres bloques (qué es, impacto y dónde usarlo) más apertura, integración y cierre, de unos 20 minutos hablados; `docs/GUION.md` dice qué se ve en cada toma y de dónde sale cada cifra.
+- **Covers:** R20 · F5
+- **Files:** `video/script.tsv`, `docs/GUION.md`, `cases/large/checks.py`, `cases/large/SPEC.md`
+- **Depends on:** U22, U23
+- **Status:** done
+- **Tests:**
+  - happy: la columna hablada suma entre 2.700 y 3.100 palabras, y `docs/GUION.md` tiene un `### <id>` por paso con `Bloque:` o `Fuera del video:`. Covers AE13.
+  - edge: cada cifra del guion → sale de `demo-check` o del caso mediano.
+
 ## Cut line
 | Tier | Units | Why |
 |---|---|---|
-| must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20 | la lección en vivo, lo que dice de la confianza y el código vigente son la charla; el deck y el guion la sostienen; el video ocupa 6 de los 25 minutos; CI avisa si algo se rompe antes del viernes |
+| must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20, U22, U23, U24 | el video es la charla: la lección, los casos del equipo, las slides de impacto y el guion son lo que se graba; CI avisa si algo se rompe antes del viernes |
 | should | U17, U18, U21 | suman un caso fuerte para la consigna, un error legible si falla el gateway y legibilidad en la sala, pero la charla anda sin ellos |
 | cut | U2, U3, U4, U5 | construidos y retirados el 2026-10-12 al pasar a la lección guiada; R1–R5 quedan para después |
 | cut | U7 | el presentador eligió no deployar; R9 queda sin cubrir y AE6 no se ejecuta |
@@ -257,7 +287,7 @@ Al terminar, el playground es una lección guiada de 14 pasos que se recorre en 
 - Los tokens y el costo cambian entre corridas — likelihood: alta — mitigation: el deck y el video toman las cifras del JSON de una corrida y lo dicen; en vivo se muestran las de esa corrida.
 
 - `jev-latest` cambia de versión y el caso dudoso del paso 7 pasa el umbral — likelihood: media — mitigation: `demo-check` antes de cada ensayo y el viernes a las 11:00 — fallback: fijar `typesafe-ai/jev-1.14.0` o cambiar el texto y volver a medir.
-- El video no llega a tiempo (HeyGen, tomas, armado) — likelihood: media — mitigation: U9 arranca apenas estén U12 y U14 — fallback: estirar la lección en vivo a 21 minutos y dejar el video para después.
+- El video no llega a tiempo (HeyGen, tomas, armado) — likelihood: media — mitigation: U9 arranca apenas estén U12 y U14 — fallback: dar la charla en vivo leyendo el guion sobre el playground y el deck.
 
 ## Out of scope
 - Que cada asistente juegue el desafío en su navegador; ranking entre asistentes (BRIEF, Para después).

@@ -7,18 +7,18 @@
 ## Esta semana (lun 19 – vie 23/10)
 
 - [ ] Mandar la invitación de calendario y reservar la sala, o el link de la reunión
-- [ ] Definir la duración: charla, demo y preguntas
-- [ ] Rehacer el deck: `docs/deck.html` es de la versión con Desafío y Docs y no sigue la lección de 11 pasos
+- [x] Definir la duración: unos 20 minutos de video (qué es, impacto y dónde usarlo) y después preguntas en vivo
+- [x] Rehacer el deck: slides de impacto, costo, riesgos, dónde usarlo y consigna para el video
 - [ ] Poner el título nuevo en la portada del deck y regenerar `docs/deck.pdf`
 - [ ] Pedir aprobación para usar datos internos en el ejercicio, o confirmar que va con datos sintéticos
 
 ## Video (retomar lo pausado)
 
 - [ ] Bajar el clip 1 de HeyGen como `video/clip-1.mov` y correr el gate de `build-voice.py`: todo `fitted` y `spread` < 9
-- [ ] Generar los 9 clips restantes con el mismo avatar, voz, formato apaisado y 720p
+- [ ] Generar un clip por beat de `video/script.tsv` (19) con el mismo avatar, voz, formato apaisado y 720p; varios beats pasan de 1 minuto, así que hace falta el plan pago de HeyGen
 - [ ] Grabar la toma de pantalla del playground: `Cmd+Shift+5` en modo ventana, Chrome sin la franja de debugging
 - [ ] Armar `video/out/demo.mp4` con `assemble-voice.sh`
-- [ ] Mirarlo entero sin sonido y confirmar que dura menos de 3 minutos
+- [ ] Mirarlo entero y confirmar que dura 21 minutos o menos
 
 ## Ejercicio guiado
 
@@ -33,7 +33,7 @@
 
 ## Semana siguiente (lun 26 – jue 29/10)
 
-- [ ] Ensayo 1, cronometrado, con la demo en vivo
+- [ ] Ensayo 1: ver el video entero en la sala y practicar respuestas a preguntas
 - [ ] Ajustar el deck y el guion con lo que salió del ensayo
 - [ ] Ensayo 2, cronometrado
 - [ ] `node scripts/demo-check.mjs --check` en verde

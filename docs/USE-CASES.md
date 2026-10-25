@@ -2,52 +2,52 @@ Source: docs/BRIEF.md · prioridades de la Cut line de docs/PLAN.md (revisado el
 
 # Evaluar con Jev — Casos de uso
 
-El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI SDK → AI Gateway → Jev) y los artefactos de la charla del 2026-10-30 (guion, deck y video). Lo prueba la charla en vivo de 25 minutos; no hay suite del evento. Los encabezados `##` quedan en inglés porque los leen los scripts del flujo.
+El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI SDK → AI Gateway → Jev) y los artefactos de la charla del 2026-10-30 (guion, deck y video). Lo prueba la sesión: un video de unos 20 minutos y después preguntas en vivo; no hay suite del evento. Los encabezados `##` quedan en inglés porque los leen los scripts del flujo.
 
 ## Features
 
 | IDs | Funcionalidad | Actor | Prioridad (PLAN) | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
-| R11, R12, R13, R14, R19 · F5 | Lección guiada de 14 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, Jev revisa a un LLM, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
-| R11 · F5 | Saltar a un paso para dar los 7 pasos en vivo | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
+| R11, R12, R13, R14, R19 · F5 | Lección guiada de 16 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, Jev revisa a un LLM, los dos casos del equipo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
+| R11 · F5 | Saltar a un paso para grabar cada toma del video | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
+| R11 · F5 | Casos del equipo: por qué falló una suite y qué tan grave es un defecto | A1, A2 | must (U22, done) | Detectan un caso propio | Sí: "dónde usarlo" |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15, done) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16, done) | Costo y riesgos claros | Sí |
-| R7, R8 · F3 | Deck con el título de la charla y consigna de caso propio | A1, A2 | must (U13, done) | Entienden qué es Jev y qué no; Detectan un caso propio | No: soporte de la charla |
-| R10 · F5 | Demo grabada de hasta 6 minutos con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
-| R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí, si llega |
-| R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18, done) | — (respaldo de la demo en vivo) | No |
-| R20 · F5 | Guion del presentador por paso | A1 | must (U20, done) | Entienden qué es Jev y qué no | No: soporte de la charla |
+| R7, R8 · F3 | Deck con el título de la charla, impacto, dónde usarlo y consigna de caso propio | A1, A2 | must (U13, U23, done) | Entienden qué es Jev y qué no; Detectan un caso propio; Costo y riesgos claros | Sí: las slides de impacto, riesgos, casos y consigna |
+| R10 · F5 | La charla entera en video, de hasta 21 minutos, con el avatar | A2, A3 | must (U9) | Pueden integrarlo solos | Es el video |
+| R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí: "dónde usarlo" |
+| R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18, done) | — (respaldo al grabar y al probar después) | No |
+| R20 · F5 | Guion completo del video en español | A1 | must (U20, U24, done) | Entienden qué es Jev y qué no | Es la narración |
 | R1, R2, R3, R4, R5, R9 | Desafío con marcador y demo deployada | — | cut (U2–U5 retirados, U7) | — | No |
 
 
 
 ## Happy paths
 
-### F5. Charla de 25 minutos — R11, R12, R16, R17, R19, R20
+### F5. Sesión de unos 20 minutos + preguntas — R11, R12, R16, R17, R19, R20
 
-Estado inicial: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` cargada, el navegador en el paso 1 y la interfaz en español; `node scripts/demo-check.mjs --check` en verde.
+Estado inicial para grabar: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` cargada, el navegador en el paso 1 y la interfaz en español; `node scripts/demo-check.mjs --check` en verde. El orden de las tomas está en `docs/GUION.md` y la narración en `video/script.tsv`.
 
-1. Paso 1, "¿Qué es Jev?": dos párrafos de teoría.
-2. Paso 2, "Sí / No": "¿Se le devolvió la plata al cliente?" sobre el ticket del agente que devolvió el dinero → sí, cerca de 1.
-3. Paso 5, "Opciones con definición": el ticket de la contraseña va a `cuenta`.
-4. Paso 6, "Todo junto": reembolso, área y urgencia en una sola llamada.
-5. Paso 7, "Cuando Jev duda": "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?" → `facturacion` con probabilidad debajo de 0,9 y el aviso de revisión humana.
-6. Paso 8, "Cuándo usar Jev y cuándo no", con los riesgos para producción.
-7. Paso 14, "Llevalo a tu código", con el snippet listo para copiar.
-8. Video de 6 minutos y 4 minutos de preguntas con la consigna.
+1. Apertura con el avatar: tres partes y el aviso de que es un avatar.
+2. Qué es: pasos 1, 2 ("¿Se le devolvió la plata al cliente?" → sí, cerca de 1), 3 (estafa), 5 (el ticket de la contraseña va a `cuenta`), 6 (reembolso, área y urgencia en una llamada) y 7 ("La app me tiró error al pagar…" → `facturacion` debajo de 0,9 y el aviso de revisión humana).
+3. Paso 8, "Cuándo usar Jev y cuándo no".
+4. Impacto: slides antes y después, costo cada 1000 tickets y riesgos.
+5. Dónde usarlo: repaso del paso 5, paso 9 (el bot que inventa), paso 10 (la suite que falló por el ambiente), paso 11 (el defecto crítico) y la slide de los cuatro casos.
+6. Paso 16, "Llevalo a tu código", con el snippet listo para copiar.
+7. Consigna y cierre; después, preguntas en vivo.
 
 Criterios de aceptación:
 - AE7. Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla. — **How it is proven:** `node scripts/demo-check.mjs --check` (respuestas de los pasos 2 a 7) + `screenshot` de un paso de práctica.
 - AE8. Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana. — **How it is proven:** `node scripts/demo-check.mjs --check` (una corrida) + `python3 cases/medium/checks.py http://localhost:3001` (`check_doubt_stable`, tres corridas) + `screenshot` del aviso.
 - AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`) + `screenshot` del paso 7.
 - AE12. Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo. — **How it is proven:** `npm test` (test de forma de `arch` y `prod`) + `screenshot` de los dos pasos.
-- AE10. Given el video final, then dura 6 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).
-- AE13. Given el guion, then hay una entrada por cada paso de la lección, en el mismo orden, y los tiempos de los 7 pasos en vivo suman 15 minutos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_guion`); el guion vive en `docs/GUION.md`.
+- AE10. Given el video final, then dura 21 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).
+- AE13. Given el guion, then la columna hablada de `video/script.tsv` suma entre 2.700 y 3.100 palabras, y `docs/GUION.md` tiene una entrada por cada paso de la lección, en el mismo orden, que dice en qué bloque del video aparece o que queda fuera. — **How it is proven:** `python3 cases/large/checks.py .` (`check_script` y `check_guion`).
 
 ### F3. De la charla al código — R6, R7, R15, R18
 
-Estado inicial: el navegador en el paso 14, con la key en el entorno de quien copia el snippet.
+Estado inicial: el navegador en el paso 16, con la key en el entorno de quien copia el snippet.
 
 1. El asistente copia el snippet con el botón Copiar y lo guarda como `jev.mjs`.
 2. Corre `npm i ai@<versión del paso>` y `node jev.mjs`.
@@ -91,17 +91,18 @@ Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales
 Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas reales). Hoy: 7/7.
 
 ### Large — la charla completa
-`cases/large/` · dominio: los artefactos de la charla · PLAN: U11, U15, U20, U13, U9.
+`cases/large/` · dominio: los artefactos de la charla · PLAN: U11, U15, U20, U13, U22, U23, U24, U9.
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
-| Producto | 14 pasos con los mismos ids en es y en, incluidos los 7 en vivo | `check_lesson_steps` |
+| Producto | 16 pasos con los mismos ids en es y en, incluidos los 11 del video | `check_lesson_steps` |
 | Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
-| Producto | El guion tiene una entrada por paso y los pasos en vivo suman 15 minutos | `check_guion` |
+| Producto | El guion ubica cada paso en un bloque del video o fuera de él | `check_guion` |
+| Producto | La narración suma entre 2.700 y 3.100 palabras (~20 min) | `check_script` |
 | Producto | El deck lleva el título de la charla y existe en PDF | `check_deck` |
-| Sistema | El video existe y dura 360 s o menos | `check_video` (falla hasta U9) |
+| Sistema | El video existe y dura 1260 s o menos | `check_video` (falla hasta U9) |
 
-Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 4/5.
+Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`). Hoy: 5/6.
 
 ### Validación de las suites (2026-10-24)
 - **Contra algo que funciona:** un server mínimo escrito desde los SPEC (fuera del repo) da 7/7 en el chico y 7/7 en el mediano; un repo armado desde `cases/large/SPEC.md` da 5/5.

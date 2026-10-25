@@ -124,6 +124,15 @@ def check_talk_cost(base):
     expect(sum(costs) < MAX_USD, f"batch cost US${sum(costs):.6f}, want < US${MAX_USD}")
 
 
+def impact(base):
+    responses, _ = run_batch(base)
+    answers = [((body or {}).get("answers", {}).get("team") or {}) for _, body in responses]
+    auto = sum((a.get("probabilities") or {}).get(a.get("choice"), 0) >= THRESHOLD for a in answers)
+    costs = [c for c in ((body or {}).get("cost") for _, body in responses) if isinstance(c, (int, float))]
+    per_1000 = f"US${sum(costs) / len(costs) * 1000:.4f}" if costs else "?"
+    return f"impact: {auto}/{len(answers)} tickets >= {THRESHOLD} (routed alone), {per_1000} per 1000 tickets"
+
+
 CHECKS = [check_batch_all_answered, check_accuracy, check_batch_fast_and_cheap, check_doubt_stable, check_order_independent, check_guardrail_pair, check_talk_cost]
 
 
@@ -147,6 +156,10 @@ def main():
           f"{time.monotonic() - started:.1f}s, {base}")
     for name, error in results:
         print(f"{'FAIL' if error else 'ok  '} {name}" + (f" — {error}" if error else ""))
+    try:
+        print(impact(base))
+    except Exception as exc:
+        print(f"impact: n/a ({type(exc).__name__})")
     return 1 if failed else 0
 
 

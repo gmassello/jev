@@ -154,6 +154,34 @@ export const I18N = {
         question: { type: 'boolean', text: '¿La respuesta del asistente afirma algo que la política no dice?', options: [] },
       },
       {
+        id: 'regression', kind: 'ask', title: 'Por qué falló esta suite',
+        theory: [
+          'Cuando una suite automatizada falla, alguien abre el reporte, lee el log y decide: ¿se cayó el ambiente, se rompió el test, faltó un dato o es un bug de la app?',
+          'Esa lectura es una pregunta cerrada con cuatro opciones conocidas. El log es el texto y cada causa lleva su definición.',
+          'Si Jev está seguro, la falla se etiqueta sola; si duda, la mira una persona.',
+        ],
+        state: 'Suite: transferencias-contactos (Android)\nTest: transferir_a_contacto_nuevo\nTimeoutException: no apareció el elemento btnConfirmar después de 30 s.\nLog de red: POST /transfers respondió 503 Service Unavailable tres veces seguidas.\nLa misma suite pasó ayer con el mismo build de la app.',
+        question: {
+          type: 'choice', text: '¿Qué causó la falla?',
+          options: ['ambiente', 'test_roto', 'dato', 'bug'],
+          descriptions: ['Un servicio caído, errores 5xx o problemas de red', 'Un locator o una espera del test que ya no sirve, o un cambio de pantalla', 'El usuario de prueba no está en el estado que necesita: sin saldo, bloqueado o sin validar', 'La app hace algo distinto de lo esperado'],
+        },
+      },
+      {
+        id: 'defects', kind: 'ask', title: 'Qué tan grave es este defecto',
+        theory: [
+          'Un defecto nuevo llega con una descripción libre, y alguien tiene que decidir su severidad antes de asignarlo.',
+          'Con la definición de cada severidad escrita una vez, Jev la propone y muestra qué tan seguro está.',
+          'El equipo revisa solo los que quedan debajo del umbral.',
+        ],
+        state: 'En iOS, al confirmar una transferencia a un contacto nuevo, la app muestra "Transferencia exitosa", pero el dinero nunca sale de la cuenta y el contacto no lo recibe. En Android el mismo flujo funciona.',
+        question: {
+          type: 'choice', text: '¿Qué severidad tiene este defecto?',
+          options: ['critica', 'alta', 'media', 'baja'],
+          descriptions: ['Dinero que se mueve mal o no se mueve, o la app no abre', 'Un flujo principal no se puede completar', 'Algo falla pero hay una forma de seguir', 'Un detalle visual o de texto'],
+        },
+      },
+      {
         id: 'similar', kind: 'theory', title: 'Proyectos parecidos',
         theory: ['Jev no es el único. Estos proyectos resuelven el mismo problema, o una parte.'],
         table: {
@@ -423,6 +451,34 @@ else console.log('A revisión humana:', probabilities);
         ],
         state: 'Store policy: returns are accepted up to 30 days after purchase, with the receipt.\nCustomer: how long do I have to return it?\nAssistant: You have up to 90 days to return it, no receipt needed.',
         question: { type: 'boolean', text: 'Does the assistant reply claim something the policy does not say?', options: [] },
+      },
+      {
+        id: 'regression', kind: 'ask', title: 'Why this suite failed',
+        theory: [
+          'When an automated suite fails, someone opens the report, reads the log and decides: did the environment go down, did the test break, was test data missing, or is it an app bug?',
+          'That reading is a closed question with four known options. The log is the text and each cause has its definition.',
+          'If Jev is sure, the failure gets labelled on its own; if it hesitates, a person looks at it.',
+        ],
+        state: 'Suite: contact-transfers (Android)\nTest: transfer_to_new_contact\nTimeoutException: element btnConfirm did not appear after 30 s.\nNetwork log: POST /transfers returned 503 Service Unavailable three times in a row.\nThe same suite passed yesterday with the same app build.',
+        question: {
+          type: 'choice', text: 'What caused the failure?',
+          options: ['environment', 'broken_test', 'test_data', 'bug'],
+          descriptions: ['A service down, 5xx errors or network problems', 'A test locator or wait that no longer works, or a screen change', 'The test user is not in the state it needs: no balance, blocked or not validated', 'The app does something different from what is expected'],
+        },
+      },
+      {
+        id: 'defects', kind: 'ask', title: 'How severe this defect is',
+        theory: [
+          'A new defect arrives with a free-text description, and someone has to decide its severity before assigning it.',
+          'With each severity defined once, Jev proposes one and shows how sure it is.',
+          'The team only reviews the ones below the threshold.',
+        ],
+        state: 'On iOS, when confirming a transfer to a new contact, the app shows "Transfer successful", but the money never leaves the account and the contact never gets it. On Android the same flow works.',
+        question: {
+          type: 'choice', text: 'How severe is this defect?',
+          options: ['critical', 'high', 'medium', 'low'],
+          descriptions: ['Money moves wrong or does not move, or the app does not open', 'A main flow cannot be completed', 'Something fails but there is a way to continue', 'A visual or text detail'],
+        },
       },
       {
         id: 'similar', kind: 'theory', title: 'Similar projects',
