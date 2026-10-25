@@ -56,13 +56,14 @@ export const I18N = {
           'Jev es un modelo que evalúa, no que conversa. Le das un texto y una pregunta cerrada, y te devuelve una respuesta con su probabilidad.',
           'Jev contesta siempre en un formato fijo: un sí o no, una opción de una lista o un nivel de una escala, con su probabilidad.',
           'TypeSafe lo llama el primer modelo "System One", por la idea de Daniel Kahneman (Pensar rápido, pensar despacio): el Sistema 1 decide rápido y sin esfuerzo, como cuando ves que una cara está enojada; el Sistema 2 razona paso a paso, como cuando calculás 17 × 24.',
-          'Jev es el Sistema 1 de tu software. Si una pregunta necesita varios pasos de razonamiento, partila en preguntas más chicas o resolvé esa parte en código.',
+          'Jev es el Sistema 1 de tu software. Si una pregunta necesita varios pasos de razonamiento, partila en preguntas más chicas o resolvé esa parte en código. Y lo que es una regla fija, como si pasaron más de 30 días, no necesita ningún modelo: es código.',
         ],
         table: {
           head: ['', 'Qué hace', 'Qué devuelve', 'Velocidad'],
           rows: [
             ['Sistema 1 · Jev', 'https://docs.typesafe.ai/introduction', 'Lee un texto y elige entre opciones conocidas', 'Un valor y su probabilidad', 'Cientos de milisegundos: mediana de 292 ms en 18 llamadas medidas'],
             ['Sistema 2 · un LLM que razona', null, 'Piensa paso a paso y escribe', 'Texto que hay que interpretar', 'Más lento: genera la respuesta token por token'],
+            ['Código · una regla fija', null, 'Aplica una regla exacta: un if, un cálculo, una fecha', 'Un resultado exacto, sin probabilidad', 'Inmediato: no llama a ningún modelo'],
           ],
         },
       },
@@ -379,13 +380,14 @@ else console.log('A revisión humana:', probabilities);
           'Jev is a model that evaluates, it does not chat. You give it a text and a closed question, and it returns an answer with its probability.',
           'Jev always answers in a fixed format: a yes or no, an option from a list or a level on a scale, with its probability.',
           'TypeSafe calls it the first "System One" model, after Daniel Kahneman\'s idea (Thinking, Fast and Slow): System 1 decides fast and without effort, like seeing that a face is angry; System 2 reasons step by step, like working out 17 × 24.',
-          'Jev is the System 1 of your software. If a question needs several reasoning steps, split it into smaller questions or solve that part in code.',
+          'Jev is the System 1 of your software. If a question needs several reasoning steps, split it into smaller questions or solve that part in code. And a fixed rule, like whether more than 30 days have passed, needs no model at all: it is code.',
         ],
         table: {
           head: ['', 'What it does', 'What it returns', 'Speed'],
           rows: [
             ['System 1 · Jev', 'https://docs.typesafe.ai/introduction', 'Reads a text and picks among known options', 'A value and its probability', 'Hundreds of milliseconds: median 292 ms over 18 measured calls'],
             ['System 2 · an LLM that reasons', null, 'Thinks step by step and writes', 'Text you have to interpret', 'Slower: it generates the answer token by token'],
+            ['Code · a fixed rule', null, 'Applies an exact rule: an if, a calculation, a date', 'An exact result, with no probability', 'Instant: it calls no model'],
           ],
         },
       },

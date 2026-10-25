@@ -9,7 +9,7 @@ La narración completa, una oración por fila, está en `video/script.tsv`: `bea
 | Bloque | Tomas (`beat`) | Pantalla | Min |
 |---|---|---|---|
 | Apertura | apertura | avatar | 1,2 |
-| Qué es | qué es · pasos 1, 2, 3, 5, 6 y 7 | playground | 7,2 |
+| Qué es | qué es · pasos 1, 2, 3, 5, 6 y 7 | playground | 7,4 |
 | Jev y un LLM | cuándo · paso 8 | playground | 1,6 |
 | Impacto | impacto · slides antes y después, costo y riesgos | deck | 3,9 |
 | Dónde usarlo | dónde · pasos 5, 9, 10 y 11, y slide casos | playground y deck | 6,0 |
@@ -34,7 +34,7 @@ Si al grabar la pantalla muestra otra cifra, se regraba la frase con la de la pa
 
 ### what — ¿Qué es Jev?
 Bloque: Qué es, toma "qué es · paso 1".
-- **Mostrar:** los párrafos, la tabla Sistema 1 (Jev) / Sistema 2 (un LLM que razona) y la barra de pasos.
+- **Mostrar:** los párrafos, la tabla de tres filas (Sistema 1 · Jev, Sistema 2 · un LLM que razona, Código · una regla fija) y la barra de pasos.
 
 ### boolean — Sí / No
 Bloque: Qué es, toma "qué es · paso 2".

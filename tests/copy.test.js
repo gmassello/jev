@@ -187,12 +187,13 @@ test('the architecture step shows the current configuration, with the pinned ai 
   }
 });
 
-test('the first step frames Jev as the System One model, with a two-row comparison', () => {
+test('the first step frames Jev as the System One model, with a three-row comparison', () => {
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'what');
     const text = step.theory.join(' ');
     assert.ok(text.includes('Kahneman') && text.includes('System One'), lang);
-    assert.equal(step.table?.rows.length, 2, lang);
+    assert.equal(step.table?.rows.length, 3, lang);
+    assert.match(step.table.rows[2][0], lang === 'es' ? /Código/ : /Code/, lang);
     for (const r of step.table.rows) assert.equal(r.length, step.table.head.length + 1, lang);
   }
 });
