@@ -73,7 +73,7 @@
   #run:disabled { opacity: .6; cursor: wait; }
   .answer h3 { margin: 0 0 .3rem; font-size: var(--fs-body); }
   .verdict { font-size: var(--fs-verdict); font-weight: 700; margin: .2rem 0 .6rem; }
-  .verdict.yes { color: var(--ok); } .verdict.no { color: var(--bad); }
+  .verdict.yes { color: var(--ok); } .verdict.no { color: var(--bad); } .verdict.review { color: var(--warn); }
   .bar-row { display: grid; grid-template-columns: minmax(6rem, 30%) 1fr 3.2rem; gap: .5rem; align-items: center; margin: .25rem 0; font-size: var(--fs-sm); }
   .bar { height: .7rem; background: var(--accent-soft); border-radius: var(--radius-pill); overflow: hidden; }
   .bar i { display: block; height: 100%; background: var(--accent); border-radius: var(--radius-pill); }
@@ -249,13 +249,14 @@
     h('div', { className: 'bar' }, h('i', { style: `width:${pct(p)}%` })),
     h('span', { className: 'pct', textContent: `${pct(p)}%` }));
 
+  const BOOL_LIMIT = 0.9;
+  const zone = (p) => (p >= BOOL_LIMIT ? 'yes' : p <= 1 - BOOL_LIMIT ? 'no' : 'review');
+
   const renderAnswer = (q, a) => {
     if (a.type === 'boolean') {
-      const yes = a.probability >= 0.5;
       return [
-        h('p', { className: `verdict ${yes ? 'yes' : 'no'}`, textContent: `${yes ? t().yes : t().no} · ${t().sure(pct(yes ? a.probability : 1 - a.probability))}` }),
-        bar(t().yes, a.probability, yes),
-        bar(t().no, 1 - a.probability, !yes),
+        h('p', { className: `verdict ${zone(a.probability)}`, textContent: t().sure(pct(a.probability)) }),
+        bar(t().yes, a.probability, true),
       ];
     }
     if (a.type === 'choice') {
@@ -271,10 +272,7 @@
   };
 
   const explainFor = (q, a) => {
-    if (a.type === 'boolean') {
-      const yes = a.probability >= 0.5;
-      return t().explain.boolean(yes, pct(yes ? a.probability : 1 - a.probability));
-    }
+    if (a.type === 'boolean') return t().explain.boolean(a.probability, zone(a.probability));
     if (a.type === 'choice') return t().explain.choice(a.choice, pct(a.probabilities?.[a.choice] ?? 1));
     const nearest = Math.min(q.criteria.length - 1, Math.max(0, Math.round(a.score)));
     return t().explain.score(q.criteria[nearest], nearest + 1, q.criteria.length);

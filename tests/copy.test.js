@@ -32,11 +32,15 @@ test('a key missing in a language falls back to english without breaking', () =>
 test('the UI says probabilidad, never "de seguridad", for a probability', () => {
   const values = Object.values(I18N.es).map((v) => (typeof v === 'function' ? v(98) : String(v)));
   assert.ok(!values.some((v) => v.includes('de seguridad')), 'found "de seguridad" in the es table');
-  assert.equal(I18N.es.sure(98), '98% de probabilidad');
+  assert.equal(I18N.es.sure(98), '98% de probabilidad de «sí»');
 });
 
 test('the playground explains a yes/no answer and a scale answer in plain words', () => {
-  assert.equal(I18N.es.explain.boolean(true, 98), 'Jev está 98% seguro de que sí. Arriba de 90% podrías automatizar; abajo, que lo mire una persona.');
+  for (const lang of ['es', 'en']) {
+    const lines = ['yes', 'no', 'review'].map((zone) => I18N[lang].explain.boolean(0.97, zone));
+    for (const line of lines) assert.ok(line.includes('probability: 0.97'), `${lang}: ${line}`);
+    assert.equal(new Set(lines).size, 3, `${lang}: one reading per zone`);
+  }
   assert.match(I18N.es.explain.score('Enojado', 3, 4), /«Enojado» \(nivel 3 de 4\)/);
   assert.match(I18N.en.explain.choice('Shipping', 81), /“Shipping” with 81%/);
 });

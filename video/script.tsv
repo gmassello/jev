@@ -21,10 +21,10 @@ beat	en	es
 2:06 qué es · paso 2	El texto: un cliente enojado por una entrega.	El texto cuenta que un cliente mandó tres mails enojado por una entrega demorada, y que el agente de soporte pidió disculpas y le devolvió todo el dinero.
 2:06 qué es · paso 2	¿Se le devolvió la plata al cliente?	La pregunta es: ¿se le devolvió la plata al cliente?
 2:06 qué es · paso 2	Aprieto «Preguntarle a Jev».	Aprieto el botón, Preguntarle a Jev.
-2:06 qué es · paso 2	Sí, con 0,98 de probabilidad.	Jev dice que sí, con una probabilidad de cero coma noventa y ocho.
-2:06 qué es · paso 2	0,98 es casi seguro; 0,5 sería «no sé».	Cero coma noventa y ocho quiere decir casi seguro que sí; cero coma cinco querría decir que no sabe.
-2:06 qué es · paso 2	En tu código elegís un umbral.	En tu código elegís un umbral, por ejemplo cero coma nueve.
-2:06 qué es · paso 2	Arriba actúa solo; abajo revisa una persona.	Por encima del umbral, el sistema actúa solo; por debajo, la decisión pasa a una persona.
+2:06 qué es · paso 2	Jev no contesta «sí»: devuelve 0,98.	Jev no contesta con la palabra sí: devuelve un solo número, cero coma noventa y ocho.
+2:06 qué es · paso 2	Es la probabilidad de que la respuesta sea sí.	Ese número es la probabilidad de que la respuesta sea sí: casi seguro que sí. Cero coma cero dos sería casi seguro que no, y cero coma cinco, que no sabe.
+2:06 qué es · paso 2	El sí o el no lo decide tu código.	El sí o el no lo decide tu código, con umbrales.
+2:06 qué es · paso 2	0,9 o más: sí. 0,1 o menos: no. En el medio, una persona.	Por ejemplo, cero coma nueve o más se trata como sí, cero coma uno o menos como no, y lo del medio lo revisa una persona.
 2:06 qué es · paso 2	Ese umbral es la idea central de todo el video.	Esa idea, un número más un umbral, es la que vamos a usar en todo el resto del video.
 2:06 qué es · paso 2	Abajo: tokens, costo, modelo y tiempo.	Abajo de cada respuesta ven cuántos tokens usó, cuánto costó, qué versión del modelo respondió y cuánto tardó.
 2:06 qué es · paso 2	Todo es editable: texto, pregunta y opciones.	Y fíjense que todo es editable: el texto, la pregunta y las opciones, así que pueden probar sus propios casos.

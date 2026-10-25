@@ -22,7 +22,7 @@ Los minutos salen de contar las palabras de la columna `es` a 2,3 por segundo; e
 
 | Cifra | Comando |
 |---|---|
-| Sí 0,98 (paso 2), estafa 1,00 (paso 3), cuenta 1,00 (paso 5), facturación entre 0,63 y 0,71 (paso 7), inventada 0,98 (paso 9), ambiente 1,00 (paso 10), crítica entre 0,93 y 0,97 (paso 11, 0,93 en el playground) | `node scripts/demo-check.mjs --check`, tres corridas del 2026-10-24 |
+| Probabilidad de sí entre 0,96 y 0,98 (paso 2), estafa 1,00 (paso 3), cuenta 1,00 (paso 5), facturación entre 0,63 y 0,71 (paso 7), inventada 0,98 (paso 9), ambiente 1,00 (paso 10), crítica entre 0,93 y 0,97 (paso 11, 0,93 en el playground) | `node scripts/demo-check.mjs --check`, tres corridas del 2026-10-24 |
 | Reembolso 0,98, facturación 1, urgencia alta 0,86 (paso 6) | la respuesta del paso 6 en el playground, 2026-10-24 |
 | Respuesta fiel 0,07, estafa en los dos órdenes | `python3 cases/medium/checks.py http://localhost:3001` (`cases/medium/SPEC.md`, medido el 2026-10-24) |
 | 5 de 5 tickets claros con 0,9 o más; US$0,0162 cada 1000 tickets; tanda en menos de 3 s | `python3 cases/medium/checks.py http://localhost:3001`, línea `impact:` y resumen, tres corridas del 2026-10-24 |
@@ -38,7 +38,7 @@ Bloque: Qué es, toma "qué es · paso 1".
 
 ### boolean — Sí / No
 Bloque: Qué es, toma "qué es · paso 2".
-- **Mostrar:** apretar "Preguntarle a Jev", el sí con 0,98 y el pie con tokens, costo, modelo y tiempo. Al final, apuntar la línea "Podés cambiar el texto…".
+- **Mostrar:** apretar "Preguntarle a Jev", "98% de probabilidad de «sí»" con una sola barra, la línea "Jev devolvió un solo número, probability: 0.98…" y el pie con tokens, costo, modelo y tiempo. Al final, apuntar la línea "Podés cambiar el texto…".
 
 ### choice — Elegir una opción
 Bloque: Qué es, toma "qué es · paso 3".
