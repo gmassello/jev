@@ -58,7 +58,7 @@ Un solo tema, claro. El oscuro queda para después (ver Rules).
 | `--text` / `--muted` | texto principal / ayudas, encabezados de tabla, "Paso N de M" |
 | `--line` / `--border-strong` | bordes y separadores / borde de inputs con foco débil |
 | `--accent` / `--accent-soft` / `--on-accent` | botón principal, links, barras / fondo de explicaciones y badges / texto sobre el acento |
-| `--ok`, `--bad`, `--warn` (+ `-soft`) | veredicto sí, veredicto no y errores, aviso de revisión humana |
+| `--ok`, `--bad`, `--warn` (+ `-soft`) | veredicto sí, veredicto no y errores, veredicto de sí/no en la zona de revisión |
 | `--code-bg` / `--code-fg` | bloque de código, diagrama y JSON |
 
 ### Contraste medido (2026-10-24, WCAG, colores `-soft` compuestos sobre `--card`)
@@ -112,7 +112,7 @@ Todos los pares de texto dan 4.5:1 o más. `--accent` sobre `--accent-soft` es e
 | Badge de tipo | `.type-badge` | `--accent` sobre `--accent-soft`, `--radius-pill` |
 | Pregunta editable | `.card` con `input`, `textarea`, opciones `.opt` | foco con `--ring`; quitar opción `.x` (hover `--bad`); "+ agregar opción" `.link` |
 | Resultado | `.card.answer`, `.verdict`, `.bar-row` | veredicto `.yes` (`--ok`) o `.no` (`--bad`); fila ganadora `.win` en 700 |
-| Explicación | `.explain` | `--accent-soft`; aviso de revisión `.explain.review` en `--warn` sobre `--warn-soft` |
+| Explicación | `.explain` | `--accent-soft`; en una pregunta de opción nombra la elegida y la que sigue, sin umbral |
 | Error | `.card.fail`, `.error` | `--bad` sobre `--bad-soft` |
 | Pie de la respuesta | `.footer` | `--muted` en `--fs-xs`: tokens · costo en US$ ("—" si no llega) · modelo · ms |
 | JSON | `details#json` | plegado por defecto; request y respuesta en bloques oscuros |

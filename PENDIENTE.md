@@ -22,7 +22,7 @@ Estado del codigo en una linea: <N tests verdes, que esta hecho, que falta>.
 | PR upstream | #<n> | | |
 | Segundo checkout | `~/<ruta>` rama `<rama>` | | |
 | Video | `<id>` | | |
-| Deck | `docs/deck.pdf` sha256 `b1f1ae4e32db` | ok, 11 slides de 1920×1080 (impacto y dónde usarlo) | 2026-10-24 |
+| Deck | `docs/deck.pdf` sha256 `d1ceb4f48e57` | ok, 11 slides de 1920×1080 (impacto y dónde usarlo) | 2026-10-24 |
 
 ## Hechos duplicados
 

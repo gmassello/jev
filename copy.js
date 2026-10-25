@@ -33,10 +33,9 @@ export const I18N = {
     sure: (p) => `${p}% de probabilidad de «sí»`,
     explain: {
       boolean: (p, zone) => `Jev devolvió un solo número, probability: ${p}: la probabilidad de que la respuesta sea sí. ${{ yes: 'Con 90% o más, tu código lo trata como sí.', no: 'Con 10% o menos, tu código lo trata como no.', review: 'Está entre 10% y 90%: que lo mire una persona.' }[zone]}`,
-      choice: (option, p) => `Eligió «${option}» con ${p}%. Las barras muestran cómo repartió la probabilidad entre las opciones.`,
+      choice: (option, p, next, pNext) => `Jev devolvió choice: «${option}» y la probabilidad de cada opción. La elegida tiene ${p}%; la que sigue, «${next}», ${pNext}%.`,
       score: (level, n, total) => `Lo ubicó en «${level}» (nivel ${n} de ${total}). Las barras muestran qué tan seguro está de cada nivel.`,
     },
-    thresholdNote: (p, auto, limit) => `Probabilidad ${p}%: con un umbral de ${limit}%, ${auto ? 'se automatizaría' : 'este ticket iría a revisión humana'}.`,
     confidenceNote: (c) => `Confianza de TypeSafe ${c}%: mide qué tan concentrada está la distribución, no la probabilidad de la opción elegida.`,
     footer: ({ tokens, cost, modelId, ms }) => `${tokens} tokens · ${cost == null ? '—' : `US$${cost.toLocaleString('es-AR', { maximumSignificantDigits: 3 })}`} · ${modelId} · ${ms} ms`,
     multiOutro: 'Con estas tres respuestas podrías rutear el ticket, priorizarlo y marcar el reembolso en un solo paso.',
@@ -125,11 +124,11 @@ export const I18N = {
         ],
       },
       {
-        id: 'doubt', kind: 'ask', title: 'Cuando Jev duda', threshold: 0.9,
+        id: 'doubt', kind: 'ask', title: 'Cuando Jev duda',
         theory: [
-          'No todas las respuestas valen lo mismo. Con un texto ambiguo, Jev reparte la probabilidad entre varias opciones y la confianza baja.',
+          'No todas las respuestas valen lo mismo. Con un texto ambiguo, Jev reparte la probabilidad entre varias opciones en vez de ponerla casi toda en una.',
           'Este ticket habla de un pago, de un pedido y de un error de la app a la vez. Mirá cómo se reparten las barras.',
-          'Ese número es el que usás para decidir qué automatizar y qué tiene que ver una persona.',
+          'Jev igual elige una opción, pero el reparto te avisa que duda. Qué hacer con un caso así, rutearlo igual o mandarlo a una persona, lo decide tu código, no Jev.',
         ],
         state: 'La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?',
         question: { type: 'choice', text: '¿A qué área va este ticket?', options: ['facturacion', 'envios', 'tecnica'] },
@@ -357,10 +356,9 @@ else console.log('A revisión humana:', probabilities);
     sure: (p) => `${p}% probability of “yes”`,
     explain: {
       boolean: (p, zone) => `Jev returned a single number, probability: ${p}: the probability that the answer is yes. ${{ yes: 'At 90% or more, your code treats it as yes.', no: 'At 10% or less, your code treats it as no.', review: 'It is between 10% and 90%: have a person look at it.' }[zone]}`,
-      choice: (option, p) => `It picked “${option}” with ${p}%. The bars show how it split the probability across the options.`,
+      choice: (option, p, next, pNext) => `Jev returned choice: “${option}” and the probability of each option. The pick has ${p}%; the runner-up, “${next}”, ${pNext}%.`,
       score: (level, n, total) => `It placed it at “${level}” (level ${n} of ${total}). The bars show how sure it is of each level.`,
     },
-    thresholdNote: (p, auto, limit) => `Probability ${p}%: with a ${limit}% threshold, ${auto ? 'this would be automated' : 'this ticket would go to human review'}.`,
     confidenceNote: (c) => `TypeSafe confidence ${c}%: it measures how concentrated the distribution is, not the probability of the picked option.`,
     footer: ({ tokens, cost, modelId, ms }) => `${tokens} tokens · ${cost == null ? '—' : `US$${cost.toLocaleString('en-US', { maximumSignificantDigits: 3 })}`} · ${modelId} · ${ms} ms`,
     multiOutro: 'With these three answers you could route the ticket, prioritize it and flag the refund in a single step.',
@@ -449,11 +447,11 @@ else console.log('A revisión humana:', probabilities);
         ],
       },
       {
-        id: 'doubt', kind: 'ask', title: 'When Jev hesitates', threshold: 0.9,
+        id: 'doubt', kind: 'ask', title: 'When Jev hesitates',
         theory: [
-          'Not every answer is worth the same. With an ambiguous text, Jev splits the probability across several options and its confidence drops.',
+          'Not every answer is worth the same. With an ambiguous text, Jev splits the probability across several options instead of putting almost all of it on one.',
           'This ticket is about a payment, an order and an app error at the same time. Watch how the bars split.',
-          'That number is what you use to decide what to automate and what a person should look at.',
+          'Jev still picks one option, but the split tells you it hesitates. What to do with a case like this, route it anyway or send it to a person, is up to your code, not Jev.',
         ],
         state: 'The app showed an error at checkout. Was I charged? Is my order on its way or not?',
         question: { type: 'choice', text: 'Which team does this ticket go to?', options: ['billing', 'shipping', 'tech'] },

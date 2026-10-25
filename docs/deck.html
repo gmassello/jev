@@ -100,9 +100,9 @@ code { font-family: var(--font-mono); }
   <p class="lead">"La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?"</p>
   <div class="cols">
     <div class="card">
-      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (SPEC medido 2026-10-24: 0,63/0,67/0,66) y node scripts/demo-check.mjs --check (0,69 y 0,71) -->
+      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (SPEC medido 2026-10-24: 0,63/0,67/0,66), node scripts/demo-check.mjs --check (0,69 y 0,71) y tres llamadas al paso 7 del 2026-10-25 (0,58/0,68/0,68) -->
       <h3>Probabilidad de la elegida</h3>
-      <div class="bar-row"><span>facturacion</span><div class="bar"><i style="width:66%"></i></div><span>0,63–0,71</span></div>
+      <div class="bar-row"><span>facturacion</span><div class="bar"><i style="width:65%"></i></div><span>0,58–0,71</span></div>
       <p class="muted">Debajo del umbral de 0,9 en todas las corridas.</p>
     </div>
     <div class="card">
@@ -123,7 +123,7 @@ code { font-family: var(--font-mono); }
       <p>Una persona lee cada ticket, cada falla y cada defecto, aunque la mayoría sean obvios.</p>
     </div>
     <div class="card">
-      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (línea impact: 5/5 tickets >= 0.9, 2026-10-24) y check_doubt_stable (0,63–0,71) -->
+      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (línea impact: 5/5 tickets >= 0.9, 2026-10-24) y check_doubt_stable (0,58–0,71) -->
       <h3>Con Jev y umbral 0,9</h3>
       <p class="big">5 de 5</p>
       <p>tickets claros se rutean solos; el ambiguo queda debajo del umbral en cada corrida y va a revisión.</p>

@@ -42,7 +42,7 @@ test('the playground explains a yes/no answer and a scale answer in plain words'
     assert.equal(new Set(lines).size, 3, `${lang}: one reading per zone`);
   }
   assert.match(I18N.es.explain.score('Enojado', 3, 4), /«Enojado» \(nivel 3 de 4\)/);
-  assert.match(I18N.en.explain.choice('Shipping', 81), /“Shipping” with 81%/);
+  assert.match(I18N.en.explain.choice('Shipping', 81, 'Billing', 12), /“Shipping”/);
 });
 
 test('the lesson has the same steps in es and en, from theory to one call with several questions and a doubtful case', () => {
@@ -55,12 +55,16 @@ test('the lesson has the same steps in es and en, from theory to one call with s
   assert.equal(multi.kind, 'multi');
   assert.deepEqual(multi.questions.map((q) => q.type).sort(), ['boolean', 'choice', 'score']);
   assert.equal(new Set(multi.questions.map((q) => q.id)).size, multi.questions.length);
-  for (const lang of ['es', 'en']) assert.equal(I18N[lang].lessons.find((l) => l.id === 'doubt')?.threshold, 0.9, lang);
 });
 
-test('the threshold note says whether a probability would be automated or reviewed', () => {
-  assert.equal(I18N.es.thresholdNote(58, false, 90), 'Probabilidad 58%: con un umbral de 90%, este ticket iría a revisión humana.');
-  assert.equal(I18N.en.thresholdNote(97, true, 90), 'Probability 97%: with a 90% threshold, this would be automated.');
+test('a choice answer is explained with what Jev returned: the pick and the runner-up, no threshold', () => {
+  for (const lang of ['es', 'en']) {
+    const line = I18N[lang].explain.choice('facturacion', 68, 'envios', 24);
+    for (const part of ['choice', 'facturacion', '68%', 'envios', '24%']) assert.ok(line.includes(part), `${lang}: ${part} in ${line}`);
+    assert.ok(!/umbral|threshold/i.test(line), `${lang}: ${line}`);
+  }
+  assert.ok(!('thresholdNote' in I18N.es) && !('thresholdNote' in I18N.en));
+  for (const lang of ['es', 'en']) assert.equal(I18N[lang].lessons.find((l) => l.id === 'doubt').threshold, undefined, lang);
 });
 
 test('the similar-projects step has the same rows and links in es and en, led by Clef and Strands Decider', () => {
@@ -115,12 +119,11 @@ test('the architecture and production steps come before the code step, with the 
   for (const lang of ['es', 'en']) assert.ok(step(lang, 'prod').list.some((item) => item.includes('jev-1.14.0')), lang);
 });
 
-test('the threshold note talks about probability and confidence has its own line', () => {
+test('confidence has its own line, separate from the choice explanation', () => {
   for (const lang of ['es', 'en']) {
     const t = I18N[lang];
-    assert.match(t.thresholdNote(68, false, 90), lang === 'es' ? /^Probabilidad 68%/ : /^Probability 68%/);
     assert.ok(t.confidenceNote(52).includes('52'), `${lang}: confidenceNote`);
-    assert.notEqual(t.confidenceNote(52), t.thresholdNote(52, false, 90));
+    assert.notEqual(t.confidenceNote(52), t.explain.choice('facturacion', 52, 'envios', 30));
   }
 });
 

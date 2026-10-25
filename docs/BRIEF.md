@@ -30,7 +30,7 @@ Investigado el 2026-10-24.
 
 ## Demo surface
 - **Que ejecuta el jurado**: un asistente dicta o escribe su propio texto en un paso de práctica y el presentador aprieta "Preguntar a Jev"
-- **Que resultado nuevo sale**: una respuesta de Jev sobre ese texto, con la probabilidad de cada opción y el aviso de revisión humana si no supera el umbral
+- **Que resultado nuevo sale**: una respuesta de Jev sobre ese texto, con la probabilidad de cada opción
 - **Que apuesta demuestra**: ver dudar al modelo enseña más que verlo acertar: el caso ambiguo bajo el umbral es lo que hace entender para qué sirve la probabilidad
 - **Donde**: `PORT=3001 npm start` (local, proyectado en la charla)
 
@@ -76,7 +76,7 @@ Investigado el 2026-10-24.
 - AE5. **Covers R5.** Para después.
 - AE6. **Covers R9.** Para después.
 - AE7. **Covers R11.** Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla.
-- AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana.
+- AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la probabilidad de la opción elegida queda por debajo de 0,9 y las barras muestran el reparto entre opciones.
 - AE9. **Covers R15.** Given el snippet copiado del último paso (hoy, el 14) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
 - AE10. **Covers R10.** Given el video final, then dura 21 minutos o menos.
 - AE12. **Covers R19.** Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo.

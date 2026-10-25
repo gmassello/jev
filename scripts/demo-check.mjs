@@ -45,7 +45,7 @@ check('paso 6 tres respuestas', ['reembolso', 'area', 'urgencia'].every((k) => m
 const L7 = byId('doubt');
 const doubt = (await ask(L7)).q1;
 const conf = doubt.probabilities[doubt.choice];
-check('paso 7 debajo del umbral', conf < L7.threshold, `${doubt.choice} ${conf.toFixed(2)} < ${L7.threshold}`);
+check('paso 7 duda (debajo de 0,9)', conf < 0.9, `${doubt.choice} ${conf.toFixed(2)} < 0.9`);
 
 const guard = (await ask(byId('guard'))).q1;
 check('paso 9 respuesta inventada', guard.probability >= 0.9, `probability ${guard.probability.toFixed(2)}`);

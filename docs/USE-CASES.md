@@ -30,7 +30,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 Estado inicial para grabar: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` cargada, el navegador en el paso 1 y la interfaz en español; `node scripts/demo-check.mjs --check` en verde. El orden de las tomas está en `docs/GUION.md` y la narración en `video/script.tsv`.
 
 1. Apertura con el avatar: tres partes y el aviso de que es un avatar.
-2. Qué es: pasos 1, 2 ("¿Se le devolvió la plata al cliente?" → sí, cerca de 1), 3 (estafa), 5 (el ticket de la contraseña va a `cuenta`), 6 (reembolso, área y urgencia en una llamada) y 7 ("La app me tiró error al pagar…" → `facturacion` debajo de 0,9 y el aviso de revisión humana).
+2. Qué es: pasos 1, 2 ("¿Se le devolvió la plata al cliente?" → sí, cerca de 1), 3 (estafa), 5 (el ticket de la contraseña va a `cuenta`), 6 (reembolso, área y urgencia en una llamada) y 7 ("La app me tiró error al pagar…" → `facturacion` debajo de 0,9, con la segunda opción a la vista en la explicación).
 3. Paso 8, "Cuándo usar Jev y cuándo no".
 4. Impacto: slides antes y después, costo cada 1000 tickets y riesgos.
 5. Dónde usarlo: repaso del paso 5, paso 9 (el bot que inventa), paso 10 (la suite que falló por el ambiente), paso 11 (el defecto crítico) y la slide de los cuatro casos.
@@ -39,7 +39,7 @@ Estado inicial para grabar: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` carga
 
 Criterios de aceptación:
 - AE7. Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla. — **How it is proven:** `node scripts/demo-check.mjs --check` (respuestas de los pasos 2 a 7) + `screenshot` de un paso de práctica.
-- AE8. Given el paso "Cuando Jev duda", when se pregunta, then la respuesta queda por debajo de 0,9 y aparece el aviso de revisión humana. — **How it is proven:** `node scripts/demo-check.mjs --check` (una corrida) + `python3 cases/medium/checks.py http://localhost:3001` (`check_doubt_stable`, tres corridas) + `screenshot` del aviso.
+- AE8. Given el paso "Cuando Jev duda", when se pregunta, then la probabilidad de la opción elegida queda por debajo de 0,9 y las barras muestran el reparto entre opciones. — **How it is proven:** `node scripts/demo-check.mjs --check` (una corrida) + `python3 cases/medium/checks.py http://localhost:3001` (`check_doubt_stable`, tres corridas) + `screenshot` de las barras y la línea "la que sigue".
 - AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`) + `screenshot` del paso 7.
 - AE12. Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo. — **How it is proven:** `npm test` (test de forma de `arch` y `prod`) + `screenshot` de los dos pasos.
 - AE10. Given el video final, then dura 21 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).

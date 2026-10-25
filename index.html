@@ -38,7 +38,6 @@
   td a { color: var(--accent); }
   .multi-q { margin: 0; font-weight: 600; }
   .outro { font-weight: 600; }
-  .explain.review { background: var(--warn-soft); color: var(--warn); font-weight: 600; }
   .type-badge { display: inline-block; font-size: var(--fs-xs); font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: var(--radius-pill); padding: .15rem .6rem; margin-bottom: .6rem; }
   .explain { background: var(--accent-soft); border-radius: var(--radius-sm); padding: .6rem .8rem; margin: .8rem 0 0; line-height: 1.5; }
   .stepper { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: var(--fs-sm); margin: 1.2rem 0 0; }
@@ -273,23 +272,12 @@
 
   const explainFor = (q, a) => {
     if (a.type === 'boolean') return t().explain.boolean(a.probability, zone(a.probability));
-    if (a.type === 'choice') return t().explain.choice(a.choice, pct(a.probabilities?.[a.choice] ?? 1));
+    if (a.type === 'choice') {
+      const [, [next, pNext] = ['—', 0]] = Object.entries(a.probabilities ?? { [a.choice]: 1 }).sort((x, y) => y[1] - x[1]);
+      return t().explain.choice(a.choice, pct(a.probabilities?.[a.choice] ?? 1), next, pct(pNext));
+    }
     const nearest = Math.min(q.criteria.length - 1, Math.max(0, Math.round(a.score)));
     return t().explain.score(q.criteria[nearest], nearest + 1, q.criteria.length);
-  };
-
-  const probabilityOf = (q, a) => {
-    if (a.type === 'boolean') return Math.max(a.probability, 1 - a.probability);
-    if (a.type === 'choice') return a.probabilities?.[a.choice] ?? 1;
-    const nearest = Math.min(q.criteria.length - 1, Math.max(0, Math.round(a.score)));
-    return a.probabilities?.[nearest] ?? 1;
-  };
-
-  const thresholdLine = (q, a) => {
-    const limit = lesson().threshold;
-    if (!limit) return null;
-    const p = probabilityOf(q, a);
-    return h('p', { className: `explain${p >= limit ? '' : ' review'}`, textContent: t().thresholdNote(pct(p), p >= limit, pct(limit)) });
   };
 
   const confidenceLine = (c) => (typeof c === 'number' ? h('p', { className: 'explain', textContent: t().confidenceNote(pct(c)) }) : null);
@@ -310,7 +298,7 @@
     $('results').replaceChildren(
       ...Object.entries(req.questions).map(([id, q]) => h('div', { className: 'card answer' },
         h('h3', { textContent: q.instructions }),
-        res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) }), thresholdLine(q, res.answers[id]), confidenceLine(res.confidence?.[id])] : null)),
+        res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) }), confidenceLine(res.confidence?.[id])] : null)),
       ...(isMulti() ? [h('p', { className: 'explain outro', textContent: t().multiOutro })] : []),
       ...(res.usage ? [h('p', { className: 'footer', textContent: t().footer({ tokens: res.usage.totalTokens, cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }) })] : []),
     );
