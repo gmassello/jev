@@ -174,3 +174,11 @@ test('regression and defects come right after guard: choices with four defined o
   }
   assert.equal(I18N.es.lessons.length, 16);
 });
+
+test('the architecture step shows the current configuration, with the pinned ai version', () => {
+  const { dependencies } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  for (const lang of ['es', 'en']) {
+    const diagram = I18N[lang].lessons.find((l) => l.id === 'arch').diagram ?? '';
+    for (const part of [`ai ${dependencies.ai}`, 'experimental_decide', 'AI_GATEWAY_API_KEY', 'JEV_MODEL', 'typesafe-ai/jev']) assert.ok(diagram.includes(part), `${lang}: ${part}`);
+  }
+});

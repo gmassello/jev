@@ -236,6 +236,21 @@ export const I18N = {
             ['C · Cloudflare Workers AI', 'https://developers.cloudflare.com/ai/models/typesafe/jev/', 'Un Worker llama a typesafe/jev, sin server propio.', 'Si ya estás en Cloudflare; tiene menos contexto (32k).'],
           ],
         },
+        diagram: `Configuración de este playground (opción A)
+  Server            server.js con node:http, sin framework · Node 24
+                    puerto 3001 en la charla (PORT; 3000 por defecto)
+  Rutas             GET /  ·  GET /copy.js  ·  POST /evaluate
+  SDK               ai 7.0.153, versión exacta · experimental_decide
+  Proveedor         Vercel AI Gateway · cuenta Hobby, pago por créditos
+  Modelo            typesafe-ai/jev, la última versión
+                    se fija con JEV_MODEL=typesafe-ai/jev-1.14.0
+  Key               AI_GATEWAY_API_KEY en .env, solo en el server
+                    fuera del repo; la plantilla es .env.example
+  Precio            US$0,042 por millón de tokens de entrada
+                    la salida no se cobra
+  Al navegador      answers, usage, modelId, ms,
+                    confidence (TypeSafe) y cost (gateway)
+  Límite de gasto   ninguno todavía (ver la checklist del paso 15)`,
         outro: 'Arrancá con A: es el código del último paso.',
       },
       {
@@ -535,6 +550,21 @@ else console.log('A revisión humana:', probabilities);
             ['C · Cloudflare Workers AI', 'https://developers.cloudflare.com/ai/models/typesafe/jev/', 'A Worker calls typesafe/jev, with no server of your own.', 'When you are already on Cloudflare; it has less context (32k).'],
           ],
         },
+        diagram: `Configuration of this playground (option A)
+  Server            server.js with node:http, no framework · Node 24
+                    port 3001 for the talk (PORT; 3000 by default)
+  Routes            GET /  ·  GET /copy.js  ·  POST /evaluate
+  SDK               ai 7.0.153, exact version · experimental_decide
+  Provider          Vercel AI Gateway · Hobby account, paid with credits
+  Model             typesafe-ai/jev, the latest version
+                    pin it with JEV_MODEL=typesafe-ai/jev-1.14.0
+  Key               AI_GATEWAY_API_KEY in .env, only on the server
+                    out of the repo; the template is .env.example
+  Price             US$0.042 per million input tokens
+                    output is not charged
+  To the browser    answers, usage, modelId, ms,
+                    confidence (TypeSafe) and cost (gateway)
+  Spend limit       none yet (see the checklist in step 15)`,
         outro: 'Start with A: it is the code in the last step.',
       },
       {
