@@ -78,6 +78,9 @@
   .bar i { display: block; height: 100%; background: var(--accent); border-radius: var(--radius-pill); }
   .bar-row.win { font-weight: 700; }
   .pct { text-align: right; font-variant-numeric: tabular-nums; }
+  .timer { display: flex; align-items: center; gap: .3rem; margin-left: auto; color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
+  .timer button { font-size: var(--fs-xs); padding: .15rem .45rem; border-color: transparent; background: transparent; color: var(--muted); white-space: nowrap; }
+  .timer button:hover { border-color: var(--line); color: var(--text); }
   .footer { color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; margin: .8rem 0 0; }
   .fail { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
   details { margin-top: 2rem; }
@@ -89,6 +92,11 @@
 <body>
 <header>
   <h1>Jev Playground</h1>
+  <div class="timer" role="group" aria-label="Timer">
+    <span id="timer-time" role="timer">00:00</span>
+    <button id="timer-toggle" type="button">Start</button>
+    <button id="timer-reset" type="button">Reset</button>
+  </div>
   <select id="lang" aria-label="Idioma / Language">
     <option value="es">Español</option>
     <option value="en">English</option>
@@ -313,6 +321,7 @@
     $('lang').value = lang;
     document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t()[el.dataset.i18n]));
     $('state').placeholder = t().statePlaceholder;
+    renderTimer();
     byStep = {};
     runs = {};
     renderStep();
@@ -346,6 +355,35 @@
     $('run').textContent = t().run;
     renderResults();
     $('results-title').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  let elapsed = 0;
+  let startedAt = null;
+  let tick = null;
+  const running = () => startedAt !== null;
+  const renderTimer = () => {
+    const s = Math.floor((elapsed + (running() ? Date.now() - startedAt : 0)) / 1000);
+    $('timer-time').textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+    $('timer-toggle').textContent = running() ? t().timerPause : t().timerStart;
+    $('timer-reset').textContent = t().timerReset;
+    $('timer-time').parentElement.ariaLabel = t().timerLabel;
+  };
+  $('timer-toggle').onclick = () => {
+    if (running()) {
+      elapsed += Date.now() - startedAt;
+      startedAt = null;
+      clearInterval(tick);
+    } else {
+      startedAt = Date.now();
+      tick = setInterval(renderTimer, 250);
+    }
+    renderTimer();
+  };
+  $('timer-reset').onclick = () => {
+    clearInterval(tick);
+    elapsed = 0;
+    startedAt = null;
+    renderTimer();
   };
 
   let saved = null;

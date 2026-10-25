@@ -31,3 +31,11 @@ test('a lesson can show several tables, each with an optional caption', () => {
   assert.match(html, /L\.tables \?\? \(L\.table \? \[L\.table\] : \[\]\)/);
   assert.match(html, /tbl\.caption/);
 });
+
+test('a subtle timer in the header shows on every step and can start, pause and reset', () => {
+  const header = html.match(/<header>([\s\S]*?)<\/header>/)[1];
+  for (const id of ['timer-time', 'timer-toggle', 'timer-reset']) assert.match(header, new RegExp(`id="${id}"`));
+  assert.match(header, />00:00</);
+  assert.match(html, /running\(\) \? t\(\)\.timerPause : t\(\)\.timerStart/);
+  assert.match(html, /Date\.now\(\)/);
+});

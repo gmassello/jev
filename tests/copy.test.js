@@ -176,6 +176,13 @@ test('the ask block tells that the text, question and options can be edited', ()
   }
 });
 
+test('the timer has start, pause, reset and a label in both languages', () => {
+  for (const lang of ['es', 'en']) {
+    for (const key of ['timerStart', 'timerPause', 'timerReset', 'timerLabel']) assert.ok(I18N[lang][key]?.trim(), `${lang}: ${key}`);
+  }
+  assert.equal(I18N.es.timerPause, 'Pausar');
+});
+
 test('defects comes right after guard: a choice with four defined options, and the regression case is gone', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
