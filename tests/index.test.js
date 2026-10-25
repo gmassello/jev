@@ -8,7 +8,8 @@ test('stepper dots are buttons that jump to their step', () => {
   const render = html.match(/\$\('dots'\)\.replaceChildren\(([\s\S]*?)\)\);\n/)?.[1] ?? '';
   assert.match(render, /h\('button'/);
   assert.match(render, /onclick: \(\) => go\(i\)/);
-  assert.match(render, /title: /);
+  assert.doesNotMatch(render, /title: /);
+  assert.match(html, /#dots button:hover::after, #dots button:focus-visible::after \{[^}]*content: attr\(aria-label\)/);
   assert.match(render, /ariaLabel: /);
   assert.doesNotMatch(html, /id="dots"[^>]*aria-hidden/);
 });
