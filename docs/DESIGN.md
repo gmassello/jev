@@ -2,7 +2,7 @@
 
 ## Context
 
-- **Proyecto:** Jev Playground, una lección guiada de 16 pasos que se graba en el video de la charla interna del 2026-10-30 ("Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"). El presentador maneja la pantalla y el público, devs, lee desde lejos (`docs/UX.md`, Review 2026-10-24).
+- **Proyecto:** Jev Playground, una lección guiada de 15 pasos que se graba en el video de la charla interna del 2026-10-30 ("Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"). El presentador maneja la pantalla y el público, devs, lee desde lejos (`docs/UX.md`, Review 2026-10-24).
 - **Modo:** Adoptar. Los tokens salen de los estilos que ya tiene `index.html`; este documento los nombra y fija las reglas. Revisado el 2026-10-24 para que coincida con el código: ya no hay pestaña Desafío, marcador, tema oscuro ni modo proyector.
 - **Rasgo heredado:** el bloque de código estilo terminal, oscuro sobre la página clara, para el snippet, el diagrama y el JSON.
 - **Decisiones propias:** acento azul `#2a62d9` (pasa 4.5:1 sobre blanco), fuentes del sistema (sin cargas externas: la página anda sin red en la sala) y un solo tema, claro, como pidió el presentador.
@@ -125,7 +125,7 @@ Una sola página con un paso a la vez (`docs/UX.md`, Review 2026-10-24).
 - **Paso de práctica** (sí/no, opción, escala, definiciones, todo junto, cuando duda): teoría arriba, después "El texto", "La pregunta" y el botón principal; al responder, el resultado con barras, la explicación y, en el paso que duda, el aviso de revisión. El JSON queda plegado abajo.
 - **Paso de código:** teoría, comandos numerados, bloque de código con Copiar y la explicación de cierre.
 
-Lo primero que se ve en cada paso es el stepper ("Paso N de 16") y el título.
+Lo primero que se ve en cada paso es el stepper ("Paso N de 15") y el título.
 
 ## Effects
 

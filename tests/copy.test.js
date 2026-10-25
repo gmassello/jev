@@ -92,20 +92,29 @@ test('the glossary covers the same terms in es and en, with one definition each'
   for (const term of ['state', 'question', 'criteria', 'score', 'usage']) assert.ok(rows('es').some((r) => r[0] === term) && rows('en').some((r) => r[0] === term), term);
 });
 
-test('the when-to-use step has the same rows in es and en', () => {
-  const step = (lang) => I18N[lang].lessons.find((l) => l.id === 'when');
-  assert.equal(step('es').table.rows.length, step('en').table.rows.length);
-  for (const lang of ['es', 'en']) for (const r of step(lang).table.rows) assert.equal(r.length, 3);
+test('the when-to-use step has a uses table with an example from the playground, and no "better with something else" column', () => {
+  for (const lang of ['es', 'en']) {
+    const [uses] = I18N[lang].lessons.find((l) => l.id === 'when').tables;
+    assert.equal(uses.head.length, 2, lang);
+    assert.match(uses.rows[0][0], lang === 'es' ? /Rutear/ : /Routing/, lang);
+    for (const r of uses.rows) assert.equal(r.length, 3, lang);
+  }
+  const rows = (lang) => I18N[lang].lessons.find((l) => l.id === 'when').tables[0].rows.length;
+  assert.equal(rows('es'), rows('en'));
 });
 
-test('the when-to-use step lists the three production risks in es and en', () => {
-  const step = (lang) => I18N[lang].lessons.find((l) => l.id === 'when');
-  assert.equal(step('es').list?.length, 3);
-  assert.equal(step('en').list?.length, 3);
-  const [untrusted, firstOption, numbers] = step('es').list;
-  assert.match(untrusted, /no es de confianza/);
+test('the when-to-use step has a risk table: what can happen and what to do, three rows in es and en', () => {
+  const risks = (lang) => I18N[lang].lessons.find((l) => l.id === 'when').tables[1];
+  for (const lang of ['es', 'en']) {
+    assert.equal(risks(lang).head.length, 3, lang);
+    assert.equal(risks(lang).rows.length, 3, lang);
+    for (const r of risks(lang).rows) assert.equal(r.length, risks(lang).head.length + 1, lang);
+    assert.ok(risks(lang).caption, lang);
+  }
+  const [untrusted, firstOption, numbers] = risks('es').rows.map((r) => r[0]);
+  assert.match(untrusted, /instrucciones escondidas/);
   assert.match(firstOption, /primera opción/);
-  assert.match(numbers, /números, fechas y conteos/);
+  assert.match(numbers, /Hacer cuentas/);
 });
 
 test('the architecture and production steps come before the code step, with the same shape in es and en', () => {
@@ -167,11 +176,12 @@ test('the ask block tells that the text, question and options can be edited', ()
   }
 });
 
-test('regression and defects come right after guard: choices with four defined options', () => {
+test('defects comes right after guard: a choice with four defined options, and the regression case is gone', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
-    assert.deepEqual(ids.slice(ids.indexOf('guard'), ids.indexOf('guard') + 3), ['guard', 'regression', 'defects'], lang);
-    for (const id of ['regression', 'defects']) {
+    assert.deepEqual(ids.slice(ids.indexOf('guard'), ids.indexOf('guard') + 2), ['guard', 'defects'], lang);
+    assert.ok(!ids.includes('regression'), lang);
+    for (const id of ['defects']) {
       const step = I18N[lang].lessons.find((l) => l.id === id);
       assert.equal(step.kind, 'ask', `${lang} ${id}`);
       assert.equal(step.question.type, 'choice', `${lang} ${id}`);
@@ -179,7 +189,7 @@ test('regression and defects come right after guard: choices with four defined o
       assert.equal(step.question.descriptions.length, 4, `${lang} ${id}`);
     }
   }
-  assert.equal(I18N.es.lessons.length, 16);
+  assert.equal(I18N.es.lessons.length, 15);
 });
 
 test('the architecture step shows the current configuration, with the pinned ai version', () => {

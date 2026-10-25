@@ -5,8 +5,8 @@ import sys
 import time
 from pathlib import Path
 
-VIDEO = ["what", "boolean", "choice", "criteria", "multi", "doubt", "when", "guard", "regression", "defects", "code"]
-STEPS = 16
+VIDEO = ["what", "boolean", "choice", "criteria", "multi", "doubt", "when", "guard", "defects", "code"]
+STEPS = 15
 SPOKEN_WORDS = (2700, 3100)
 TITLE = "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"
 MAX_VIDEO_SECONDS = 1260

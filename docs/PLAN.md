@@ -3,10 +3,10 @@
 Source: `docs/BRIEF.md`, `docs/UX.md`, `docs/ARCHITECTURE.md` · Deadline: 2026-10-30 12:00 -03:00 · Hours left at writing: 137.5 (revisado el 2026-10-24; la versión del 2026-10-10 tenía 284.5 al 22/10)
 
 ## Summary
-Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde usarlo) seguido de preguntas en vivo. El video recorre 11 de los 16 pasos del playground, con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, las slides del deck y un guion completo en español (`video/script.tsv`). Hasta el 2026-10-24 el plan era una lección en vivo de 15 minutos, 6 de video y 4 de preguntas. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
+Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde usarlo) seguido de preguntas en vivo. El video recorre 10 de los 15 pasos del playground, con probabilidad, confianza y costo que vienen del gateway, el snippet con la API vigente del AI SDK, las slides del deck y un guion completo en español (`video/script.tsv`). Hasta el 2026-10-24 el plan era una lección en vivo de 15 minutos, 6 de video y 4 de preguntas. El desafío (U2–U5) se construyó y se retiró el 2026-10-12. Las unidades que desbloquean la charla son U14 (lo que la lección dice de la confianza) y U12 (saltar a los pasos en vivo).
 
 ## Key technical decisions
-- Lección guiada en lugar del desafío, sesión de unos 20 minutos toda en video + preguntas en vivo, 11 pasos en el video, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24; la charla de 25 minutos con 7 pasos en vivo quedó reemplazada ese mismo día). Las decisiones de abajo sobre el desafío quedan como historia.
+- Lección guiada en lugar del desafío, sesión de unos 20 minutos toda en video + preguntas en vivo, 10 pasos en el video, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24; la charla de 25 minutos con 7 pasos en vivo quedó reemplazada ese mismo día). Las decisiones de abajo sobre el desafío quedan como historia.
 - Desafío, enfoque, casos sintéticos, dominio tickets de soporte, presentador proyecta, todo en español — settled: inherited from BRIEF.
 - Sin deploy: la charla corre en local por screen-share y el acceso asincrónico es el video — chosen over clave compartida en la app y Vercel Deployment Protection because el presentador lo eligió al resolver la pregunta abierta del BRIEF. R9 queda en cut. settled: user-directed
 - El desafío reusa `POST /evaluate` desde el navegador, una llamada por ticket con concurrencia limitada (5), sin endpoint nuevo — chosen over un endpoint que corra el set en el server because no toca `server.js` y la medición de 15 llamadas dio 0 errores en ~1.1 s con concurrencia 15 y con 5. settled: plan-time
@@ -239,14 +239,14 @@ Al terminar, la charla es un video de unos 20 minutos (qué es, impacto y dónde
   - happy: los colores con `#` aparecen solo dentro de `:root`, y las capturas de un paso de teoría y uno de práctica coinciden con las de antes.
 
 ### U22. Casos del equipo: por qué falló una suite y qué tan grave es un defecto
-- **Goal:** dos pasos de práctica nuevos después de "Jev revisa a un LLM", con datos sintéticos parecidos a los del equipo: el log de una suite caída (`ambiente`, `test_roto`, `dato` o `bug`) y la descripción de un defecto (`critica`, `alta`, `media` o `baja`), cada opción con su definición, para la parte "dónde usarlo" del video.
+- **Goal:** un paso de práctica nuevo después de "Jev revisa a un LLM", con datos sintéticos parecidos a los del equipo: la descripción de un defecto (`critica`, `alta`, `media` o `baja`), cada opción con su definición, para la parte "dónde usarlo" del video. (El caso de regresión, el log de una suite caída, se construyó y se retiró el 2026-10-25.)
 - **Covers:** R11 · F5
 - **Files:** `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
 - **Depends on:** U17
 - **Status:** done
 - **Tests:**
-  - happy: `regression` y `defects` van justo después de `guard`, en es y en, como `choice` con 4 opciones definidas.
-  - edge: `demo-check` → la suite da `ambiente` con 0,9 o más y el defecto da `critica` (medido 2026-10-24: 1,00 y 0,95–0,97 en tres corridas; 0,93 en el playground).
+  - happy: `defects` va justo después de `guard`, en es y en, como `choice` con 4 opciones definidas, y `regression` ya no existe.
+  - edge: `demo-check` → el defecto da `critica` (medido 2026-10-24: 0,95–0,97 en tres corridas; 0,93 en el playground).
 
 ### U23. Deck en tres ejes: qué es, impacto y dónde usarlo
 - **Goal:** el deck aporta las slides que aparecen en el video: impacto (hoy el 100 % a mano contra 5 de 5 tickets claros ruteados solos y el ambiguo a revisión), costo cada 1000 tickets, riesgos con la key en el server, y los cuatro casos de "dónde usarlo".

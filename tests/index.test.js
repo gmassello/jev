@@ -26,3 +26,8 @@ test('an edit hint sits before the run button and changes for the multi step', (
   assert.match(html, /<p id="edit-hint" class="hint"><\/p>\s*<button id="run"/);
   assert.match(html, /\$\('edit-hint'\)\.textContent = isMulti\(\) \? t\(\)\.editHintMulti : t\(\)\.editHint;/);
 });
+
+test('a lesson can show several tables, each with an optional caption', () => {
+  assert.match(html, /L\.tables \?\? \(L\.table \? \[L\.table\] : \[\]\)/);
+  assert.match(html, /tbl\.caption/);
+});

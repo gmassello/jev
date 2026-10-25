@@ -1,7 +1,7 @@
 # Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad — Brief
 
 ## Resumen
-Un segmento de unos 20 minutos para devs, todo en video grabado y narrado por un avatar con la voz clonada del presentador, seguido de preguntas en vivo. Cuenta tres cosas: qué es Jev, cómo puede impactar (con cifras medidas) y dónde lo podríamos usar (cuatro casos, dos del trabajo del equipo). Se van sabiendo qué es Jev, cuándo conviene y cuándo no, cómo leer la probabilidad y cómo llamarlo desde su código.
+Un segmento de unos 20 minutos para devs, todo en video grabado y narrado por un avatar con la voz clonada del presentador, seguido de preguntas en vivo. Cuenta tres cosas: qué es Jev, cómo puede impactar (con cifras medidas) y dónde lo podríamos usar (tres casos, uno del trabajo del equipo). Se van sabiendo qué es Jev, cuándo conviene y cuándo no, cómo leer la probabilidad y cómo llamarlo desde su código.
 
 ## Marco del problema
 Los compañeros son programadores que no conocen Jev. El riesgo es que lo vean como "otro chatbot" y lo usen donde no corresponde, o que no se animen a meterlo en su código. Una explicación teórica no alcanza: qué significa la confianza, dónde duda y cuánto cuesta se entiende viéndolo responder sobre casos concretos. El repo ya tiene el playground como lección paso a paso, bilingüe, con un paso de código listo para copiar (`index.html`, `copy.js`, `server.js`).
@@ -50,13 +50,13 @@ Investigado el 2026-10-24.
 - R8. Un deck en español (HTML + PDF), con el título de la charla, aporta las slides que aparecen en el video: qué es Jev, Jev vs. LLMs, probabilidad, impacto, riesgos, dónde usarlo e integración. [criterion: Entienden qué es Jev y qué no]
 - R9. **Para después.** La demo publicada en una URL protegida. [criterion: Costo y riesgos claros]
 - R10. La charla es un video de hasta 21 minutos, en español, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal; se proyecta en la sesión antes de las preguntas y sirve para quien no estuvo. [criterion: Pueden integrarlo solos]
-- R11. El video recorre en el playground 11 pasos de la lección: qué es, sí/no, opción, opción con definición, todo junto, cuando Jev duda, cuándo usarlo, Jev revisa a un LLM, por qué falló una suite, qué tan grave es un defecto y código; los mismos pasos existen en español y en inglés, y el resto queda en el playground. [criterion: Entienden qué es Jev y qué no]
+- R11. El video recorre en el playground 10 pasos de la lección: qué es, sí/no, opción, opción con definición, todo junto, cuando Jev duda, cuándo usarlo, Jev revisa a un LLM, qué tan grave es un defecto y código; los mismos pasos existen en español y en inglés, y el resto queda en el playground. [criterion: Entienden qué es Jev y qué no]
 - R12. Un caso ambiguo muestra la respuesta por debajo del umbral y la derivación a una persona. [criterion: Costo y riesgos claros]
 - R13. Un paso compara cuándo conviene Jev y cuándo otra herramienta, y nombra los proyectos parecidos. [criterion: Entienden qué es Jev y qué no]
 - R14. Un glosario repasa los conceptos de la lección. [criterion: Entienden qué es Jev y qué no]
 - R15. El snippet de integración usa la API vigente del AI SDK. [criterion: Pueden integrarlo solos]
 - R16. La lección distingue la probabilidad de cada opción de la confianza, como la define TypeSafe, y muestra los umbrales que sugiere. [criterion: Costo y riesgos claros]
-- R17. "Cuándo usarlo" suma tres riesgos para producción: el texto que entra no es de confianza, Jev prefiere la primera opción, y números, fechas y conteos se resuelven en código. [criterion: Costo y riesgos claros]
+- R17. "Cuándo usarlo" suma tres riesgos para producción, cada uno con qué puede pasar y qué hacer: el texto puede traer instrucciones escondidas, Jev prefiere la primera opción, y las cuentas (fechas, plazos y cantidades) se hacen en código. [criterion: Costo y riesgos claros]
 - R18. Un caso muestra a Jev como guardrail de un LLM: si la respuesta de un chatbot afirma algo que la política no dice. [criterion: Detectan un caso propio]
 - R19. La lección muestra cómo está armado el playground, qué otras formas hay de llamar a Jev y cómo llevarlo a producción con una compuerta de decisión. [criterion: Pueden integrarlo solos]
 - R20. El video tiene un guion completo en español (`video/script.tsv`, una oración por fila) de unos 20 minutos hablados, en tres bloques: qué es, impacto y dónde usarlo; `docs/GUION.md` dice qué se ve en cada toma y de dónde sale cada cifra. [criterion: Entienden qué es Jev y qué no]
@@ -86,7 +86,7 @@ Investigado el 2026-10-24.
 ## Decisiones clave
 - Lección guiada paso a paso — chosen over el desafío con marcador because es más simple y pedagógica: un tema y un tipo de respuesta por paso. settled: user-directed
 - Sesión de unos 20 minutos, toda en video grabado, + preguntas en vivo — chosen over 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) because así lo pidieron (qué es, impacto, dónde usarlo y preguntas) y el video no depende de la red en la sala. settled: user-directed (2026-10-24)
-- 11 pasos en el video — chosen over los 7 de la lección en vivo because sin vivo hay lugar para los casos de uso (guard, regresión y defectos). settled: user-directed (2026-10-24)
+- 10 pasos en el video — chosen over los 7 de la lección en vivo because sin vivo hay lugar para los casos de uso (guard y defectos; el caso de regresión se retiró el 2026-10-25). settled: user-directed (2026-10-24)
 - Casos de ejemplo sintéticos — chosen over datos reales del equipo because evita la aprobación para mandar datos internos a un proveedor externo. settled: user-directed
 - La charla corre en local — chosen over una demo deployada because no hay que proteger una URL ni exponer la key; el respaldo es el video y el PDF. settled: user-directed
 - ~~Desafío con casos etiquetados~~ — reemplazada por la lección guiada (2026-10-12).

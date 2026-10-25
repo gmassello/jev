@@ -209,11 +209,14 @@
     $('lesson-title').textContent = L.title;
     $('theory').replaceChildren(
       ...L.theory.map((p) => h('p', { textContent: p })),
-      ...(L.table ? [h('div', { className: 'table-wrap' }, h('table', {},
-        h('thead', {}, h('tr', {}, L.table.head.map((c) => h('th', { textContent: c })))),
-        h('tbody', {}, L.table.rows.map(([name, url, ...cells]) => h('tr', {},
-          h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
-          cells.map((c) => h('td', { textContent: c })))))))] : []),
+      ...(L.tables ?? (L.table ? [L.table] : [])).flatMap((tbl) => [
+        ...(tbl.caption ? [h('p', { textContent: tbl.caption })] : []),
+        h('div', { className: 'table-wrap' }, h('table', {},
+          h('thead', {}, h('tr', {}, tbl.head.map((c) => h('th', { textContent: c })))),
+          h('tbody', {}, tbl.rows.map(([name, url, ...cells]) => h('tr', {},
+            h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
+            cells.map((c) => h('td', { textContent: c }))))))),
+      ]),
       ...(L.diagram ? [h('div', { className: 'code' }, h('pre', { textContent: L.diagram }))] : []),
       ...(L.list ? [h('ul', {}, L.list.map((c) => h('li', { textContent: c })))] : []),
       ...(L.commands ? [h('ol', { className: 'commands' }, L.commands.map((c) => h('li', {}, h('code', { textContent: c }))))] : []),

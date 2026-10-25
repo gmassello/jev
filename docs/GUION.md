@@ -12,8 +12,8 @@ La narración completa, una oración por fila, está en `video/script.tsv`: `bea
 | Qué es | qué es · pasos 1, 2, 3, 5, 6 y 7 | playground | 7,4 |
 | Jev y un LLM | cuándo · paso 8 | playground | 1,6 |
 | Impacto | impacto · slides antes y después, costo y riesgos | deck | 3,9 |
-| Dónde usarlo | dónde · pasos 5, 9, 10 y 11, y slide casos | playground y deck | 6,0 |
-| Integración | código · paso 16 | playground | 0,5 |
+| Dónde usarlo | dónde · pasos 5, 9 y 10, y slide casos | playground y deck | 4,3 |
+| Integración | código · paso 15 | playground | 0,5 |
 | Cierre | cierre · slide consigna y avatar | deck y avatar | 1,1 |
 
 Los minutos salen de contar las palabras de la columna `es` a 2,3 por segundo; el clip real de HeyGen manda.
@@ -22,7 +22,7 @@ Los minutos salen de contar las palabras de la columna `es` a 2,3 por segundo; e
 
 | Cifra | Comando |
 |---|---|
-| Probabilidad de sí entre 0,96 y 0,98 (paso 2), estafa 1,00 (paso 3), cuenta 1,00 (paso 5), facturación entre 0,58 y 0,71, con envíos segunda entre 0,23 y 0,31 (paso 7, 2026-10-25), inventada 0,98 (paso 9), ambiente 1,00 (paso 10), crítica entre 0,93 y 0,97 (paso 11, 0,93 en el playground) | `node scripts/demo-check.mjs --check`, tres corridas del 2026-10-24 |
+| Probabilidad de sí entre 0,96 y 0,98 (paso 2), estafa 1,00 (paso 3), cuenta 1,00 (paso 5), facturación entre 0,58 y 0,71, con envíos segunda entre 0,23 y 0,31 (paso 7, 2026-10-25), inventada 0,98 (paso 9), crítica entre 0,93 y 0,97 (paso 10, 0,93 en el playground) | `node scripts/demo-check.mjs --check`, tres corridas del 2026-10-24 |
 | Reembolso 0,98, facturación 1, urgencia alta 0,86 (paso 6) | la respuesta del paso 6 en el playground, 2026-10-24 |
 | Respuesta fiel 0,07, estafa en los dos órdenes | `python3 cases/medium/checks.py http://localhost:3001` (`cases/medium/SPEC.md`, medido el 2026-10-24) |
 | 5 de 5 tickets claros con 0,9 o más; US$0,0162 cada 1000 tickets; tanda en menos de 3 s | `python3 cases/medium/checks.py http://localhost:3001`, línea `impact:` y resumen, tres corridas del 2026-10-24 |
@@ -61,18 +61,14 @@ Bloque: Qué es, toma "qué es · paso 7".
 
 ### when — Cuándo usar Jev y cuándo no
 Bloque: Jev y un LLM, toma "cuándo · paso 8".
-- **Mostrar:** la tabla y la frase final; los riesgos se cuentan después, sobre la slide.
+- **Mostrar:** la tabla de usos con su ejemplo en el playground, la tabla de riesgos (riesgo, qué puede pasar, qué hacer) y la frase final; los riesgos se narran después, sobre la slide.
 
 ### guard — Jev revisa a un LLM
 Bloque: Dónde usarlo, toma "dónde · paso 9".
 - **Mostrar:** la política y la respuesta del bot en el texto, apretar el botón, el sí con 0,98.
 
-### regression — Por qué falló esta suite
-Bloque: Dónde usarlo, toma "dónde · paso 10".
-- **Mostrar:** el log en el texto (timeout, 503 y "pasó ayer"), las cuatro causas con su definición, apretar el botón y ver `ambiente` en 1,00.
-
 ### defects — Qué tan grave es este defecto
-Bloque: Dónde usarlo, toma "dónde · paso 11".
+Bloque: Dónde usarlo, toma "dónde · paso 10".
 - **Mostrar:** la descripción del defecto, las cuatro severidades, apretar el botón y ver `critica` con más de 0,9.
 
 ### similar — Proyectos parecidos
@@ -88,5 +84,5 @@ Fuera del video: si preguntan dónde vive la key, en el server y nunca en el nav
 Fuera del video: la checklist (key en el server, límite de gasto, timeout, versión fija del modelo) sirve para las preguntas de producción.
 
 ### code — Llevalo a tu código
-Bloque: Integración, toma "código · paso 16".
+Bloque: Integración, toma "código · paso 15".
 - **Mostrar:** los tres comandos, el snippet y el botón Copiar. Corrido con la key, imprime "Rutear a cuenta".

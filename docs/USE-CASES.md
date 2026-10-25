@@ -8,9 +8,9 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 
 | IDs | Funcionalidad | Actor | Prioridad (PLAN) | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
-| R11, R12, R13, R14, R19 · F5 | Lección guiada de 16 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, Jev revisa a un LLM, los dos casos del equipo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
+| R11, R12, R13, R14, R19 · F5 | Lección guiada de 15 pasos: práctica con llamadas reales, caso que duda, cuándo usarlo, Jev revisa a un LLM, el caso del equipo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
 | R11 · F5 | Saltar a un paso para grabar cada toma del video | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
-| R11 · F5 | Casos del equipo: por qué falló una suite y qué tan grave es un defecto | A1, A2 | must (U22, done) | Detectan un caso propio | Sí: "dónde usarlo" |
+| R11 · F5 | Caso del equipo: qué tan grave es un defecto | A1, A2 | must (U22, done) | Detectan un caso propio | Sí: "dónde usarlo" |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
 | R6, R15 · F3 | Snippet con la API vigente del AI SDK | A2 | must (U15, done) | Pueden integrarlo solos | Sí: el cierre |
 | R17 · F5 | Riesgos para producción en "Cuándo usar Jev" | A1, A2 | must (U16, done) | Costo y riesgos claros | Sí |
@@ -33,8 +33,8 @@ Estado inicial para grabar: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` carga
 2. Qué es: pasos 1, 2 ("¿Se le devolvió la plata al cliente?" → sí, cerca de 1), 3 (estafa), 5 (el ticket de la contraseña va a `cuenta`), 6 (reembolso, área y urgencia en una llamada) y 7 ("La app me tiró error al pagar…" → `facturacion` debajo de 0,9, con la segunda opción a la vista en la explicación).
 3. Paso 8, "Cuándo usar Jev y cuándo no".
 4. Impacto: slides antes y después, costo cada 1000 tickets y riesgos.
-5. Dónde usarlo: repaso del paso 5, paso 9 (el bot que inventa), paso 10 (la suite que falló por el ambiente), paso 11 (el defecto crítico) y la slide de los cuatro casos.
-6. Paso 16, "Llevalo a tu código", con el snippet listo para copiar.
+5. Dónde usarlo: repaso del paso 5, paso 9 (el bot que inventa), paso 10 (el defecto crítico) y la slide de los tres casos.
+6. Paso 15, "Llevalo a tu código", con el snippet listo para copiar.
 7. Consigna y cierre; después, preguntas en vivo.
 
 Criterios de aceptación:
@@ -47,7 +47,7 @@ Criterios de aceptación:
 
 ### F3. De la charla al código — R6, R7, R15, R18
 
-Estado inicial: el navegador en el paso 16, con la key en el entorno de quien copia el snippet.
+Estado inicial: el navegador en el paso 15, con la key en el entorno de quien copia el snippet.
 
 1. El asistente copia el snippet con el botón Copiar y lo guarda como `jev.mjs`.
 2. Corre `npm i ai@<versión del paso>` y `node jev.mjs`.
@@ -95,7 +95,7 @@ Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas real
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
-| Producto | 16 pasos con los mismos ids en es y en, incluidos los 11 del video | `check_lesson_steps` |
+| Producto | 15 pasos con los mismos ids en es y en, incluidos los 10 del video | `check_lesson_steps` |
 | Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
 | Producto | El guion ubica cada paso en un bloque del video o fuera de él | `check_guion` |
 | Producto | La narración suma entre 2.700 y 3.100 palabras (~20 min) | `check_script` |

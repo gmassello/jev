@@ -154,10 +154,10 @@ code { font-family: var(--font-mono); }
   <p class="kicker">Riesgos</p>
   <h2>Antes de producción</h2>
   <ul>
-    <li><b>El texto que entra no es de confianza.</b> Tratalo como dato, nunca como instrucción, y no automatices una acción irreversible.</li>
+    <li><b>El texto puede traer instrucciones escondidas.</b> Tratalo como dato, nunca como instrucción, y no automatices una acción irreversible.</li>
     <li><b>Jev prefiere la primera opción cuando duda.</b> Probá tus preguntas con las opciones en otro orden.</li>
-    <li><b>Números, fechas y conteos se resuelven en código.</b> "¿Pasaron más de 30 días?" se calcula.</li>
-    <li><b>Las probabilidades no vienen calibradas.</b> Medí con tus propios casos dónde poner el umbral.</li>
+    <li><b>Las cuentas se hacen en código.</b> Para "¿pasaron más de 30 días?", restá las fechas vos.</li>
+    <li><b>Un 0,9 no es 9 aciertos de cada 10.</b> Medí con tus propios casos dónde poner el umbral.</li>
   </ul>
   <p class="muted">La key vive en el server, nunca en el navegador ni en el repo.</p>
 </section>
@@ -167,10 +167,9 @@ code { font-family: var(--font-mono); }
   <h2>Una persona lee y elige entre opciones conocidas</h2>
   <table>
     <tr><th>Caso</th><th>Texto que entra</th><th>Pregunta</th><th>Jev</th></tr>
-    <!-- src: node scripts/demo-check.mjs --check (pasos 5, 9, 10 y 11, 2026-10-24) -->
+    <!-- src: node scripts/demo-check.mjs --check (pasos 5, 9 y 10, 2026-10-24) -->
     <tr><td>Tickets de soporte</td><td>El mensaje del cliente</td><td>¿A qué área va?</td><td>cuenta 1,00</td></tr>
     <tr><td>Revisar a un LLM</td><td>Política + respuesta del bot</td><td>¿Afirma algo que la política no dice?</td><td>sí 0,98</td></tr>
-    <tr><td>Fallas de regresión</td><td>El log de la suite</td><td>¿Ambiente, test roto, dato o bug?</td><td>ambiente 1,00</td></tr>
     <tr><td>Triage de defectos</td><td>La descripción del defecto</td><td>¿Crítica, alta, media o baja?</td><td>crítica 0,93–0,97</td></tr>
   </table>
   <p class="muted">Textos sintéticos: usar logs o defectos reales necesita aprobación, porque viajan a un proveedor externo.</p>
@@ -204,7 +203,7 @@ else console.log('A revisión humana:', probabilities);</pre>
   <div class="flow"><span>Navegador</span><b>→</b><span>Server propio (guarda la key)</span><b>→</b><span>Vercel AI Gateway</span><b>→</b><span>Jev</span></div>
   <ul>
     <li>Jev va como una compuerta antes de actuar: decide, y tu código compara la probabilidad con el umbral.</li>
-    <li>Fijá la versión del modelo (<code>typesafe-ai/jev-1.14.0</code>) para que el umbral calibrado no cambie solo.</li>
+    <li>Fijá la versión del modelo (<code>typesafe-ai/jev-1.14.0</code>) para que el umbral que elegiste no cambie solo.</li>
     <li>Límite de gasto, timeout y un log de decisiones sin datos personales.</li>
   </ul>
 </section>
