@@ -51,7 +51,7 @@ Las trampas del repo, para el que lo toque dentro de tres dias (que sos vos, sin
 
 No son tareas: son riesgos. Cada uno con su fallback.
 
-- **La demo sigue arriba durante la charla** — alarma: ninguna todavía (sin job `uptime`); fallback: correr el playground en local (`PORT=3001 npm start`) y mostrarlo por screen-share.
+- **La demo sigue arriba durante la charla** — alarma: workflow `uptime` (todos los días 12:17 UTC; prueba 401 sin clave y la página con la clave del secreto `JEV_ACCESS_PASSWORD`); fallback: correr el playground en local (`PORT=3001 npm start`) y mostrarlo por screen-share.
 - **Slot de calendario, sala o link de la reunión** — fallback: grabar el video corto antes, para que sirva aunque se mueva la charla.
 - **Acceso a la API para los asistentes** (demo compartida protegida o una key de AI Gateway por persona) — fallback: el ejercicio guiado corre contra la demo deployada, sin keys individuales.
 - **Aprobación para mandar datos internos a un proveedor externo** — fallback: el ejercicio guiado usa datos sintéticos (como los ejemplos Support/Review/Email del playground).

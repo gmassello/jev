@@ -211,7 +211,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - error: una key inválida → el mensaje en el idioma de la UI, sin el texto crudo del gateway.
 
 ### U19. CI and uptime
-- **Goal:** cada push corre `npm test` en GitHub Actions. Uptime todavía no: la demo publicada (U7) pide la clave y el job necesitaría un secreto de GitHub.
+- **Goal:** cada push corre `npm test` en GitHub Actions. El workflow `uptime` revisa la demo publicada (U7) una vez por día: 401 sin clave y la página con la clave del secreto `JEV_ACCESS_PASSWORD`.
 - **Covers:** —
 - **Files:** `.github/workflows/ci.yml`
 - **Depends on:** —

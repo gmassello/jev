@@ -1,0 +1,36 @@
+name: Uptime
+
+on:
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SITE: https://jev-514702007876.us-central1.run.app
+  TEXT: "<title>Jev Playground"
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: The playground is up, serves its own page with the password and refuses without it
+        env:
+          ACCESS: ${{ secrets.JEV_ACCESS_PASSWORD }}
+        run: |
+          [ -n "$ACCESS" ] || { echo "missing secret JEV_ACCESS_PASSWORD" >&2; exit 1; }
+          check() {
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$SITE")
+            [ "$code" = 401 ] || { echo "expected 401 without password, got $code"; return 1; }
+            body=$(curl -sf --max-time 30 -u "uptime:$ACCESS" "$SITE") || { echo "down: $SITE"; return 1; }
+            grep -qF "$TEXT" <<< "$body" || { echo "wrong content: $SITE"; return 1; }
+          }
+          for i in $(seq 1 10); do
+            check && exit 0
+            sleep 15
+          done
+          echo "the playground failed after 10 attempts" >&2
+          exit 1
