@@ -19,7 +19,8 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 | R18 · F3 | Jev revisa la respuesta de un chatbot | A1, A2 | should (U17, done) | Detectan un caso propio | Sí: "dónde usarlo" |
 | R10 · F5 | Errores del gateway en lenguaje llano | A1 | should (U18, done) | — (respaldo al grabar y al probar después) | No |
 | R20 · F5 | Guion completo del video en español | A1 | must (U20, U24, done) | Entienden qué es Jev y qué no | Es la narración |
-| R1, R2, R3, R4, R5, R9 | Desafío con marcador y demo deployada | — | cut (U2–U5 retirados, U7) | — | No |
+| R9 · F4 | Demo publicada en Cloud Run con clave | A3 | should (U7, done) | Costo y riesgos claros | No |
+| R1, R2, R3, R4, R5 | Desafío con marcador | — | cut (U2–U5 retirados) | — | No |
 
 
 
@@ -72,6 +73,7 @@ Criterios de aceptación:
 | Sistema | Tokens, tiempo, modelo y warnings en cada respuesta; totalTokens = entrada + salida | `check_usage_and_timing` |
 | Sistema | Confianza de TypeSafe por pregunta en [0, 1] y costo de la llamada ≥ 0 | `check_confidence_and_cost` |
 | Sistema | Body inválido → 500 con error legible; ruta inexistente → 404 | `check_invalid_json`, `check_unknown_route` |
+| Sistema | AE6: con `ACCESS_PASSWORD`, sin la clave → 401 en la página y en `/evaluate` | `tests/server.test.js`; contra la URL publicada, los checks con `JEV_ACCESS_PASSWORD` |
 
 Correr: `python3 cases/small/checks.py http://localhost:3001` (4 llamadas reales). Hoy: 7/7.
 
@@ -118,6 +120,5 @@ Correr: `python3 cases/large/checks.py .` (sin red; necesita `node` y `ffprobe`)
 ## Out of scope
 
 - R1, R2, R3, R4, R5 con AE1, AE2, AE3, AE4, AE5 — el desafío con marcador y umbral deslizable se construyó y se retiró el 2026-10-12; queda para después (BRIEF).
-- R9 con AE6 — la demo deployada y protegida queda para después: la charla corre en local (PLAN U7, cut).
 - Que cada asistente juegue en su propio navegador; integrar Jev en código propio en vivo; datos reales del equipo; comparación en vivo contra un LLM (BRIEF).
 - Probar la UI con un navegador automatizado: lo visual queda como `screenshot` y la lógica, en `npm test` y en los checks contra `/evaluate`.

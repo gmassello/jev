@@ -1,11 +1,21 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { timingSafeEqual } from 'node:crypto';
 import { experimental_decide as decide } from 'ai';
 
 const PORT = process.env.PORT ?? 3000;
 const MODEL = process.env.JEV_MODEL ?? 'typesafe-ai/jev';
 
 const MODULES = new Set(['/copy.js']);
+const ACCESS = process.env.ACCESS_PASSWORD;
+
+const allowed = (req) => {
+  if (!ACCESS) return true;
+  const [scheme, encoded = ''] = (req.headers.authorization ?? '').split(' ');
+  const pass = Buffer.from(Buffer.from(encoded, 'base64').toString().split(':').slice(1).join(':'));
+  const want = Buffer.from(ACCESS);
+  return scheme === 'Basic' && pass.length === want.length && timingSafeEqual(pass, want);
+};
 
 const send = (res, status, body, type = 'application/json') => {
   res.writeHead(status, { 'content-type': type });
@@ -13,6 +23,10 @@ const send = (res, status, body, type = 'application/json') => {
 };
 
 createServer(async (req, res) => {
+  if (!allowed(req)) {
+    res.writeHead(401, { 'www-authenticate': 'Basic realm="jev"', 'content-type': 'text/plain' });
+    return res.end('unauthorized');
+  }
   if (req.method === 'GET' && req.url === '/') {
     return send(res, 200, await readFile(new URL('./index.html', import.meta.url)), 'text/html');
   }

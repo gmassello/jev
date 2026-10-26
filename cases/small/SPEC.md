@@ -29,6 +29,7 @@ Caso propio y trivial: un solo ticket de soporte recorre todo el sistema una vez
 ## Contrato de runtime
 - **URL base:** la del server (`npm start` usa el puerto 3000; la charla, `PORT=3001`).
 - **Health / reset:** no hay; el server no tiene estado.
+- **Acceso:** con `ACCESS_PASSWORD` en el server, todo pide basic auth y sin la clave responde 401; los checks la mandan si existe `JEV_ACCESS_PASSWORD`.
 - **`POST /evaluate`:** body `{ "state": string | object, "questions": { "<id>": Question } }` → 200 `{ answers, usage, warnings, modelId, ms, confidence, cost }`.
 - **Forma del error:** `{ "error": "<mensaje>" }` con 500 (falla de la evaluación o body inválido) o 404 (ruta inexistente).
 - **Requiere:** `AI_GATEWAY_API_KEY` en el entorno del server. Cada corrida de los checks hace 3 llamadas reales a Jev.

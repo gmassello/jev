@@ -16,7 +16,7 @@ Estado del codigo en una linea: <N tests verdes, que esta hecho, que falta>.
 | Superficie | Donde | Estado | Verificado |
 |---|---|---|---|
 | Repo y CI | `<owner>/<repo>` @ `<sha>` | | |
-| Sitio | <URL> | | |
+| Sitio | https://jev-514702007876.us-central1.run.app (pide clave: `gcloud secrets versions access latest --secret jev-access --project jev-playground-2610`) | ok, 401 sin clave; caso chico 7/7 con clave | 2026-10-26 |
 | Submission | <URL publica, no /edit> | | |
 | Tarjeta en la galeria | <URL de la galeria> | | |
 | PR upstream | #<n> | | |
@@ -51,7 +51,11 @@ Las trampas del repo, para el que lo toque dentro de tres dias (que sos vos, sin
 
 No son tareas: son riesgos. Cada uno con su fallback.
 
-- **La demo sigue arriba durante la charla** — alarma: workflow `uptime` (cada 6 h); fallback: correr el playground en local (`PORT=3001 npm start`) y mostrarlo por screen-share.
+- **La demo sigue arriba durante la charla** — alarma: ninguna todavía (sin job `uptime`); fallback: correr el playground en local (`PORT=3001 npm start`) y mostrarlo por screen-share.
 - **Slot de calendario, sala o link de la reunión** — fallback: grabar el video corto antes, para que sirva aunque se mueva la charla.
 - **Acceso a la API para los asistentes** (demo compartida protegida o una key de AI Gateway por persona) — fallback: el ejercicio guiado corre contra la demo deployada, sin keys individuales.
 - **Aprobación para mandar datos internos a un proveedor externo** — fallback: el ejercicio guiado usa datos sintéticos (como los ejemplos Support/Review/Email del playground).
+
+## Recursos facturables
+
+- Proyecto GCP `jev-playground-2610` (Cloud Run `jev`, secretos `jev-gateway-key` y `jev-access`) — apagar: `gcloud projects delete jev-playground-2610`.

@@ -14,6 +14,16 @@ npm start              # http://localhost:3000
 
 Optional: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-ai/jev`). Run the tests with `npm test`.
 
+## Deploy
+
+The hosted playground runs on Cloud Run and asks for a password (HTTP basic auth). Set `ACCESS_PASSWORD` to turn that on anywhere; without it the server is open, as in local use.
+
+```bash
+gcloud run deploy jev --source . --region us-central1 --project jev-playground-2610 --allow-unauthenticated --update-secrets AI_GATEWAY_API_KEY=jev-gateway-key:latest,ACCESS_PASSWORD=jev-access:latest
+```
+
+Both the gateway key and the password live in Secret Manager, never in the repo.
+
 ## Before you use it in production
 
 - **Calibrate the threshold on your own data.** Label a few dozen real cases and check how often Jev is right at each probability level before letting it act on its own.

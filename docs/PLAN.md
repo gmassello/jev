@@ -8,7 +8,8 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 ## Key technical decisions
 - Lección guiada en lugar del desafío, sesión de unos 20 minutos en vivo + preguntas con el video de respaldo, 10 pasos en la charla, opción A de arquitectura (AI Gateway + AI SDK) — settled: inherited from BRIEF y `docs/ARCHITECTURE.md` (2026-10-24; la charla de 25 minutos con 7 pasos en vivo quedó reemplazada ese mismo día; el 2026-10-25 la charla volvió a ser en vivo y el video pasó a respaldo). Las decisiones de abajo sobre el desafío quedan como historia.
 - Desafío, enfoque, casos sintéticos, dominio tickets de soporte, presentador proyecta, todo en español — settled: inherited from BRIEF.
-- Sin deploy: la charla corre en local por screen-share y el acceso asincrónico es el video — chosen over clave compartida en la app y Vercel Deployment Protection because el presentador lo eligió al resolver la pregunta abierta del BRIEF. R9 queda en cut. settled: user-directed
+- ~~Sin deploy~~ — reabierta el 2026-10-26 con `/hackathon-deploy`.
+- Demo en Cloud Run con usuario y clave (basic auth) en `server.js` — chosen over Vercel y el login de Google (IAP) because gcloud ya estaba instalado, `server.js` corre tal cual y la clave anda en cualquier hosting. La charla sigue en vivo; la URL sirve para quien no asista. settled: user-directed (2026-10-26)
 - El desafío reusa `POST /evaluate` desde el navegador, una llamada por ticket con concurrencia limitada (5), sin endpoint nuevo — chosen over un endpoint que corra el set en el server because no toca `server.js` y la medición de 15 llamadas dio 0 errores en ~1.1 s con concurrencia 15 y con 5. settled: plan-time
 - El copy (`I18N`) y el precio por token salen de `index.html` a módulos ES importables desde el navegador y desde `node --test` — chosen over dejarlos inline because la regla común pide un test de paridad de claves ES/EN y "un solo lugar decide" para el precio. settled: plan-time
 - El costo se calcula solo con el precio de entrada publicado (US$0.042 / M tokens de entrada); la página del modelo en AI Gateway no publica precio de salida (verificado el 2026-10-10), así que la UI lo rotula "costo estimado (entrada)" — chosen over inventar un precio de salida because toda cifra publicada sale de una fuente. settled: plan-time
@@ -89,9 +90,9 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 ### U7. Demo deployada y protegida
 - **Goal:** la demo está publicada en una URL que solo puede usar quien tiene acceso.
 - **Covers:** R9 · F4
-- **Files:** —
+- **Files:** `server.js`, `tests/server.test.js`, `package.json`, `cases/small/checks.py`
 - **Depends on:** —
-- **Status:** todo
+- **Status:** done
 - **Tests:**
   - error: alguien sin acceso abre la URL → no puede llamar a Jev. Covers AE6.
 
@@ -210,7 +211,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - error: una key inválida → el mensaje en el idioma de la UI, sin el texto crudo del gateway.
 
 ### U19. CI and uptime
-- **Goal:** cada push corre `npm test` en GitHub Actions. Uptime no aplica: no hay superficie pública (la charla corre en local y R9 está en cut).
+- **Goal:** cada push corre `npm test` en GitHub Actions. Uptime todavía no: la demo publicada (U7) pide la clave y el job necesitaría un secreto de GitHub.
 - **Covers:** —
 - **Files:** `.github/workflows/ci.yml`
 - **Depends on:** —
@@ -272,9 +273,8 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 | Tier | Units | Why |
 |---|---|---|
 | must | U1, U11, U12, U13, U14, U15, U16, U9, U19, U20, U22, U23, U24 | la lección, los casos del equipo, las slides de impacto y el guion son lo que se muestra en vivo y lo que se graba de respaldo; CI avisa si algo se rompe antes del viernes |
-| should | U17, U18, U21 | suman un caso fuerte para la consigna, un error legible si falla el gateway y legibilidad en la sala, pero la charla anda sin ellos |
+| should | U17, U18, U21, U7 | suman un caso fuerte para la consigna, un error legible si falla el gateway, legibilidad en la sala y la demo publicada con clave para quien no asista, pero la charla anda sin ellos |
 | cut | U2, U3, U4, U5 | construidos y retirados el 2026-10-12 al pasar a la lección guiada; R1–R5 quedan para después |
-| cut | U7 | el presentador eligió no deployar; R9 queda sin cubrir y AE6 no se ejecuta |
 | cut | U6 | un solo tema claro y zoom del navegador al 125–150 %, decidido en la revisión del design system (2026-10-24); el desafío que nombran sus tests se retiró |
 | cut | U8, U10 | U8 es el deck del desafío, reemplazado por U13; U10 queda absorbida por U15 |
 
@@ -293,4 +293,3 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 - Que cada asistente juegue el desafío en su navegador; ranking entre asistentes (BRIEF, Para después).
 - Integrar Jev en código propio en vivo; datos reales del equipo; keys individuales; comparación en vivo contra un LLM (BRIEF, Fuera de este producto).
 - Cargar un set de tickets propio o subir un CSV; varias preguntas a la vez en el desafío (`docs/UX.md`, Out of scope).
-- Deploy de la demo (U7, cut).

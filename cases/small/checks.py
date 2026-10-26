@@ -1,4 +1,6 @@
+import base64
 import json
+import os
 import sys
 import time
 import urllib.error
@@ -21,6 +23,9 @@ def request(base, method, path, body=None, raw=None):
     req = urllib.request.Request(base + path, data=data, method=method)
     if data is not None:
         req.add_header("Content-Type", "application/json")
+    if os.environ.get("JEV_ACCESS_PASSWORD"):
+        token = base64.b64encode(f"x:{os.environ['JEV_ACCESS_PASSWORD']}".encode()).decode()
+        req.add_header("Authorization", f"Basic {token}")
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             return resp.status, resp.headers.get("content-type", ""), resp.read()
