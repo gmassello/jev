@@ -76,7 +76,7 @@ Investigado el 2026-10-24.
 - AE5. **Covers R5.** Para después.
 - AE6. **Covers R9.** Dada la URL publicada, alguien sin la clave la abre y recibe 401, sin que se llame a Jev.
 - AE7. **Covers R11.** Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla.
-- AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la probabilidad de la opción elegida queda por debajo de 0,9 y las barras muestran el reparto entre opciones.
+- AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la probabilidad de la opción elegida queda por debajo de 0,8 y las barras muestran el reparto entre opciones.
 - AE9. **Covers R15.** Given el snippet copiado del último paso (hoy, el 14) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
 - AE10. **Covers R10.** Given el video final, then dura 21 minutos o menos.
 - AE12. **Covers R19.** Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la checklist con la versión fija del modelo.

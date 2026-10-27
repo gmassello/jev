@@ -260,8 +260,9 @@
     h('div', { className: 'bar' }, h('i', { style: `width:${pct(p)}%` })),
     h('span', { className: 'pct', textContent: `${pct(p)}%` }));
 
-  const BOOL_LIMIT = 0.9;
-  const zone = (p) => (p >= BOOL_LIMIT ? 'yes' : p <= 1 - BOOL_LIMIT ? 'no' : 'review');
+  const YES_FROM = 0.8;
+  const NO_UP_TO = 0.2;
+  const zone = (p) => (p >= YES_FROM ? 'yes' : p <= NO_UP_TO ? 'no' : 'review');
 
   const renderAnswer = (q, a) => {
     if (a.type === 'boolean') {

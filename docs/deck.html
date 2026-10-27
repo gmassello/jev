@@ -103,14 +103,14 @@ code { font-family: var(--font-mono); }
       <!-- src: python3 cases/medium/checks.py http://localhost:3001 (SPEC medido 2026-10-24: 0,63/0,67/0,66), node scripts/demo-check.mjs --check (0,69 y 0,71) y tres llamadas al paso 7 del 2026-10-25 (0,58/0,68/0,68) -->
       <h3>Probabilidad de la elegida</h3>
       <div class="bar-row"><span>facturacion</span><div class="bar"><i style="width:65%"></i></div><span>0,58–0,71</span></div>
-      <p class="muted">Debajo del umbral de 0,9 en todas las corridas.</p>
+      <p class="muted">Debajo del umbral de 0,8 en todas las corridas.</p>
     </div>
     <div class="card">
       <h3>Confianza de TypeSafe</h3>
       <p>Otro número: qué tan concentrada está la distribución. 1 si casi todo va a una opción, 0 si está pareja.</p>
     </div>
   </div>
-  <p class="review">Probabilidad debajo de 0,9 → el ticket va a revisión humana.</p>
+  <p class="review">Probabilidad debajo de 0,8 → el ticket va a revisión humana.</p>
 </section>
 
 <section class="slide">
@@ -123,8 +123,8 @@ code { font-family: var(--font-mono); }
       <p>Una persona lee cada ticket, cada falla y cada defecto, aunque la mayoría sean obvios.</p>
     </div>
     <div class="card">
-      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (línea impact: 5/5 tickets >= 0.9, 2026-10-24) y check_doubt_stable (0,58–0,71) -->
-      <h3>Con Jev y umbral 0,9</h3>
+      <!-- src: python3 cases/medium/checks.py http://localhost:3001 (línea impact: 5/5 tickets >= 0.8, tres corridas del 2026-10-27) y check_doubt_stable (0,58–0,71) -->
+      <h3>Con Jev y umbral 0,8</h3>
       <p class="big">5 de 5</p>
       <p>tickets claros se rutean solos; el ambiguo queda debajo del umbral en cada corrida y va a revisión.</p>
     </div>
@@ -157,7 +157,7 @@ code { font-family: var(--font-mono); }
     <li><b>El texto puede traer instrucciones escondidas.</b> Tratalo como dato, nunca como instrucción, y no automatices una acción irreversible.</li>
     <li><b>Jev prefiere la primera opción cuando duda.</b> Probá tus preguntas con las opciones en otro orden.</li>
     <li><b>Las cuentas se hacen en código.</b> Para "¿pasaron más de 30 días?", restá las fechas vos.</li>
-    <li><b>Un 0,9 no es 9 aciertos de cada 10.</b> Medí con tus propios casos dónde poner el umbral.</li>
+    <li><b>Un 0,8 no es 8 aciertos de cada 10.</b> Medí con tus propios casos dónde poner el umbral.</li>
   </ul>
   <p class="muted">La key vive en el server, nunca en el navegador ni en el repo.</p>
 </section>
@@ -192,7 +192,7 @@ const { answers } = await decide({
 });
 
 const { choice, probabilities } = answers.area;
-if (probabilities[choice] >= 0.9) console.log('Rutear a', choice);
+if (probabilities[choice] >= 0.8) console.log('Rutear a', choice);
 else console.log('A revisión humana:', probabilities);</pre>
   <p class="muted">Es el snippet del último paso del playground, compactado; corrido con la key, imprime "Rutear a cuenta".</p>
 </section>

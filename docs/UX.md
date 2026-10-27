@@ -103,7 +103,7 @@ Modo Mejora sobre la lección paso a paso, contra el `docs/BRIEF.md` reescrito e
 ### Current flow
 
 1. Una sola página de 11 pasos. Navegación: Anterior, Inicio y Siguiente arriba y abajo (`index.html:318`–`320`); los puntos del stepper son decorativos (`index.html:99`); idioma en un select (`index.html:88`); el paso se recuerda en `localStorage`.
-2. Pasos de teoría: 1 qué es, 8 cuándo usar Jev, 9 proyectos parecidos, 10 glosario. Pasos de práctica: 2 sí/no, 3 opción, 4 escala, 5 opciones con definición, 6 todo junto, 7 cuando Jev duda (umbral 0,9). Paso 11: código para copiar.
+2. Pasos de teoría: 1 qué es, 8 cuándo usar Jev, 9 proyectos parecidos, 10 glosario. Pasos de práctica: 2 sí/no, 3 opción, 4 escala, 5 opciones con definición, 6 todo junto, 7 cuando Jev duda (umbral 0,8). Paso 11: código para copiar.
 3. En un paso de práctica: texto y pregunta editables, botón "Preguntarle a Jev" que pasa a "Pensando…", resultado con veredicto, barras y explicación; en el paso 7, la línea del umbral; el JSON queda oculto detrás de "Ver el JSON de la llamada".
 
 Clics hasta la primera respuesta de Jev: 2 (Empezar y Preguntarle a Jev).

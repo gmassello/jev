@@ -40,9 +40,9 @@ Medido el 2026-10-24, 3 corridas: A 0,98/0,98/0,98; B 0,07/0,06/0,07; ambiguo 0,
 - AE2. **Covers R2.** Given las 5 respuestas, then al menos 4 tienen `choice` igual al esperado.
 - AE3. **Covers R3.** Given la tanda, then el tiempo total de punta a punta es menor a 10 s y el costo estimado de entrada (suma de `inputTokens` × US$0.042 / 1.000.000) es menor a US$0.001.
 
-- AE4. **Covers R4.** Given el ticket ambiguo, when se evalúa 3 veces, then en las 3 la probabilidad de la opción elegida es menor a 0,9.
+- AE4. **Covers R4.** Given el ticket ambiguo, when se evalúa 3 veces, then en las 3 la probabilidad de la opción elegida es menor a 0,8.
 - AE5. **Covers R5.** Given el mail, when se evalúa con las opciones en los dos órdenes, then las dos respuestas eligen `Estafa`.
-- AE6. **Covers R6.** Given la política, then con la conversación A la probabilidad de sí es ≥ 0,9 y con la B es ≤ 0,1.
+- AE6. **Covers R6.** Given la política, then con la conversación A la probabilidad de sí es ≥ 0,8 y con la B es ≤ 0,2.
 - AE7. **Covers R7.** Given las 5 respuestas de la tanda, then cada una trae `cost` (número ≥ 0, en US$) y la suma es menor a US$0,001.
 
 ## Contrato de runtime

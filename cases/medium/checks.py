@@ -30,7 +30,7 @@ QUESTION = {"team": {"type": "choice", "instructions": "¿A qué área va este t
 
 DOUBT = "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?"
 DOUBT_Q = {"type": "choice", "instructions": "¿A qué área va este ticket?", "criteria": {"facturacion": None, "envios": None, "tecnica": None}}
-THRESHOLD = 0.9
+THRESHOLD = 0.8
 MAIL = "¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya"
 MAIL_ORDERS = [["Trabajo", "Personal", "Promoción", "Estafa"], ["Estafa", "Trabajo", "Personal", "Promoción"]]
 POLICY = "Política de la tienda: las devoluciones se aceptan hasta 30 días después de la compra, con el ticket."
@@ -113,8 +113,8 @@ def check_order_independent(base):
 def check_guardrail_pair(base):
     invented = answer(base, POLICY + "\n" + INVENTED, GUARD_Q).get("probability")
     faithful = answer(base, POLICY + "\n" + FAITHFUL, GUARD_Q).get("probability")
-    expect(isinstance(invented, (int, float)) and invented >= 0.9, f"invented answer: probability {invented!r}, want >= 0.9")
-    expect(isinstance(faithful, (int, float)) and faithful <= 0.1, f"faithful answer: probability {faithful!r}, want <= 0.1")
+    expect(isinstance(invented, (int, float)) and invented >= THRESHOLD, f"invented answer: probability {invented!r}, want >= {THRESHOLD}")
+    expect(isinstance(faithful, (int, float)) and faithful <= 0.2, f"faithful answer: probability {faithful!r}, want <= 0.2")
 
 
 def check_talk_cost(base):

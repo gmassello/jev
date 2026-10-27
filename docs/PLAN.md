@@ -112,7 +112,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 - **Covers:** R10 · F5
 - **Files:** `video/script.tsv`, `video/out/demo.mp4`, `docs/AI_DISCLOSURE.md`
 - **Depends on:** U12, U14, U15, U16, U17, U22, U23, U24
-- **Status:** todo
+- **Status:** todo — en pausa desde el 2026-10-27: el guion de los 15 pasos pide unos 765 créditos de HeyGen y quedan 282; la charla va en vivo leyendo el playground.
 - **Tests:**
   - happy: el video final → dura 21 minutos o menos (`ffprobe`). Covers AE10.
   - edge: cada cifra de los subtítulos → coincide con la salida de `demo-check`.
@@ -129,14 +129,14 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - error: sin `AI_GATEWAY_API_KEY` → falla con el mensaje de autenticación del gateway, no con un stack trace mudo.
 
 ### U11. Lección guiada de 13 pasos
-- **Goal:** el playground es una lección paso a paso, bilingüe, con un tema y un tipo de respuesta por paso: qué es, sí/no, opción, escala, opciones con definición, todo junto, cuando Jev duda (umbral 0,9), cuándo usarlo, proyectos parecidos, glosario, arquitectura, Jev en tu sistema y código; reemplaza al desafío.
+- **Goal:** el playground es una lección paso a paso, bilingüe, con un tema y un tipo de respuesta por paso: qué es, sí/no, opción, escala, opciones con definición, todo junto, cuando Jev duda (umbral 0,8), cuándo usarlo, proyectos parecidos, glosario, arquitectura, Jev en tu sistema y código; reemplaza al desafío.
 - **Covers:** R11, R12, R13, R14, R19 · F5
 - **Files:** `index.html`, `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
 - **Depends on:** U1
 - **Status:** done
 - **Tests:**
   - happy: un paso de práctica → "Preguntarle a Jev" muestra la respuesta, la probabilidad de cada opción y la explicación (verificado en Chrome con llamadas reales). Covers AE7.
-  - happy: el paso "Cuando Jev duda" → `node scripts/demo-check.mjs --check` lo da por debajo de 0,9 con el aviso de revisión humana. Covers AE8.
+  - happy: el paso "Cuando Jev duda" → `node scripts/demo-check.mjs --check` lo da por debajo de 0,8 con el aviso de revisión humana. Covers AE8.
   - happy: los pasos de arquitectura y producción → el test de forma exige las tres opciones, la compuerta y la versión fija `jev-1.14.0` en es y en. Covers AE12.
   - edge: un idioma con una clave o un paso de menos → el test de paridad falla.
 
@@ -198,7 +198,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 - **Depends on:** U11
 - **Status:** done
 - **Tests:**
-  - happy: el ejemplo con un dato inventado → Jev dice que sí con 0,9 o más, verificado por `demo-check`.
+  - happy: el ejemplo con un dato inventado → Jev dice que sí con 0,8 o más, verificado por `demo-check`.
   - edge: el ejemplo de inyección → se mide 3 veces antes de sumarlo; si no mueve la respuesta, no entra.
 
 ### U18. Errores del gateway en lenguaje llano
@@ -269,6 +269,16 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - happy: la columna hablada suma entre 2.700 y 3.100 palabras, y `docs/GUION.md` tiene un `### <id>` por paso con `Bloque:` o `Fuera del video:`. Covers AE13.
   - edge: cada cifra del guion → sale de `demo-check` o del caso mediano.
 
+### U25. Guion en vivo y página de ensayo
+- **Goal:** `docs/CHARLA.md` tiene la charla por momento (ventana de tiempo, pantalla, qué apretar, frases clave, cifra y qué saltear si vas pasado) cubriendo los 15 pasos, y `scripts/ensayo.mjs` genera `docs/ensayo.html`, que la muestra con un cronómetro, el desvío contra el plan y la tabla de tiempos reales para ajustar las ventanas.
+- **Covers:** R20 · F5
+- **Files:** —
+- **Depends on:** U24
+- **Status:** cut — retirada el 2026-10-27: el presentador lee el texto del playground y no usa notas aparte.
+- **Tests:**
+  - happy: las ventanas de `docs/CHARLA.md` son contiguas desde 0:00 y terminan en 20:00 o antes, y cada paso de `copy.js` aparece en una línea `Pantalla:`.
+  - edge: la página generada trae todas las secciones.
+
 ## Cut line
 | Tier | Units | Why |
 |---|---|---|
@@ -276,6 +286,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 | should | U17, U18, U21, U7 | suman un caso fuerte para la consigna, un error legible si falla el gateway, legibilidad en la sala y la demo publicada con clave para quien no asista, pero la charla anda sin ellos |
 | cut | U2, U3, U4, U5 | construidos y retirados el 2026-10-12 al pasar a la lección guiada; R1–R5 quedan para después |
 | cut | U6 | un solo tema claro y zoom del navegador al 125–150 %, decidido en la revisión del design system (2026-10-24); el desafío que nombran sus tests se retiró |
+| cut | U25 | retirada el 2026-10-27: la charla se da leyendo el texto del playground |
 | cut | U8, U10 | U8 es el deck del desafío, reemplazado por U13; U10 queda absorbida por U15 |
 
 ## Risks

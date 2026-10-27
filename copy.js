@@ -36,7 +36,7 @@ export const I18N = {
     yes: 'Sí',
     sure: (p) => `${p}% de probabilidad de «sí»`,
     explain: {
-      boolean: (p, zone) => `Jev devolvió un solo número, probability: ${p}: la probabilidad de que la respuesta sea sí. ${{ yes: 'Con 90% o más, tu código lo trata como sí.', no: 'Con 10% o menos, tu código lo trata como no.', review: 'Está entre 10% y 90%: que lo mire una persona.' }[zone]}`,
+      boolean: (p, zone) => `Jev devolvió un solo número, probability: ${p}: la probabilidad de que la respuesta sea sí. ${{ yes: 'Con 80% o más, tu código lo trata como sí.', no: 'Con 20% o menos, tu código lo trata como no.', review: 'Está entre 20% y 80%: que lo mire una persona.' }[zone]}`,
       choice: (option, p, next, pNext) => `Jev devolvió choice: «${option}» y la probabilidad de cada opción. La elegida tiene ${p}%; la que sigue, «${next}», ${pNext}%.`,
       score: (level, n, total) => `Lo ubicó en «${level}» (nivel ${n} de ${total}). Las barras muestran qué tan seguro está de cada nivel.`,
     },
@@ -56,29 +56,21 @@ export const I18N = {
       {
         id: 'what', kind: 'theory', title: '¿Qué es Jev?',
         theory: [
-          'Jev es un modelo que evalúa, no que conversa. Le das un texto y una pregunta cerrada, y te devuelve una respuesta con su probabilidad.',
-          'Jev contesta siempre en un formato fijo: un sí o no, una opción de una lista o un nivel de una escala, con su probabilidad.',
-          'TypeSafe lo llama el primer modelo "System One", por la idea de Daniel Kahneman (Pensar rápido, pensar despacio): el Sistema 1 decide rápido y sin esfuerzo, como cuando ves que una cara está enojada; el Sistema 2 razona paso a paso, como cuando calculás 17 × 24.',
-          'Jev es el Sistema 1 de tu software. Si una pregunta necesita varios pasos de razonamiento, partila en preguntas más chicas o resolvé esa parte en código. Y lo que es una regla fija, como si pasaron más de 30 días, no necesita ningún modelo: es código.',
+          'Jev evalúa, no conversa: le das un texto y una pregunta cerrada, y te devuelve una respuesta con su probabilidad.',
+          'La respuesta tiene un formato fijo: sí o no, una opción de una lista o un nivel de una escala.',
+          'TypeSafe lo llama "System One", por Kahneman: el Sistema 1 decide rápido; el Sistema 2 razona paso a paso.',
+          'Jev es una opción de Sistema 1 para tu software.',
         ],
-        table: {
-          head: ['', 'Qué hace', 'Qué devuelve', 'Velocidad'],
-          rows: [
-            ['Sistema 1 · Jev', 'https://docs.typesafe.ai/introduction', 'Lee un texto y elige entre opciones conocidas', 'Un valor y su probabilidad', 'Cientos de milisegundos: mediana de 292 ms en 18 llamadas medidas'],
-            ['Sistema 2 · un LLM que razona', null, 'Piensa paso a paso y escribe', 'Texto que hay que interpretar', 'Más lento: genera la respuesta token por token'],
-            ['Código · una regla fija', null, 'Aplica una regla exacta: un if, un cálculo, una fecha', 'Un resultado exacto, sin probabilidad', 'Inmediato: no llama a ningún modelo'],
-          ],
-        },
       },
       {
         id: 'boolean', kind: 'ask', title: 'Sí / No',
         theory: [
-          'La pregunta más simple: algo que se responde con sí o no.',
-          'Jev no devuelve la palabra "sí" ni "no": devuelve un solo número, probability, que es la probabilidad de que la respuesta sea sí. 0,98 es "casi seguro que sí"; 0,02, "casi seguro que no"; 0,5, "no sé".',
-          'El sí o el no lo decide tu código con umbrales: 0,9 o más se trata como sí, 0,1 o menos como no, y lo del medio lo revisa una persona.',
+          'Jev no devuelve "sí" ni "no": devuelve un número entre 0 y 1, la probabilidad de que la respuesta sea sí.',
+          'Tu código decide con dos umbrales. Los umbrales los configurás vos según tu caso. Por ejemplo, en este caso: 0,8 o más es sí, y 0,2 o menos es no.',
+          'Lo que cae entre 0,2 y 0,8 no lo decide el código: lo revisa una persona. Eso es el human in the loop.',
         ],
-        state: 'El cliente mandó tres mails enojado por una entrega demorada. El agente de soporte pidió disculpas y le devolvió todo el dinero.',
-        question: { type: 'boolean', text: '¿Se le devolvió la plata al cliente?', options: [] },
+        state: 'El cliente no podía pagar con su tarjeta. El agente le explicó cómo actualizarla, el pago pasó y el cliente respondió: ¡genial, gracias!',
+        question: { type: 'boolean', text: '¿Se resolvió el problema del cliente?', options: [] },
       },
       {
         id: 'choice', kind: 'ask', title: 'Elegir una opción',
@@ -93,9 +85,9 @@ export const I18N = {
       {
         id: 'score', kind: 'ask', title: 'Escala',
         theory: [
-          'Cuando la respuesta es un grado (poco, algo, mucho), usás una escala.',
-          'Los niveles van ordenados de menor a mayor. Jev devuelve la probabilidad de cada nivel y un score: la posición promedio, contando desde 0.',
-          'Un score de 3,2 en una escala de 5 niveles cae cerca del cuarto nivel.',
+          'Cuando la respuesta es un grado, usás una escala.',
+          'Jev devuelve la probabilidad de cada nivel y un score: la posición promedio, contando desde 0.',
+          'Un score de 3,2 en una escala de cinco niveles cae cerca del cuarto nivel.',
         ],
         state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
         question: { type: 'score', text: '¿Cuántas estrellas le daría?', options: ['1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'] },
@@ -103,9 +95,9 @@ export const I18N = {
       {
         id: 'criteria', kind: 'ask', title: 'Opciones con definición',
         theory: [
-          'Un nombre de opción suelto puede ser ambiguo: ¿un reintegro es de "facturación" o de "envíos"?',
-          'Podés acompañar cada opción con una descripción corta que le dice a Jev qué entra en ella. Viaja en el campo criteria del request.',
-          'Es la forma que conviene para rutear tickets a un equipo.',
+          'Un nombre suelto puede ser ambiguo: ¿un reintegro es "facturación" o "envíos"?',
+          'Cada opción puede llevar una descripción corta de qué entra en ella; viaja en el campo criteria.',
+          'Es la forma de rutear tickets a un equipo.',
         ],
         state: 'Hace dos días que no puedo entrar a mi cuenta: me dice que la contraseña es incorrecta aunque ya la cambié.',
         question: {
@@ -130,9 +122,9 @@ export const I18N = {
       {
         id: 'doubt', kind: 'ask', title: 'Cuando Jev duda',
         theory: [
-          'No todas las respuestas valen lo mismo. Con un texto ambiguo, Jev reparte la probabilidad entre varias opciones en vez de ponerla casi toda en una.',
-          'Este ticket habla de un pago, de un pedido y de un error de la app a la vez. Mirá cómo se reparten las barras.',
-          'Jev igual elige una opción, pero el reparto te avisa que duda. Qué hacer con un caso así, rutearlo igual o mandarlo a una persona, lo decide tu código, no Jev.',
+          'Con un texto ambiguo, Jev reparte la probabilidad entre varias opciones.',
+          'Este ticket habla de un pago, un pedido y un error de la app a la vez.',
+          'Jev igual elige, pero el reparto avisa que duda; si se rutea o va a una persona, lo decide tu código.',
         ],
         state: 'La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?',
         question: { type: 'choice', text: '¿A qué área va este ticket?', options: ['facturacion', 'envios', 'tecnica'] },
@@ -160,14 +152,14 @@ export const I18N = {
             ['Hacer cuentas: fechas, plazos y cantidades', null, 'Para "¿pasaron más de 30 días desde la compra?" tiene que encontrar dos fechas y restarlas; ahí se puede equivocar.', 'Hacer la cuenta en código y dejarle a Jev lo que es leer y entender, como "¿el cliente pide devolver el producto?".'],
           ],
         }],
-        outro: 'Si la salida es una decisión cerrada, Jev. Si es texto libre, un LLM. Si es una regla fija, código.',
+        outro: 'Si la salida es una decisión cerrada, usá Jev; si es texto libre, un LLM; y si es una regla fija, código.',
       },
       {
         id: 'guard', kind: 'ask', title: 'Jev revisa a un LLM',
         theory: [
-          'Un chatbot puede inventar: prometer un plazo o una condición que tu política no dice. Jev sirve de control antes de que la respuesta llegue al cliente.',
-          'El texto junta la política y la respuesta del bot, y la pregunta es un sí/no: ¿la respuesta afirma algo que la política no dice?',
-          'Si dice que sí con mucha probabilidad, el bot no manda esa respuesta y la revisa una persona.',
+          'Un chatbot puede inventar un plazo o una condición que la política no dice.',
+          'El texto junta la política y la respuesta del bot: ¿afirma algo que la política no dice?',
+          'Si Jev dice que sí, la respuesta no sale y la revisa una persona.',
         ],
         state: 'Política de la tienda: las devoluciones se aceptan hasta 30 días después de la compra, con el ticket.\nCliente: ¿hasta cuándo puedo devolver?\nAsistente: Tenés hasta 90 días para devolverlo, sin ticket.',
         question: { type: 'boolean', text: '¿La respuesta del asistente afirma algo que la política no dice?', options: [] },
@@ -201,7 +193,7 @@ export const I18N = {
             ['LLM con salida estructurada', null, 'Un modelo general responde en JSON siguiendo un schema.', 'Genera texto aunque lo encorsetes, y la confianza no viene como dato.'],
           ],
         },
-        outro: 'Los más parecidos son Clef, de Cloudflare (compatible con la API de Jev y de código abierto), y Strands Decider, de AWS (abierto y pensado para correr local). Los demás sirven si tu caso es de un solo tipo, como moderación o etiquetas fijas. En cualquier caso, compará con tus propios datos antes de elegir.',
+        outro: 'Los más parecidos son Clef, de Cloudflare, que es abierto y compatible con la API de Jev, y Strands Decider, de AWS, que también es abierto y corre local. Los demás sirven para un solo tipo de caso. Compará con tus datos antes de elegir.',
       },
       {
         id: 'glossary', kind: 'theory', title: 'Conceptos',
@@ -229,8 +221,8 @@ export const I18N = {
       {
         id: 'arch', kind: 'theory', title: 'Cómo está armado este playground',
         theory: [
-          'Tu navegador → este server (guarda la key) → Vercel AI Gateway → Jev. La página nunca ve la key: solo le manda el texto y las preguntas al server.',
-          'Nunca llames a Jev directo desde el navegador: la key quedaría a la vista de cualquiera que abra las herramientas del navegador.',
+          'El navegador le manda el texto a este server, que guarda la key, y el server llama a Jev por Vercel AI Gateway.',
+          'Nunca llames a Jev desde el navegador: la key quedaría a la vista.',
           'Hay otras formas de llegar al mismo modelo:',
         ],
         table: {
@@ -256,7 +248,7 @@ export const I18N = {
   Al navegador      answers, usage, modelId, ms,
                     confidence (TypeSafe) y cost (gateway)
   Límite de gasto   ninguno todavía (ver la checklist del paso 14)`,
-        outro: 'Arrancá con A: es el código del último paso.',
+        outro: 'Arrancá con la opción A: es el código del último paso.',
       },
       {
         id: 'prod', kind: 'theory', title: 'Jev en tu sistema',
@@ -281,7 +273,7 @@ acción automática   revisión humana
           'Timeout con un mensaje claro si Jev no responde.',
           'El texto puede traer instrucciones escondidas: tratalo como dato.',
           'Guardá cada decisión, sin datos personales, para ajustar el umbral.',
-          'Fijá la versión del modelo en producción (typesafe-ai/jev-1.14.0) y ajustá el umbral al cambiarla.',
+          'Fijá la versión del modelo en producción, por ejemplo typesafe-ai/jev-1.14.0, y ajustá el umbral cuando la cambies.',
         ],
         outro: 'Antes de producción, revisá estos puntos.',
       },
@@ -311,7 +303,7 @@ const { answers } = await decide({
 });
 
 const { choice, probabilities } = answers.area;
-if (probabilities[choice] >= 0.9) console.log('Rutear a', choice);
+if (probabilities[choice] >= 0.8) console.log('Rutear a', choice);
 else console.log('A revisión humana:', probabilities);
 `,
         outro: 'Cambiá el texto, las opciones o el umbral, y ya tenés tu primer router con Jev.',
@@ -355,7 +347,7 @@ else console.log('A revisión humana:', probabilities);
     yes: 'Yes',
     sure: (p) => `${p}% probability of “yes”`,
     explain: {
-      boolean: (p, zone) => `Jev returned a single number, probability: ${p}: the probability that the answer is yes. ${{ yes: 'At 90% or more, your code treats it as yes.', no: 'At 10% or less, your code treats it as no.', review: 'It is between 10% and 90%: have a person look at it.' }[zone]}`,
+      boolean: (p, zone) => `Jev returned a single number, probability: ${p}: the probability that the answer is yes. ${{ yes: 'At 80% or more, your code treats it as yes.', no: 'At 20% or less, your code treats it as no.', review: 'It is between 20% and 80%: have a person look at it.' }[zone]}`,
       choice: (option, p, next, pNext) => `Jev returned choice: “${option}” and the probability of each option. The pick has ${p}%; the runner-up, “${next}”, ${pNext}%.`,
       score: (level, n, total) => `It placed it at “${level}” (level ${n} of ${total}). The bars show how sure it is of each level.`,
     },
@@ -375,29 +367,21 @@ else console.log('A revisión humana:', probabilities);
       {
         id: 'what', kind: 'theory', title: 'What is Jev?',
         theory: [
-          'Jev is a model that evaluates, it does not chat. You give it a text and a closed question, and it returns an answer with its probability.',
-          'Jev always answers in a fixed format: a yes or no, an option from a list or a level on a scale, with its probability.',
-          'TypeSafe calls it the first "System One" model, after Daniel Kahneman\'s idea (Thinking, Fast and Slow): System 1 decides fast and without effort, like seeing that a face is angry; System 2 reasons step by step, like working out 17 × 24.',
-          'Jev is the System 1 of your software. If a question needs several reasoning steps, split it into smaller questions or solve that part in code. And a fixed rule, like whether more than 30 days have passed, needs no model at all: it is code.',
+          'Jev evaluates, it does not chat: you give it a text and a closed question, and it returns an answer with its probability.',
+          'The answer has a fixed format: yes or no, an option from a list or a level on a scale.',
+          'TypeSafe calls it "System One", after Kahneman: System 1 decides fast; System 2 reasons step by step.',
+          'Jev is one System 1 option for your software.',
         ],
-        table: {
-          head: ['', 'What it does', 'What it returns', 'Speed'],
-          rows: [
-            ['System 1 · Jev', 'https://docs.typesafe.ai/introduction', 'Reads a text and picks among known options', 'A value and its probability', 'Hundreds of milliseconds: median 292 ms over 18 measured calls'],
-            ['System 2 · an LLM that reasons', null, 'Thinks step by step and writes', 'Text you have to interpret', 'Slower: it generates the answer token by token'],
-            ['Code · a fixed rule', null, 'Applies an exact rule: an if, a calculation, a date', 'An exact result, with no probability', 'Instant: it calls no model'],
-          ],
-        },
       },
       {
         id: 'boolean', kind: 'ask', title: 'Yes / No',
         theory: [
-          'The simplest question: something answered with yes or no.',
-          'Jev does not return the word "yes" or "no": it returns a single number, probability, which is the probability that the answer is yes. 0.98 means "almost certainly yes"; 0.02, "almost certainly no"; 0.5, "I don\'t know".',
-          'Your code decides yes or no with thresholds: 0.9 or more is treated as yes, 0.1 or less as no, and anything in between goes to a person.',
+          'Jev does not return "yes" or "no": it returns a number between 0 and 1, the probability that the answer is yes.',
+          'Your code decides with two thresholds. You set the thresholds for your own case. For example, in this case: 0.8 or more is yes, and 0.2 or less is no.',
+          'Anything between 0.2 and 0.8 is not decided by the code: a person reviews it. That is the human in the loop.',
         ],
-        state: 'The customer wrote three angry emails about a late delivery. The support agent apologized and issued a full refund.',
-        question: { type: 'boolean', text: 'Did the customer get their money back?', options: [] },
+        state: 'The customer could not pay with their card. The agent explained how to update it, the payment went through and the customer replied: great, thanks!',
+        question: { type: 'boolean', text: 'Was the customer\'s problem solved?', options: [] },
       },
       {
         id: 'choice', kind: 'ask', title: 'Pick one option',
@@ -412,9 +396,9 @@ else console.log('A revisión humana:', probabilities);
       {
         id: 'score', kind: 'ask', title: 'Scale',
         theory: [
-          'When the answer is a degree (a little, some, a lot), you use a scale.',
-          'Levels go from lowest to highest. Jev returns the probability of each level and a score: the average position, counting from 0.',
-          'A score of 3.2 on a 5-level scale lands near the fourth level.',
+          'When the answer is a degree, you use a scale.',
+          'Jev returns the probability of each level and a score: the average position, counting from 0.',
+          'A score of 3.2 on a five-level scale lands near the fourth level.',
         ],
         state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
         question: { type: 'score', text: 'How many stars would they give?', options: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'] },
@@ -422,9 +406,9 @@ else console.log('A revisión humana:', probabilities);
       {
         id: 'criteria', kind: 'ask', title: 'Options with a definition',
         theory: [
-          'A bare option name can be ambiguous: is a refund "billing" or "shipping"?',
-          'You can add a short description to each option that tells Jev what belongs in it. It travels in the criteria field of the request.',
-          'It is the shape that works for routing tickets to a team.',
+          'A bare name can be ambiguous: is a refund "billing" or "shipping"?',
+          'Each option can carry a short description of what belongs in it; it travels in the criteria field.',
+          'It is the shape for routing tickets to a team.',
         ],
         state: 'For two days I have not been able to log into my account: it says the password is wrong even though I already changed it.',
         question: {
@@ -449,9 +433,9 @@ else console.log('A revisión humana:', probabilities);
       {
         id: 'doubt', kind: 'ask', title: 'When Jev hesitates',
         theory: [
-          'Not every answer is worth the same. With an ambiguous text, Jev splits the probability across several options instead of putting almost all of it on one.',
-          'This ticket is about a payment, an order and an app error at the same time. Watch how the bars split.',
-          'Jev still picks one option, but the split tells you it hesitates. What to do with a case like this, route it anyway or send it to a person, is up to your code, not Jev.',
+          'With an ambiguous text, Jev splits the probability across several options.',
+          'This ticket is about a payment, an order and an app error at the same time.',
+          'Jev still picks one, but the split tells you it hesitates; whether it is routed or goes to a person is up to your code.',
         ],
         state: 'The app showed an error at checkout. Was I charged? Is my order on its way or not?',
         question: { type: 'choice', text: 'Which team does this ticket go to?', options: ['billing', 'shipping', 'tech'] },
@@ -479,14 +463,14 @@ else console.log('A revisión humana:', probabilities);
             ['Doing math: dates, deadlines and amounts', null, 'To answer "have more than 30 days passed since the purchase?" it has to find two dates and subtract them; that is where it can get it wrong.', 'Do the math in code and leave Jev what is about reading and understanding, like "is the customer asking to return the product?".'],
           ],
         }],
-        outro: 'If the output is a closed decision, Jev. If it is free text, an LLM. If it is a fixed rule, code.',
+        outro: 'If the output is a closed decision, use Jev; if it is free text, an LLM; and if it is a fixed rule, code.',
       },
       {
         id: 'guard', kind: 'ask', title: 'Jev checks an LLM',
         theory: [
-          'A chatbot can make things up: promise a deadline or a condition your policy does not state. Jev works as a check before the reply reaches the customer.',
-          'The text puts together the policy and the bot reply, and the question is a yes/no: does the reply claim something the policy does not say?',
-          'If it says yes with a high probability, the bot does not send that reply and a person reviews it.',
+          'A chatbot can make up a deadline or a condition the policy does not state.',
+          'The text puts together the policy and the bot reply: does it claim something the policy does not say?',
+          'If Jev says yes, the reply does not go out and a person reviews it.',
         ],
         state: 'Store policy: returns are accepted up to 30 days after purchase, with the receipt.\nCustomer: how long do I have to return it?\nAssistant: You have up to 90 days to return it, no receipt needed.',
         question: { type: 'boolean', text: 'Does the assistant reply claim something the policy does not say?', options: [] },
@@ -520,7 +504,7 @@ else console.log('A revisión humana:', probabilities);
             ['LLM with structured output', null, 'A general model answers in JSON following a schema.', 'It still generates text, and confidence does not come back as data.'],
           ],
         },
-        outro: 'The closest ones are Cloudflare Clef (Jev-API compatible and open source) and AWS Strands Decider (open and built to run locally). The others work if your case is a single kind, like moderation or fixed labels. Either way, compare them on your own data before choosing.',
+        outro: 'The closest ones are Cloudflare Clef, which is open and compatible with the Jev API, and AWS Strands Decider, which is also open and runs locally. The others fit a single kind of case. Compare on your own data before choosing.',
       },
       {
         id: 'glossary', kind: 'theory', title: 'Concepts',
@@ -548,8 +532,8 @@ else console.log('A revisión humana:', probabilities);
       {
         id: 'arch', kind: 'theory', title: 'How this playground is built',
         theory: [
-          'Your browser → this server (holds the key) → Vercel AI Gateway → Jev. The page never sees the key: it only sends the text and the questions to the server.',
-          'Never call Jev straight from the browser: the key would be visible to anyone who opens the browser tools.',
+          'The browser sends the text to this server, which holds the key, and the server calls Jev through Vercel AI Gateway.',
+          'Never call Jev from the browser: the key would be in plain sight.',
           'There are other ways to reach the same model:',
         ],
         table: {
@@ -575,7 +559,7 @@ else console.log('A revisión humana:', probabilities);
   To the browser    answers, usage, modelId, ms,
                     confidence (TypeSafe) and cost (gateway)
   Spend limit       none yet (see the checklist in step 14)`,
-        outro: 'Start with A: it is the code in the last step.',
+        outro: 'Start with option A: it is the code in the last step.',
       },
       {
         id: 'prod', kind: 'theory', title: 'Jev in your system',
@@ -600,7 +584,7 @@ automatic action    human review
           'A timeout with a clear message if Jev does not answer.',
           'The text can carry hidden instructions: treat it as data.',
           'Store each decision, without personal data, to adjust the threshold.',
-          'Pin the model version in production (typesafe-ai/jev-1.14.0) and adjust the threshold when you change it.',
+          'Pin the model version in production, for example typesafe-ai/jev-1.14.0, and adjust the threshold when you change it.',
         ],
         outro: 'Check these points before going to production.',
       },
@@ -630,7 +614,7 @@ const { answers } = await decide({
 });
 
 const { choice, probabilities } = answers.area;
-if (probabilities[choice] >= 0.9) console.log('Route to', choice);
+if (probabilities[choice] >= 0.8) console.log('Route to', choice);
 else console.log('Send to human review:', probabilities);
 `,
         outro: 'Change the text, the options or the threshold, and you have your first router with Jev.',

@@ -12,7 +12,9 @@
 - [ ] Poner el título nuevo en la portada del deck y regenerar `docs/deck.pdf`
 - [ ] Pedir aprobación para usar datos internos en el ejercicio, o confirmar que va con datos sintéticos
 
-## Video (retomar lo pausado)
+## Video (en pausa)
+
+En pausa el 2026-10-27: el guion entero pide unos 765 créditos de HeyGen y quedan 282 hasta el 4/11. Plan B para la charla: `docs/deck.pdf` y la grabación de la reunión.
 
 - [ ] Bajar el clip 1 de HeyGen como `video/clip-1.mov` y correr el gate de `build-voice.py`: todo `fitted` y `spread` < 9
 - [ ] Generar un clip por beat de `video/script.tsv` (19) con el mismo avatar, voz, formato apaisado y 720p; varios beats pasan de 1 minuto, así que hace falta el plan pago de HeyGen
@@ -33,8 +35,8 @@
 
 ## Semana siguiente (lun 26 – jue 29/10)
 
-- [ ] Ensayo 1: dar la charla entera en vivo con el cronómetro del playground y practicar respuestas a preguntas
-- [ ] Ajustar el deck y el guion con lo que salió del ensayo
+- [ ] Ensayo 1: dar la charla entera leyendo el playground, con el cronómetro del header, y practicar respuestas a preguntas
+- [ ] Acortar en `copy.js` el texto de los pasos que se hagan largos al leerlos
 - [ ] Ensayo 2, cronometrado
 - [ ] `node scripts/demo-check.mjs --check` en verde
 - [ ] Preparar el plan B: el video, `docs/deck.pdf` y el server local, por si falla la red o el gateway

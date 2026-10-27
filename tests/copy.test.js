@@ -79,7 +79,7 @@ test('the code step gives three commands and a runnable evaluate call with a 0.9
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'code');
     assert.equal(step.commands.length, 3, lang);
-    for (const part of ['experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.9']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
+    for (const part of ['experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.8']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
     assert.ok(!step.code.includes('experimental_evaluate'), `${lang}: deprecated experimental_evaluate`);
     assert.equal(step.commands[0], `npm i ai@${JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).dependencies.ai}`, lang);
   }
@@ -207,13 +207,11 @@ test('the architecture step shows the current configuration, with the pinned ai 
   }
 });
 
-test('the first step frames Jev as the System One model, with a three-row comparison', () => {
+test('the first step frames Jev as the System One model, in prose only', () => {
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'what');
     const text = step.theory.join(' ');
     assert.ok(text.includes('Kahneman') && text.includes('System One'), lang);
-    assert.equal(step.table?.rows.length, 3, lang);
-    assert.match(step.table.rows[2][0], lang === 'es' ? /Código/ : /Code/, lang);
-    for (const r of step.table.rows) assert.equal(r.length, step.table.head.length + 1, lang);
+    assert.equal(step.table, undefined, lang);
   }
 });
