@@ -48,9 +48,9 @@ const conf = doubt.probabilities[doubt.choice];
 check('paso 7 duda (debajo de 0,8)', conf < 0.8, `${doubt.choice} ${conf.toFixed(2)} < 0.8`);
 
 const guard = (await ask(byId('guard'))).q1;
-check('paso 9 respuesta inventada', guard.probability >= 0.8, `probability ${guard.probability.toFixed(2)}`);
+check('paso 8 respuesta inventada', guard.probability >= 0.8, `probability ${guard.probability.toFixed(2)}`);
 
 const defects = (await ask(byId('defects'))).q1;
-check('paso 10 critica', defects.choice === 'critica', `${defects.choice} ${defects.probabilities[defects.choice].toFixed(2)}`);
+check('paso 9 critica', defects.choice === 'critica', `${defects.choice} ${defects.probabilities[defects.choice].toFixed(2)}`);
 
 process.exit(results.every(Boolean) ? 0 : 1);

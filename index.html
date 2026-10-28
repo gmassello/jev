@@ -52,9 +52,14 @@
   .opt.described { display: grid; grid-template-columns: minmax(6rem, 30%) 1fr auto; }
   .step-nav { display: flex; justify-content: space-between; gap: .8rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
   .step-nav.top { margin: 1rem 0 0; padding: 0 0 1rem; border-top: 0; border-bottom: 1px solid var(--line); }
-  .nav-next { margin-left: auto; }
+  .nav-home { margin-left: auto; }
   #json { margin-top: 1rem; }
-  #json summary { color: var(--accent); }
+  #json summary, #arch summary { color: var(--accent); }
+  #arch { margin-top: 1rem; }
+  .arch { display: flex; flex-direction: column; align-items: stretch; max-width: 32rem; margin-top: .8rem; }
+  .arch-box { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .6rem .8rem; }
+  .arch-box p { margin: .2rem 0 0; color: var(--muted); font-size: var(--fs-sm); line-height: 1.45; }
+  .arch-link { color: var(--muted); font: var(--fs-xs)/1.4 var(--font-mono); padding: .35rem 0 .35rem 1.2rem; }
   .code { position: relative; margin: 0 0 1rem; }
   .code button { position: absolute; top: .5rem; right: .5rem; font-size: var(--fs-xs); padding: .2rem .6rem; }
   .commands { padding-left: 1.4rem; line-height: 1.9; }
@@ -106,8 +111,8 @@
 <main id="view-playground">
 <div class="step-nav top">
   <button class="nav-prev" type="button"></button>
-  <button class="nav-home" type="button"></button>
   <button class="nav-next" type="button"></button>
+  <button class="nav-home" type="button"></button>
 </div>
 <div class="stepper"><span id="step-of"></span><nav id="dots" aria-label="Steps"></nav></div>
 <h2 id="lesson-title" class="lesson-title"></h2>
@@ -129,17 +134,21 @@
     <h3 data-i18n="jsonResponse"></h3>
     <pre id="res"></pre>
   </details>
+  <details id="arch" hidden>
+    <summary data-i18n="archToggle"></summary>
+    <div id="arch-boxes" class="arch"></div>
+  </details>
 </div>
 
 <div class="step-nav">
   <button class="nav-prev" type="button"></button>
-  <button class="nav-home" type="button"></button>
   <button class="nav-next" type="button"></button>
+  <button class="nav-home" type="button"></button>
 </div>
 </main>
 
 <script type="module">
-  import { I18N, resolve, keyOrCredit } from './copy.js';
+  import { I18N, resolve, keyOrCredit, costSplit } from './copy.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -298,6 +307,11 @@
   const renderResults = () => {
     $('results-title').hidden = !lastRun;
     $('json').hidden = !lastRun || Boolean(lastRun.res.local);
+    $('arch').hidden = $('json').hidden;
+    $('arch-boxes').replaceChildren(...t().arch.flatMap(({ name, detail }, i) => [
+      ...(i ? [h('div', { className: 'arch-link', textContent: `↓ ${t().archLinks[i - 1]}` })] : []),
+      h('div', { className: 'arch-box' }, h('strong', { textContent: name }), h('p', { textContent: detail })),
+    ]), h('div', { className: 'arch-link', textContent: `↑ ${t().archBack}` }));
     $('req').textContent = lastRun ? JSON.stringify(lastRun.req, null, 2) : '';
     $('res').textContent = lastRun ? JSON.stringify(lastRun.res, null, 2) : '';
     if (!lastRun) return $('results').replaceChildren();
@@ -313,7 +327,7 @@
         h('h3', { textContent: q.instructions }),
         res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) }), confidenceLine(res.confidence?.[id])] : null)),
       ...(isMulti() ? [h('p', { className: 'explain outro', textContent: t().multiOutro })] : []),
-      ...(res.usage ? [h('p', { className: 'footer', textContent: t().footer({ tokens: res.usage.totalTokens, cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }) })] : []),
+      ...(res.usage ? [h('p', { className: 'footer', textContent: t().footer({ input: res.usage.inputTokens, output: res.usage.outputTokens, ...costSplit(res.usage, res.cost ?? null), cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }) })] : []),
     );
   };
 

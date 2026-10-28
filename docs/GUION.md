@@ -63,7 +63,7 @@ Bloque: Qué es, toma "qué es · paso 6".
 Bloque: Qué es, toma "qué es · paso 7".
 - **Mostrar:** apretar el botón, las barras repartidas, la línea "La elegida tiene N%; la que sigue, «envios», M%" (envíos queda segunda, cerca de un cuarto) y la línea de confianza aparte.
 
-### when — Cuándo usar Jev y cuándo no
+### when — Riesgos antes de producción
 Bloque: Jev y un LLM, toma "cuándo · paso 8".
 - **Mostrar:** la tabla de usos con su ejemplo en el playground, la tabla de riesgos (riesgo, qué puede pasar, qué hacer) y la frase final; los riesgos se narran después, sobre la slide.
 
@@ -71,7 +71,7 @@ Bloque: Jev y un LLM, toma "cuándo · paso 8".
 Bloque: Dónde usarlo, toma "dónde · paso 9".
 - **Mostrar:** la política y la respuesta del bot en el texto, apretar el botón, el sí con 0,98.
 
-### defects — Qué tan grave es este defecto
+### defects — Proponer severidad de un defecto
 Bloque: Dónde usarlo, toma "dónde · paso 10".
 - **Mostrar:** la descripción del defecto, las cuatro severidades, apretar el botón y ver `critica` con más de 0,9.
 

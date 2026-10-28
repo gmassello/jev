@@ -20,7 +20,7 @@ beat	en	es
 0:44 qué es · paso 1	Y lo que es una regla fija, es código.	Y lo que es una regla fija o un cálculo, como si pasaron más de treinta días, no necesita ningún modelo: se escribe en código.
 0:44 qué es · paso 1	Veamos cada tipo de pregunta.	Veamos cada tipo de pregunta, de la más simple a la más completa.
 2:32 qué es · paso 2	La pregunta más simple: sí o no.	La pregunta más simple es la que se responde con sí o no.
-2:32 qué es · paso 2	El texto: un pago con tarjeta que se resolvió.	El texto cuenta que un cliente no podía pagar con su tarjeta, que el agente le explicó cómo actualizarla, y que el pago pasó y el cliente respondió: ¡genial, gracias!
+2:32 qué es · paso 2	El texto: un pago con tarjeta que se resolvió.	El texto cuenta que un cliente no podía pagar con su tarjeta, que el agente le explicó cómo utilizarla, y que el pago pasó y el cliente respondió: ¡genial, gracias!
 2:32 qué es · paso 2	¿Se resolvió el problema del cliente?	La pregunta es: ¿se resolvió el problema del cliente?
 2:32 qué es · paso 2	Aprieto «Preguntarle a Jev».	Aprieto el botón, Preguntarle a Jev.
 2:32 qué es · paso 2	Jev no contesta «sí»: devuelve 0,98.	Jev no contesta con la palabra sí: devuelve un solo número, cero coma noventa y ocho.

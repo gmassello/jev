@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { I18N, resolve, keyOrCredit } from '../copy.js';
+import { I18N, resolve, keyOrCredit, costSplit } from '../copy.js';
 import { readFileSync } from 'node:fs';
 
 const shape = (value) =>
@@ -92,24 +92,12 @@ test('the glossary covers the same terms in es and en, with one definition each'
   for (const term of ['state', 'question', 'criteria', 'score', 'usage']) assert.ok(rows('es').some((r) => r[0] === term) && rows('en').some((r) => r[0] === term), term);
 });
 
-test('the when-to-use step has a uses table with an example from the playground, and no "better with something else" column', () => {
-  for (const lang of ['es', 'en']) {
-    const [uses] = I18N[lang].lessons.find((l) => l.id === 'when').tables;
-    assert.equal(uses.head.length, 2, lang);
-    assert.match(uses.rows[0][0], lang === 'es' ? /Rutear/ : /Routing/, lang);
-    for (const r of uses.rows) assert.equal(r.length, 3, lang);
-  }
-  const rows = (lang) => I18N[lang].lessons.find((l) => l.id === 'when').tables[0].rows.length;
-  assert.equal(rows('es'), rows('en'));
-});
-
-test('the when-to-use step has a risk table: what can happen and what to do, three rows in es and en', () => {
-  const risks = (lang) => I18N[lang].lessons.find((l) => l.id === 'when').tables[1];
+test('the risks step has a risk table: what can happen and what to do, three rows in es and en', () => {
+  const risks = (lang) => I18N[lang].lessons.find((l) => l.id === 'when').tables[0];
   for (const lang of ['es', 'en']) {
     assert.equal(risks(lang).head.length, 3, lang);
     assert.equal(risks(lang).rows.length, 3, lang);
     for (const r of risks(lang).rows) assert.equal(r.length, risks(lang).head.length + 1, lang);
-    assert.ok(risks(lang).caption, lang);
   }
   const [untrusted, firstOption, numbers] = risks('es').rows.map((r) => r[0]);
   assert.match(untrusted, /instrucciones escondidas/);
@@ -124,8 +112,10 @@ test('the architecture and production steps come before the code step, with the 
   }
   const step = (lang, id) => I18N[lang].lessons.find((l) => l.id === id);
   assert.equal(step('es', 'arch').table.rows.length, step('en', 'arch').table.rows.length);
-  assert.equal(step('es', 'prod').list.length, step('en', 'prod').list.length);
-  for (const lang of ['es', 'en']) assert.ok(step(lang, 'prod').list.some((item) => item.includes('jev-1.14.0')), lang);
+  for (const lang of ['es', 'en']) {
+    assert.equal(step(lang, 'prod').list, undefined, lang);
+    assert.ok(step(lang, 'arch').diagram.includes('jev-1.14.0'), lang);
+  }
 });
 
 test('confidence has its own line, separate from the choice explanation', () => {
@@ -136,20 +126,28 @@ test('confidence has its own line, separate from the choice explanation', () => 
   }
 });
 
-test('the footer shows tokens, cost, model and time, with a dash when the cost is missing', () => {
+test('the footer shows input and output tokens with their cost, the total, model and time, with a dash when the cost is missing', () => {
   for (const lang of ['es', 'en']) {
     const t = I18N[lang];
-    const full = t.footer({ tokens: 325, cost: 0.00001365, modelId: 'typesafe-ai/jev-1.14.0', ms: 900 });
-    for (const part of ['325', 'US$', 'typesafe-ai/jev-1.14.0', '900']) assert.ok(full.includes(part), `${lang}: ${part} in ${full}`);
-    const noCost = t.footer({ tokens: 325, cost: null, modelId: 'typesafe-ai/jev', ms: 900 });
+    const full = t.footer({ input: 275, output: 21, inputCost: 1.155e-5, outputCost: 0, cost: 1.155e-5, modelId: 'typesafe-ai/jev-1.14.0', ms: 900 });
+    for (const part of ['275', '21', 'US$', 'total', 'typesafe-ai/jev-1.14.0', '900']) assert.ok(full.includes(part), `${lang}: ${part} in ${full}`);
+    const noCost = t.footer({ input: 275, output: 21, inputCost: null, outputCost: null, cost: null, modelId: 'typesafe-ai/jev', ms: 900 });
     assert.ok(noCost.includes('—') && !noCost.includes('undefined') && !noCost.includes('null'), `${lang}: ${noCost}`);
   }
 });
 
-test('the guardrail step comes right after when-to-use: a yes/no over a policy and a chatbot reply', () => {
+test('costSplit puts the gateway cost on input tokens and the rest on output, from a real call', () => {
+  const { inputCost, outputCost } = costSplit({ inputTokens: 275, outputTokens: 21 }, 1.155e-5);
+  assert.ok(Math.abs(inputCost - 1.155e-5) < 1e-12 && outputCost < 1e-12, `${inputCost} ${outputCost}`);
+  assert.deepEqual(costSplit({ inputTokens: 275, outputTokens: 21 }, null), { inputCost: null, outputCost: null });
+});
+
+test('the guardrail step comes right after doubt and prod and then the risks step right after defects: a yes/no over a policy and a chatbot reply', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
-    assert.equal(ids.indexOf('guard'), ids.indexOf('when') + 1, lang);
+    assert.equal(ids.indexOf('guard'), ids.indexOf('doubt') + 1, lang);
+    assert.equal(ids.indexOf('prod'), ids.indexOf('defects') + 1, lang);
+    assert.equal(ids.indexOf('when'), ids.indexOf('prod') + 1, lang);
     const step = I18N[lang].lessons.find((l) => l.id === 'guard');
     assert.equal(step.kind, 'ask', lang);
     assert.equal(step.question.type, 'boolean', lang);
@@ -207,11 +205,22 @@ test('the architecture step shows the current configuration, with the pinned ai 
   }
 });
 
-test('the first step frames Jev as the System One model, in prose only', () => {
+test('the first step frames Jev as the System One model, with prose and a list of five uses', () => {
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'what');
     const text = step.theory.join(' ');
     assert.ok(text.includes('Kahneman') && text.includes('System One'), lang);
     assert.equal(step.table, undefined, lang);
+    assert.equal(step.list.length, 5, lang);
+  }
+});
+
+test('the architecture dropdown has four boxes joined by three links in both languages', () => {
+  for (const lang of ['es', 'en']) {
+    const { arch, archLinks } = I18N[lang];
+    assert.equal(arch.length, 4, lang);
+    assert.equal(archLinks.length, 3, lang);
+    assert.ok(arch.some((b) => b.name === 'Vercel AI Gateway'), lang);
+    assert.ok(arch.some((b) => b.name.includes('TypeSafe')), lang);
   }
 });

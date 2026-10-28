@@ -40,7 +40,7 @@ Contraste, foco y teclado van a `hackathon-ux-ud-review`, no se miden acá.
 5. **Final**: el slider de umbral (0.5 → 0.95). Debajo, tres números que se recalculan sin volver a llamar a Jev: **Automáticos · A revisión humana · Errores que se automatizarían**. El pie cierra con tickets, segundos y costo en US$ de esa corrida (clave `costFooter`), medidos en vivo. Ese es el número que se lleva el público.
 6. Link al pie: "Así se hace en código →", que abre Docs en `#doc-integrate` (R6). Después viene la consigna del caso propio (R7), que va en el deck.
 
-**Playground (mejoras 2–3).** El mismo flujo de hoy, con el pie de resultados extendido (tiempo · tokens · costo US$), el botón "Ver JSON" al lado del título de resultados y el link "¿Cómo leer esto?". El veredicto pasa a decir "confianza". El Modo avanzado se va porque lo reemplaza "Ver JSON".
+**Playground (mejoras 2–3).** El mismo flujo de hoy, con el pie de resultados extendido (tokens y costo de entrada y de salida · total US$ · tiempo), el botón "Ver JSON" al lado del título de resultados y el link "¿Cómo leer esto?". El veredicto pasa a decir "confianza". El Modo avanzado se va porque lo reemplaza "Ver JSON".
 
 **Header (mejora 4).** Idioma · Tema (claro/oscuro) · Registro (técnico/para dummies) · Modo proyector. El registro arranca en dummies (regla común) y solo cambia la prosa explicativa (intro, ayudas, Docs); los valores medidos, los nombres de campo y el código no cambian.
 
@@ -104,7 +104,7 @@ Modo Mejora sobre la lección paso a paso, contra el `docs/BRIEF.md` reescrito e
 
 1. Una sola página de 11 pasos. Navegación: Anterior, Inicio y Siguiente arriba y abajo (`index.html:318`–`320`); los puntos del stepper son decorativos (`index.html:99`); idioma en un select (`index.html:88`); el paso se recuerda en `localStorage`.
 2. Pasos de teoría: 1 qué es, 8 cuándo usar Jev, 9 proyectos parecidos, 10 glosario. Pasos de práctica: 2 sí/no, 3 opción, 4 escala, 5 opciones con definición, 6 todo junto, 7 cuando Jev duda (umbral 0,8). Paso 11: código para copiar.
-3. En un paso de práctica: texto y pregunta editables, botón "Preguntarle a Jev" que pasa a "Pensando…", resultado con veredicto, barras y explicación; en el paso 7, la línea del umbral; el JSON queda oculto detrás de "Ver el JSON de la llamada".
+3. En un paso de práctica: texto y pregunta editables, botón "Preguntarle a Jev" que pasa a "Pensando…", resultado con veredicto, barras y explicación; en el paso 7, la línea del umbral; el JSON queda oculto detrás de "Ver el JSON de la llamada", y al lado "Ver la arquitectura" muestra en cajas el recorrido navegador → server → Vercel AI Gateway → TypeSafe Jev.
 
 Clics hasta la primera respuesta de Jev: 2 (Empezar y Preguntarle a Jev).
 
