@@ -28,7 +28,7 @@ check('server', html.includes('<title>Jev Playground'), base);
 if (!results[0]) process.exit(1);
 
 const boolean = (await ask(byId('boolean'))).q1;
-check('paso 2 sí con 0,8 o más', boolean.probability >= 0.8, `probability ${boolean.probability.toFixed(2)}`);
+check('paso 2 sí con 0,7 o más', boolean.probability >= 0.7, `probability ${boolean.probability.toFixed(2)}`);
 
 const choice = (await ask(byId('choice'))).q1;
 check('paso 3 estafa', choice.choice === 'Estafa', `${choice.choice} ${choice.probabilities[choice.choice].toFixed(2)}`);
@@ -45,12 +45,27 @@ check('paso 6 tres respuestas', ['reembolso', 'area', 'urgencia'].every((k) => m
 const L7 = byId('doubt');
 const doubt = (await ask(L7)).q1;
 const conf = doubt.probabilities[doubt.choice];
-check('paso 7 duda (debajo de 0,8)', conf < 0.8, `${doubt.choice} ${conf.toFixed(2)} < 0.8`);
+check('paso 7 duda (debajo de 0,7)', conf < 0.7, `${doubt.choice} ${conf.toFixed(2)} < 0.7`);
 
 const guard = (await ask(byId('guard'))).q1;
-check('paso 8 respuesta inventada', guard.probability >= 0.8, `probability ${guard.probability.toFixed(2)}`);
+check('paso 8 respuesta inventada', guard.probability >= 0.7, `probability ${guard.probability.toFixed(2)}`);
 
 const defects = (await ask(byId('defects'))).q1;
 check('paso 9 critica', defects.choice === 'critica', `${defects.choice} ${defects.probabilities[defects.choice].toFixed(2)}`);
+
+for (const [i, name] of ['inyección', 'sumar cantidades'].entries()) {
+  const e = byId('doubt').examples[i + 1];
+  const p = (await ask({ state: e.state, question: e.question })).q1.probability;
+  check(`paso 7 ${name} en duda`, p > 0.3 && p < 0.7, `probability ${p.toFixed(2)}`);
+}
+
+const inj = byId('doubt').examples[1];
+const rewritten = inj.fix.match(/"([^"]+)"/)[1];
+const pFix = (await ask({ state: inj.state, question: { ...inj.question, text: rewritten } })).q1.probability;
+check('paso 7 inyección con la pregunta reescrita da no', pFix <= 0.3, `probability ${pFix.toFixed(2)}`);
+
+const date = byId('doubt').examples[3];
+const pDate = (await ask({ state: date.state, question: date.question })).q1.probability;
+check('paso 7 fecha en el borde: Jev se equivoca (30 días, dice sí)', pDate >= 0.7, `probability ${pDate.toFixed(2)}`);
 
 process.exit(results.every(Boolean) ? 0 : 1);

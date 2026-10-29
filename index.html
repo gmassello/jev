@@ -47,6 +47,8 @@
   #dots button:hover { box-shadow: 0 0 0 2px var(--line); }
   #dots button:hover::after, #dots button:focus-visible::after { content: attr(aria-label); position: absolute; top: calc(100% + .45rem); right: 0; z-index: 1; white-space: nowrap; padding: .25rem .5rem; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: var(--fs-xs); pointer-events: none; }
   .lesson-title { font-size: var(--fs-title); margin: .4rem 0 .8rem; }
+  .type-tag { font: 500 var(--fs-sm)/1.4 var(--font-mono); background: var(--accent-soft); padding: .1rem .45rem; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+  .type-tag.field { display: table; margin: .3rem 0; font-size: var(--fs-xs); }
   .theory p { line-height: 1.6; margin: 0 0 .7rem; }
   #view-playground h3 { font-size: .95rem; margin: 1.4rem 0 .4rem; }
   .opt.described { display: grid; grid-template-columns: minmax(6rem, 30%) 1fr auto; }
@@ -54,8 +56,9 @@
   .step-nav.top { margin: 1rem 0 0; padding: 0 0 1rem; border-top: 0; border-bottom: 1px solid var(--line); }
   .nav-home { margin-left: auto; }
   #json { margin-top: 1rem; }
-  #json summary, #arch summary { color: var(--accent); }
-  #arch { margin-top: 1rem; }
+  #json summary, .detail summary { color: var(--accent); }
+  .detail { margin-top: .4rem; }
+  .detail > summary { margin-bottom: .8rem; }
   .arch { display: flex; flex-direction: column; align-items: stretch; max-width: 32rem; margin-top: .8rem; }
   .arch-box { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .6rem .8rem; }
   .arch-box p { margin: .2rem 0 0; color: var(--muted); font-size: var(--fs-sm); line-height: 1.45; }
@@ -72,6 +75,8 @@
   .hint { color: var(--muted); font-size: .85rem; margin: .3rem 0 0; }
   .error { color: var(--bad); font-size: var(--fs-sm); margin: .4rem 0 0; }
   .link { border: 0; background: none; color: var(--accent); padding: .2rem 0; }
+  .examples { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .examples button.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
   .x { border: 0; background: none; color: var(--muted); font-size: 1.1rem; padding: 0 .4rem; }
   .x:hover { color: var(--bad); }
   #run { display: block; width: 100%; margin-top: 1.2rem; padding: .8rem; font-size: 1.1rem; font-weight: 600; background: var(--accent); color: var(--on-accent); border: 0; }
@@ -87,7 +92,8 @@
   .timer { display: flex; align-items: center; gap: .3rem; margin-left: auto; color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
   .timer button { font-size: var(--fs-xs); padding: .15rem .45rem; border-color: transparent; background: transparent; color: var(--muted); white-space: nowrap; }
   .timer button:hover { border-color: var(--line); color: var(--text); }
-  .footer { color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; margin: .8rem 0 0; }
+  .cost-scale { color: var(--accent); font-weight: 600; font-size: var(--fs-sm); margin: .3rem 0 0; }
+  .footer { color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; margin: .8rem 0 0; white-space: pre-line; line-height: 1.6; }
   .fail { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
   details { margin-top: 2rem; }
   summary { cursor: pointer; color: var(--muted); }
@@ -119,24 +125,21 @@
 <div id="theory" class="theory"></div>
 
 <div id="ask">
-  <h3 data-i18n="step1"></h3>
+  <div id="examples"></div>
+  <h3><span data-i18n="step1"></span> <code class="type-tag">state</code></h3>
   <textarea id="state" rows="3"></textarea>
-  <h3 data-i18n="step2"></h3>
+  <h3><span data-i18n="step2"></span> <code class="type-tag">questions</code></h3>
   <div id="questions"></div>
   <p id="edit-hint" class="hint"></p>
   <button id="run" data-i18n="run"></button>
-  <h3 id="results-title" data-i18n="step3" hidden></h3>
+  <h3 id="results-title" hidden><span data-i18n="step3"></span> <code class="type-tag">answers</code></h3>
   <div id="results"></div>
-  <details id="json" hidden>
+  <details id="json" open hidden>
     <summary data-i18n="jsonToggle"></summary>
     <h3 data-i18n="jsonRequest"></h3>
     <pre id="req"></pre>
     <h3 data-i18n="jsonResponse"></h3>
     <pre id="res"></pre>
-  </details>
-  <details id="arch" hidden>
-    <summary data-i18n="archToggle"></summary>
-    <div id="arch-boxes" class="arch"></div>
   </details>
 </div>
 
@@ -148,7 +151,7 @@
 </main>
 
 <script type="module">
-  import { I18N, resolve, keyOrCredit, costSplit } from './copy.js';
+  import { I18N, resolve, keyOrCredit, costSplit, typeTag } from './copy.js';
 
   const $ = (id) => document.getElementById(id);
   const h = (tag, props = {}, ...kids) => {
@@ -170,10 +173,25 @@
   const entry = () => entryAt(step);
   const current = () => entry().question;
 
+  const renderExamples = () => {
+    const L = lesson();
+    if (!L.examples) return $('examples').replaceChildren();
+    const active = entry().example ?? 0;
+    $('examples').replaceChildren(
+      h('div', { className: 'examples' }, L.examples.map((e, i) => h('button', { type: 'button', className: i === active ? 'on' : '', ariaPressed: String(i === active), textContent: e.label, onclick: () => {
+        byStep[step] = { state: e.state, question: structuredClone(e.question), example: i };
+        runs[step] = null;
+        renderStep();
+      } }))),
+      h('p', { className: 'explain', textContent: L.examples[active].fix }),
+    );
+  };
+
   const renderQuestions = (error) => {
     if (isMulti()) {
       return $('questions').replaceChildren(...lesson().questions.map((q) => h('div', { className: 'card' },
         h('span', { className: 'type-badge', textContent: t().types[q.type] }),
+        h('code', { className: 'type-tag field', textContent: 'instructions' }),
         h('p', { className: 'multi-q', textContent: q.text }),
         q.options.length ? h('p', { className: 'hint', textContent: q.options.join(' · ') }) : null)));
     }
@@ -190,9 +208,10 @@
     );
     $('questions').replaceChildren(h('div', { className: 'card' },
       h('span', { className: 'type-badge', textContent: t().types[q.type] }),
+      h('code', { className: 'type-tag field', textContent: 'instructions' }),
       h('input', { className: 'q-text', value: q.text, placeholder: t().questionPlaceholder, ariaLabel: t().questionPlaceholder, oninput: (e) => { q.text = e.target.value; } }),
       h('p', { className: 'hint', textContent: t().hints[q.type] }),
-      opts,
+      ...(opts ? [h('code', { className: 'type-tag field', textContent: 'criteria' }), opts] : []),
       error ? h('p', { className: 'error', textContent: error }) : null,
     ));
   };
@@ -224,8 +243,8 @@
     $('step-of').textContent = t().stepOf(step + 1, total);
     $('dots').ariaLabel = t().stepsNav;
     $('dots').replaceChildren(...lessons().map((l, i) => h('button', { type: 'button', className: i <= step ? 'on' : '', ariaLabel: `${i + 1}. ${l.title}`, ariaCurrent: i === step ? 'step' : null, onclick: () => go(i) })));
-    $('lesson-title').textContent = L.title;
-    $('theory').replaceChildren(
+    $('lesson-title').replaceChildren(L.title, ...(typeTag(L) ? [' ', h('code', { className: 'type-tag', textContent: typeTag(L) })] : []));
+    const body = [
       ...L.theory.map((p) => h('p', { textContent: p })),
       ...(L.tables ?? (L.table ? [L.table] : [])).flatMap((tbl) => [
         ...(tbl.caption ? [h('p', { textContent: tbl.caption })] : []),
@@ -235,6 +254,10 @@
             h('td', {}, url ? h('a', { href: url, target: '_blank', rel: 'noopener', textContent: name }) : name),
             cells.map((c) => h('td', { textContent: c }))))))),
       ]),
+      ...(L.boxes ? [h('div', { className: 'arch' }, ...t().arch.flatMap(({ name, detail }, i) => [
+        ...(i ? [h('div', { className: 'arch-link', textContent: `↓ ${t().archLinks[i - 1]}` })] : []),
+        h('div', { className: 'arch-box' }, h('strong', { textContent: name }), h('p', { textContent: detail })),
+      ]), h('div', { className: 'arch-link', textContent: `↑ ${t().archBack}` }))] : []),
       ...(L.diagram ? [h('div', { className: 'code' }, h('pre', { textContent: L.diagram }))] : []),
       ...(L.list ? [h('ul', {}, L.list.map((c) => h('li', { textContent: c })))] : []),
       ...(L.commands ? [h('ol', { className: 'commands' }, L.commands.map((c) => h('li', {}, h('code', { textContent: c }))))] : []),
@@ -244,13 +267,17 @@
         } }),
         h('pre', { textContent: L.code }))] : []),
       ...(L.outro ? [h('p', { className: 'explain', textContent: L.outro })] : []),
-    );
+    ];
+    $('theory').replaceChildren(...(L.collapsed
+      ? [h('p', { className: 'hint', textContent: t().detailNote }), h('details', { className: 'detail' }, h('summary', { textContent: t().detailToggle }), ...body)]
+      : body));
     const asks = L.kind === 'ask' || L.kind === 'multi';
     $('ask').hidden = !asks;
     if (asks) {
       $('state').value = entry().state;
       $('edit-hint').textContent = isMulti() ? t().editHintMulti : t().editHint;
       lastRun = runs[step] ?? null;
+      renderExamples();
       renderQuestions();
       renderResults();
     }
@@ -269,8 +296,8 @@
     h('div', { className: 'bar' }, h('i', { style: `width:${pct(p)}%` })),
     h('span', { className: 'pct', textContent: `${pct(p)}%` }));
 
-  const YES_FROM = 0.8;
-  const NO_UP_TO = 0.2;
+  const YES_FROM = 0.7;
+  const NO_UP_TO = 0.3;
   const zone = (p) => (p >= YES_FROM ? 'yes' : p <= NO_UP_TO ? 'no' : 'review');
 
   const renderAnswer = (q, a) => {
@@ -307,11 +334,6 @@
   const renderResults = () => {
     $('results-title').hidden = !lastRun;
     $('json').hidden = !lastRun || Boolean(lastRun.res.local);
-    $('arch').hidden = $('json').hidden;
-    $('arch-boxes').replaceChildren(...t().arch.flatMap(({ name, detail }, i) => [
-      ...(i ? [h('div', { className: 'arch-link', textContent: `↓ ${t().archLinks[i - 1]}` })] : []),
-      h('div', { className: 'arch-box' }, h('strong', { textContent: name }), h('p', { textContent: detail })),
-    ]), h('div', { className: 'arch-link', textContent: `↑ ${t().archBack}` }));
     $('req').textContent = lastRun ? JSON.stringify(lastRun.req, null, 2) : '';
     $('res').textContent = lastRun ? JSON.stringify(lastRun.res, null, 2) : '';
     if (!lastRun) return $('results').replaceChildren();
@@ -328,6 +350,7 @@
         res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) }), confidenceLine(res.confidence?.[id])] : null)),
       ...(isMulti() ? [h('p', { className: 'explain outro', textContent: t().multiOutro })] : []),
       ...(res.usage ? [h('p', { className: 'footer', textContent: t().footer({ input: res.usage.inputTokens, output: res.usage.outputTokens, ...costSplit(res.usage, res.cost ?? null), cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }) })] : []),
+      ...(res.cost != null ? [h('p', { className: 'cost-scale', textContent: t().costScale(res.cost) })] : []),
     );
   };
 

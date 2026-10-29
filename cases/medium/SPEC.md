@@ -25,7 +25,7 @@ Pregunta `team` (`choice`): "¿A qué área va este ticket?" con `facturacion` (
 | 4 | No puedo entrar: me dice que mi correo no está registrado, pero tengo cuenta hace dos años. | cuenta |
 | 5 | Necesito la factura A de mi última compra a nombre de la empresa. | facturacion |
 
-**Ticket ambiguo** (`choice`, "¿A qué área va este ticket?" con `facturacion`, `envios`, `tecnica`, sin definiciones): "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?"
+**Ticket ambiguo** (`choice`, "¿A qué área va este ticket?" con `facturacion`, `envios`, `tecnica`, sin definiciones): "Quiero cancelar el pedido que todavía no llegó y que me devuelvan la plata."
 
 **Mail** (`choice`, "¿Qué tipo de mail es?"): "¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya", con las opciones en dos órdenes: `Trabajo, Personal, Promoción, Estafa` y `Estafa, Trabajo, Personal, Promoción`.
 
@@ -33,16 +33,16 @@ Pregunta `team` (`choice`): "¿A qué área va este ticket?" con `facturacion` (
 - A: "Cliente: ¿hasta cuándo puedo devolver? Asistente: Tenés hasta 90 días para devolverlo, sin ticket." → sí
 - B: "Cliente: ¿hasta cuándo puedo devolver? Asistente: Tenés hasta 30 días desde la compra, con el ticket." → no
 
-Medido el 2026-10-24, 3 corridas: A 0,98/0,98/0,98; B 0,07/0,06/0,07; ambiguo 0,63/0,67/0,66; el mail dio `Estafa` en los dos órdenes.
+Medido el 2026-10-24, 3 corridas: A 0,98/0,98/0,98; B 0,07/0,06/0,07; ambiguo 0,63/0,67/0,66; con el ticket nuevo del 2026-10-29, 0,52/0,51/0,51 (una vez eligió `envios`); el mail dio `Estafa` en los dos órdenes.
 
 ## Ejemplos de aceptación
 - AE1. **Covers R1.** Given los 5 tickets, when se evalúan con concurrencia 5, then las 5 llamadas responden 200 y cada respuesta trae `choice` y `probabilities` con las cuatro opciones.
 - AE2. **Covers R2.** Given las 5 respuestas, then al menos 4 tienen `choice` igual al esperado.
 - AE3. **Covers R3.** Given la tanda, then el tiempo total de punta a punta es menor a 10 s y el costo estimado de entrada (suma de `inputTokens` × US$0.042 / 1.000.000) es menor a US$0.001.
 
-- AE4. **Covers R4.** Given el ticket ambiguo, when se evalúa 3 veces, then en las 3 la probabilidad de la opción elegida es menor a 0,8.
+- AE4. **Covers R4.** Given el ticket ambiguo, when se evalúa 3 veces, then en las 3 la probabilidad de la opción elegida es menor a 0,7.
 - AE5. **Covers R5.** Given el mail, when se evalúa con las opciones en los dos órdenes, then las dos respuestas eligen `Estafa`.
-- AE6. **Covers R6.** Given la política, then con la conversación A la probabilidad de sí es ≥ 0,8 y con la B es ≤ 0,2.
+- AE6. **Covers R6.** Given la política, then con la conversación A la probabilidad de sí es ≥ 0,7 y con la B es ≤ 0,3.
 - AE7. **Covers R7.** Given las 5 respuestas de la tanda, then cada una trae `cost` (número ≥ 0, en US$) y la suma es menor a US$0,001.
 
 ## Contrato de runtime

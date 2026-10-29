@@ -21,7 +21,7 @@ Es la entrega que se juzga: la lección del playground, el snippet, el guion del
 - **Guion:** `video/script.tsv` (`beat`, `en` = subtítulo, `es` = lo que se dice) y `docs/GUION.md`, con un encabezado `### <id del paso>` por paso, en el orden de `copy.js`; los pasos del video llevan una línea `Bloque:` y el resto una `Fuera del video:`.
 
 ## Ejemplos de aceptación
-- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 15 pasos con los mismos `id` en el mismo orden, y entre ellos están los 10 pasos del video.
+- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 15 pasos con los mismos `id` en el mismo orden, y entre ellos están los 9 pasos del video.
 - AE2. **Covers R15.** Given el paso `code`, then su campo `code` importa `experimental_decide` y no contiene `experimental_evaluate`.
 - AE3. **Covers R20.** Given `docs/GUION.md`, then hay un `### <id>` por cada paso de `copy.js`, en el mismo orden, cada paso del video con su línea `Bloque:` y el resto con `Fuera del video:`; y la columna `es` de `video/script.tsv` suma entre 2.700 y 3.100 palabras.
 - AE4. **Covers R8.** Given `docs/deck.html`, then contiene el título de la charla, y existe `docs/deck.pdf` no vacío.

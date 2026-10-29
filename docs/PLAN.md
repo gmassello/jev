@@ -129,14 +129,14 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - error: sin `AI_GATEWAY_API_KEY` → falla con el mensaje de autenticación del gateway, no con un stack trace mudo.
 
 ### U11. Lección guiada de 13 pasos
-- **Goal:** el playground es una lección paso a paso, bilingüe, con un tema y un tipo de respuesta por paso: qué es, sí/no, opción, escala, opciones con definición, todo junto, cuando Jev duda (umbral 0,8), cuándo usarlo, proyectos parecidos, glosario, arquitectura, Jev en tu sistema y código; reemplaza al desafío.
+- **Goal:** el playground es una lección paso a paso, bilingüe, con un tema y un tipo de respuesta por paso: qué es, sí/no, opción, escala, opciones con definición, todo junto, cuando Jev duda (umbral 0,7), cuándo usarlo, proyectos parecidos, glosario, arquitectura, Jev en tu sistema y código; reemplaza al desafío.
 - **Covers:** R11, R12, R13, R14, R19 · F5
 - **Files:** `index.html`, `copy.js`, `tests/copy.test.js`, `scripts/demo-check.mjs`
 - **Depends on:** U1
 - **Status:** done
 - **Tests:**
   - happy: un paso de práctica → "Preguntarle a Jev" muestra la respuesta, la probabilidad de cada opción y la explicación (verificado en Chrome con llamadas reales). Covers AE7.
-  - happy: el paso "Cuando Jev duda" → `node scripts/demo-check.mjs --check` lo da por debajo de 0,8 con el aviso de revisión humana. Covers AE8.
+  - happy: el paso "Cuando Jev duda" → `node scripts/demo-check.mjs --check` lo da por debajo de 0,7 con el aviso de revisión humana. Covers AE8.
   - happy: los pasos de arquitectura y producción → el test de forma exige las tres opciones, la compuerta y la versión fija `jev-1.14.0` en el diagrama de arquitectura, en es y en. Covers AE12.
   - edge: un idioma con una clave o un paso de menos → el test de paridad falla.
 
@@ -183,7 +183,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - error: sin `AI_GATEWAY_API_KEY` → el snippet falla con el mensaje de autenticación del gateway.
 
 ### U16. Riesgos en "Cuándo usar Jev"
-- **Goal:** el paso "Cuándo usar Jev y cuándo no" suma tres riesgos para producción: el texto que entra no es de confianza, Jev prefiere la primera opción, y números, fechas y conteos se resuelven en código.
+- **Goal:** el paso "Cuando Jev duda" (desde el 2026-10-29 unido con el de riesgos) muestra tres riesgos con un ejemplo que se corre en vivo: instrucciones escondidas, sumar cantidades y fechas en el borde. La primera opción salió el 2026-10-29 porque no se reprodujo con Jev real.
 - **Covers:** R17 · F5
 - **Files:** `copy.js`, `tests/copy.test.js`
 - **Depends on:** U11
@@ -198,7 +198,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 - **Depends on:** U11
 - **Status:** done
 - **Tests:**
-  - happy: el ejemplo con un dato inventado → Jev dice que sí con 0,8 o más, verificado por `demo-check`.
+  - happy: el ejemplo con un dato inventado → Jev dice que sí con 0,7 o más, verificado por `demo-check`.
   - edge: el ejemplo de inyección → se mide 3 veces antes de sumarlo; si no mueve la respuesta, no entra.
 
 ### U18. Errores del gateway en lenguaje llano

@@ -28,9 +28,9 @@ TICKETS = [
 ]
 QUESTION = {"team": {"type": "choice", "instructions": "¿A qué área va este ticket?", "criteria": TEAMS}}
 
-DOUBT = "La app me tiró error al pagar y no sé si me cobraron. ¿Me llegó el pedido o no?"
+DOUBT = "Quiero cancelar el pedido que todavía no llegó y que me devuelvan la plata."
 DOUBT_Q = {"type": "choice", "instructions": "¿A qué área va este ticket?", "criteria": {"facturacion": None, "envios": None, "tecnica": None}}
-THRESHOLD = 0.8
+THRESHOLD = 0.7
 MAIL = "¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya"
 MAIL_ORDERS = [["Trabajo", "Personal", "Promoción", "Estafa"], ["Estafa", "Trabajo", "Personal", "Promoción"]]
 POLICY = "Política de la tienda: las devoluciones se aceptan hasta 30 días después de la compra, con el ticket."

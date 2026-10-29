@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { I18N, resolve, keyOrCredit, costSplit } from '../copy.js';
+import { I18N, resolve, keyOrCredit, costSplit, typeTag } from '../copy.js';
 import { readFileSync } from 'node:fs';
 
 const shape = (value) =>
@@ -79,7 +79,7 @@ test('the code step gives three commands and a runnable evaluate call with a 0.9
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'code');
     assert.equal(step.commands.length, 3, lang);
-    for (const part of ['experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.8']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
+    for (const part of ['experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.7']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
     assert.ok(!step.code.includes('experimental_evaluate'), `${lang}: deprecated experimental_evaluate`);
     assert.equal(step.commands[0], `npm i ai@${JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).dependencies.ai}`, lang);
   }
@@ -92,17 +92,18 @@ test('the glossary covers the same terms in es and en, with one definition each'
   for (const term of ['state', 'question', 'criteria', 'score', 'usage']) assert.ok(rows('es').some((r) => r[0] === term) && rows('en').some((r) => r[0] === term), term);
 });
 
-test('the risks step has a risk table: what can happen and what to do, three rows in es and en', () => {
-  const risks = (lang) => I18N[lang].lessons.find((l) => l.id === 'when').tables[0];
+test('the doubt step is a practice step with four runnable examples, ambiguous text first, each with what to do', () => {
   for (const lang of ['es', 'en']) {
-    assert.equal(risks(lang).head.length, 3, lang);
-    assert.equal(risks(lang).rows.length, 3, lang);
-    for (const r of risks(lang).rows) assert.equal(r.length, risks(lang).head.length + 1, lang);
+    const step = I18N[lang].lessons.find((l) => l.id === 'doubt');
+    assert.equal(step.kind, 'ask', lang);
+    assert.ok(!I18N[lang].lessons.some((l) => l.id === 'when'), lang);
+    assert.equal(step.examples.length, 4, lang);
+    assert.equal(step.examples[0].question.type, 'choice', lang);
+    for (const e of step.examples) for (const k of ['label', 'state', 'question', 'fix']) assert.ok(e[k], `${lang}: ${k}`);
+    assert.equal(step.state, step.examples[0].state, lang);
+    assert.deepEqual(step.question, step.examples[0].question, lang);
   }
-  const [untrusted, firstOption, numbers] = risks('es').rows.map((r) => r[0]);
-  assert.match(untrusted, /instrucciones escondidas/);
-  assert.match(firstOption, /primera opción/);
-  assert.match(numbers, /Hacer cuentas/);
+  assert.ok(!JSON.stringify(I18N.es.lessons.find((l) => l.id === 'doubt')).includes('primera opción'));
 });
 
 test('the architecture and production steps come before the code step, with the same shape in es and en', () => {
@@ -130,9 +131,15 @@ test('the footer shows input and output tokens with their cost, the total, model
   for (const lang of ['es', 'en']) {
     const t = I18N[lang];
     const full = t.footer({ input: 275, output: 21, inputCost: 1.155e-5, outputCost: 0, cost: 1.155e-5, modelId: 'typesafe-ai/jev-1.14.0', ms: 900 });
-    for (const part of ['275', '21', 'US$', 'total', 'typesafe-ai/jev-1.14.0', '900']) assert.ok(full.includes(part), `${lang}: ${part} in ${full}`);
+    for (const part of ['275', '21', 'US$', 'Total', 'typesafe-ai/jev-1.14.0', '900']) assert.ok(full.includes(part), `${lang}: ${part} in ${full}`);
+    const lines = full.split('\n');
+    assert.equal(lines.length, 5, lang);
+    assert.match(lines[0], { es: /^Tokens de entrada: 275/, en: /^Input tokens: 275/ }[lang]);
+    assert.match(lines[1], { es: /^Tokens de salida: 21/, en: /^Output tokens: 21/ }[lang]);
+    assert.ok(!full.includes('llamadas') && !full.includes('calls'), `${lang}: ${full}`);
+    assert.equal(t.costScale(1.155e-5), { es: '10.000 llamadas como esta: US$0,115', en: '10,000 calls like this one: US$0.115' }[lang]);
     const noCost = t.footer({ input: 275, output: 21, inputCost: null, outputCost: null, cost: null, modelId: 'typesafe-ai/jev', ms: 900 });
-    assert.ok(noCost.includes('—') && !noCost.includes('undefined') && !noCost.includes('null'), `${lang}: ${noCost}`);
+    assert.ok(noCost.includes('—') && !noCost.includes('undefined') && !noCost.includes('null') && !noCost.includes('llamadas') && !noCost.includes('calls'), `${lang}: ${noCost}`);
   }
 });
 
@@ -142,12 +149,11 @@ test('costSplit puts the gateway cost on input tokens and the rest on output, fr
   assert.deepEqual(costSplit({ inputTokens: 275, outputTokens: 21 }, null), { inputCost: null, outputCost: null });
 });
 
-test('the guardrail step comes right after doubt and prod and then the risks step right after defects: a yes/no over a policy and a chatbot reply', () => {
+test('the guardrail step comes right after doubt and prod right after defects: a yes/no over a policy and a chatbot reply', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
     assert.equal(ids.indexOf('guard'), ids.indexOf('doubt') + 1, lang);
     assert.equal(ids.indexOf('prod'), ids.indexOf('defects') + 1, lang);
-    assert.equal(ids.indexOf('when'), ids.indexOf('prod') + 1, lang);
     const step = I18N[lang].lessons.find((l) => l.id === 'guard');
     assert.equal(step.kind, 'ask', lang);
     assert.equal(step.question.type, 'boolean', lang);
@@ -215,6 +221,13 @@ test('the first step frames Jev as the System One model, with prose and a list o
   }
 });
 
+test('the last four steps start collapsed behind a details toggle that points to the PDF', () => {
+  for (const lang of ['es', 'en']) {
+    assert.deepEqual(I18N[lang].lessons.filter((l) => l.collapsed).map((l) => l.id), ['similar', 'glossary', 'arch', 'code'], lang);
+    assert.ok(I18N[lang].detailToggle && /PDF/.test(I18N[lang].detailNote), lang);
+  }
+});
+
 test('the architecture dropdown has four boxes joined by three links in both languages', () => {
   for (const lang of ['es', 'en']) {
     const { arch, archLinks } = I18N[lang];
@@ -222,5 +235,28 @@ test('the architecture dropdown has four boxes joined by three links in both lan
     assert.equal(archLinks.length, 3, lang);
     assert.ok(arch.some((b) => b.name === 'Vercel AI Gateway'), lang);
     assert.ok(arch.some((b) => b.name.includes('TypeSafe')), lang);
+    assert.deepEqual(I18N[lang].lessons.filter((l) => l.boxes).map((l) => l.id), ['flow'], lang);
+    assert.equal(I18N[lang].lessons.findIndex((l) => l.id === 'flow'), 1, lang);
+    assert.ok(!I18N[lang].lessons.some((l) => l.arch) && !('archToggle' in I18N[lang]), lang);
+  }
+});
+
+test('each part of a practice step shows the field name it has in the call', () => {
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  for (const [key, field] of [['step1', 'state'], ['step2', 'questions'], ['step3', 'answers']]) {
+    assert.match(html, new RegExp(`data-i18n="${key}"></span> <code class="type-tag">${field}</code>`), key);
+  }
+  for (const field of ['instructions', 'criteria']) assert.ok(html.includes(`className: 'type-tag field', textContent: '${field}'`), field);
+});
+
+test('practice steps show the question type next to the title, taken from the question itself', () => {
+  const want = {
+    boolean: '"type": "boolean"', choice: '"type": "choice"', score: '"type": "score"',
+    criteria: '"type": "choice" + criteria', multi: 'boolean · choice · score',
+    guard: '"type": "boolean"', defects: '"type": "choice" + criteria',
+  };
+  for (const lang of ['es', 'en']) {
+    const tags = Object.fromEntries(I18N[lang].lessons.map((l) => [l.id, typeTag(l)]).filter(([, tag]) => tag));
+    assert.deepEqual(tags, want, lang);
   }
 });

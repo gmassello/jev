@@ -22,7 +22,7 @@ Estado del codigo en una linea: <N tests verdes, que esta hecho, que falta>.
 | PR upstream | #<n> | | |
 | Segundo checkout | `~/<ruta>` rama `<rama>` | | |
 | Video | `<id>` | | |
-| Deck | `docs/deck.pdf` sha256 `397d771ffa4f` | ok, 11 slides de 1920×1080 (impacto y dónde usarlo; portada en vivo), umbral 0,8 | 2026-10-27 |
+| Deck | `docs/deck.pdf` sha256 `935b4f5b4bb3` | ok, 11 slides de 1920×1080 (impacto y dónde usarlo; portada en vivo), umbral 0,7 (el que sugiere TypeSafe), ticket ambiguo nuevo, riesgos sin la primera opción | 2026-10-29 |
 
 ## Hechos duplicados
 
