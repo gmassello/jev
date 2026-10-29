@@ -5,8 +5,8 @@ import sys
 import time
 from pathlib import Path
 
-VIDEO = ["what", "boolean", "choice", "score", "criteria", "multi", "doubt", "guard", "defects", "similar", "glossary", "arch", "prod", "code"]
-STEPS = 15
+VIDEO = ["what", "boolean", "choice", "score", "criteria", "multi", "doubt", "guard", "defects", "similar", "fields"]
+STEPS = 12
 SPOKEN_WORDS = (2700, 3100)
 TITLE = "Evaluar con Jev: de una pregunta cerrada a una decisión con probabilidad"
 MAX_VIDEO_SECONDS = 1260
@@ -34,9 +34,9 @@ def check_lesson_steps(root):
 
 
 def check_snippet_current_api(root):
-    code = next((l for l in lessons(root)["es"] if l["id"] == "code"), {}).get("code", "")
-    expect("experimental_decide" in code, "the code step does not use experimental_decide")
-    expect("experimental_evaluate" not in code, "the code step still uses experimental_evaluate")
+    code = (root / "README.md").read_text()
+    expect("experimental_decide" in code, "the README snippet does not use experimental_decide")
+    expect("experimental_evaluate" not in code, "the README snippet still uses experimental_evaluate")
 
 
 def check_guion(root):

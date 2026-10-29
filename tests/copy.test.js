@@ -75,21 +75,11 @@ test('the similar-projects step has the same rows and links in es and en, led by
   assert.deepEqual(es.rows.slice(0, 2).map((r) => r[0]), ['Cloudflare Clef', 'AWS Strands Decider 2B']);
 });
 
-test('the code step gives three commands and a runnable evaluate call with a 0.9 threshold', () => {
-  for (const lang of ['es', 'en']) {
-    const step = I18N[lang].lessons.find((l) => l.id === 'code');
-    assert.equal(step.commands.length, 3, lang);
-    for (const part of ['experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.7']) assert.ok(step.code.includes(part), `${lang}: ${part}`);
-    assert.ok(!step.code.includes('experimental_evaluate'), `${lang}: deprecated experimental_evaluate`);
-    assert.equal(step.commands[0], `npm i ai@${JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).dependencies.ai}`, lang);
-  }
-});
-
-test('the glossary covers the same terms in es and en, with one definition each', () => {
-  const rows = (lang) => I18N[lang].lessons.find((l) => l.id === 'glossary').table.rows;
-  assert.equal(rows('es').length, rows('en').length);
-  assert.deepEqual(rows('es').map((r) => r.length), rows('en').map((r) => r.length));
-  for (const term of ['state', 'question', 'criteria', 'score', 'usage']) assert.ok(rows('es').some((r) => r[0] === term) && rows('en').some((r) => r[0] === term), term);
+test('the README snippet installs the pinned ai and makes a runnable decide call with the 0.7 threshold', () => {
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  const pinned = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).dependencies.ai;
+  for (const part of ['## Use it in your code', `npm i ai@${pinned}`, 'experimental_decide', "model: 'typesafe-ai/jev'", '>= 0.7']) assert.ok(readme.includes(part), part);
+  assert.ok(!readme.includes('experimental_evaluate'));
 });
 
 test('the doubt step is a practice step with four runnable examples, ambiguous text first, each with what to do', () => {
@@ -106,16 +96,10 @@ test('the doubt step is a practice step with four runnable examples, ambiguous t
   assert.ok(!JSON.stringify(I18N.es.lessons.find((l) => l.id === 'doubt')).includes('primera opción'));
 });
 
-test('the architecture and production steps come before the code step, with the same shape in es and en', () => {
+test('the architecture, production and code steps are gone', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
-    assert.ok(ids.indexOf('arch') < ids.indexOf('code') && ids.indexOf('prod') < ids.indexOf('code'), lang);
-  }
-  const step = (lang, id) => I18N[lang].lessons.find((l) => l.id === id);
-  assert.equal(step('es', 'arch').table.rows.length, step('en', 'arch').table.rows.length);
-  for (const lang of ['es', 'en']) {
-    assert.equal(step(lang, 'prod').list, undefined, lang);
-    assert.ok(step(lang, 'arch').diagram.includes('jev-1.14.0'), lang);
+    assert.ok(!ids.includes('arch') && !ids.includes('prod') && !ids.includes('code'), lang);
   }
 });
 
@@ -149,11 +133,10 @@ test('costSplit puts the gateway cost on input tokens and the rest on output, fr
   assert.deepEqual(costSplit({ inputTokens: 275, outputTokens: 21 }, null), { inputCost: null, outputCost: null });
 });
 
-test('the guardrail step comes right after doubt and prod right after defects: a yes/no over a policy and a chatbot reply', () => {
+test('the guardrail step comes right after doubt: a yes/no over a policy and a chatbot reply', () => {
   for (const lang of ['es', 'en']) {
     const ids = I18N[lang].lessons.map((l) => l.id);
     assert.equal(ids.indexOf('guard'), ids.indexOf('doubt') + 1, lang);
-    assert.equal(ids.indexOf('prod'), ids.indexOf('defects') + 1, lang);
     const step = I18N[lang].lessons.find((l) => l.id === 'guard');
     assert.equal(step.kind, 'ask', lang);
     assert.equal(step.question.type, 'boolean', lang);
@@ -200,15 +183,7 @@ test('defects comes right after guard: a choice with four defined options, and t
       assert.equal(step.question.descriptions.length, 4, `${lang} ${id}`);
     }
   }
-  assert.equal(I18N.es.lessons.length, 15);
-});
-
-test('the architecture step shows the current configuration, with the pinned ai version', () => {
-  const { dependencies } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-  for (const lang of ['es', 'en']) {
-    const diagram = I18N[lang].lessons.find((l) => l.id === 'arch').diagram ?? '';
-    for (const part of [`ai ${dependencies.ai}`, 'experimental_decide', 'AI_GATEWAY_API_KEY', 'JEV_MODEL', 'typesafe-ai/jev']) assert.ok(diagram.includes(part), `${lang}: ${part}`);
-  }
+  assert.equal(I18N.es.lessons.length, 12);
 });
 
 test('the first step frames Jev as the System One model, with prose and a list of five uses', () => {
@@ -221,9 +196,9 @@ test('the first step frames Jev as the System One model, with prose and a list o
   }
 });
 
-test('the last four steps start collapsed behind a details toggle that points to the PDF', () => {
+test('only the similar projects step starts collapsed behind a details toggle that points to the PDF', () => {
   for (const lang of ['es', 'en']) {
-    assert.deepEqual(I18N[lang].lessons.filter((l) => l.collapsed).map((l) => l.id), ['similar', 'glossary', 'arch', 'code'], lang);
+    assert.deepEqual(I18N[lang].lessons.filter((l) => l.collapsed).map((l) => l.id), ['similar'], lang);
     assert.ok(I18N[lang].detailToggle && /PDF/.test(I18N[lang].detailNote), lang);
   }
 });
@@ -238,6 +213,18 @@ test('the architecture dropdown has four boxes joined by three links in both lan
     assert.deepEqual(I18N[lang].lessons.filter((l) => l.boxes).map((l) => l.id), ['flow'], lang);
     assert.equal(I18N[lang].lessons.findIndex((l) => l.id === 'flow'), 1, lang);
     assert.ok(!I18N[lang].lessons.some((l) => l.arch) && !('archToggle' in I18N[lang]), lang);
+  }
+});
+
+test('the fields step comes right before similar projects, which is last, and names every request and response field', () => {
+  for (const lang of ['es', 'en']) {
+    const L = I18N[lang].lessons;
+    assert.deepEqual(L.slice(-2).map((l) => l.id), ['fields', 'similar'], lang);
+    assert.ok(!L.some((l) => l.id === 'glossary'), lang);
+    const other = I18N[lang === 'es' ? 'en' : 'es'].lessons.find((l) => l.id === 'fields');
+    assert.deepEqual(L.find((l) => l.id === 'fields').tables.map((t) => t.rows.length), other.tables.map((t) => t.rows.length), lang);
+    const names = L.find((l) => l.id === 'fields').tables.flatMap((t) => t.rows.map(([n]) => n));
+    for (const f of ['state', 'questions', 'instructions', 'criteria', 'answers', 'probability', 'probabilities', 'usage', 'warnings', 'modelId', 'ms', 'confidence', 'cost']) assert.ok(names.includes(f), `${lang}: ${f}`);
   }
 });
 

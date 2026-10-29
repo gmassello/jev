@@ -4,3 +4,5 @@ video/out/
 video/*.mov
 video/*.mp4
 __pycache__/
+video/*.log
+.DS_Store

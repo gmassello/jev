@@ -137,7 +137,7 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
 - **Tests:**
   - happy: un paso de práctica → "Preguntarle a Jev" muestra la respuesta, la probabilidad de cada opción y la explicación (verificado en Chrome con llamadas reales). Covers AE7.
   - happy: el paso "Cuando Jev duda" → `node scripts/demo-check.mjs --check` lo da por debajo de 0,7 con el aviso de revisión humana. Covers AE8.
-  - happy: los pasos de arquitectura y producción → el test de forma exige las tres opciones, la compuerta y la versión fija `jev-1.14.0` en el diagrama de arquitectura, en es y en. Covers AE12.
+  - happy: el paso 2 y el de código → los tests exigen las cuatro cajas del recorrido y el umbral del código, en es y en. Covers AE12.
   - edge: un idioma con una clave o un paso de menos → el test de paridad falla.
 
 ### U12. Saltar a un paso
@@ -172,13 +172,13 @@ Al terminar, la charla son unos 20 minutos en vivo sobre el playground (qué es,
   - error: sin costo en la respuesta → el pie muestra "—".
 
 ### U15. API vigente del AI SDK
-- **Goal:** `ai` sube a 7.0.153 en versión exacta y el server, el snippet del último paso y `demo-check` usan `experimental_decide`.
+- **Goal:** `ai` sube a 7.0.153 en versión exacta y el server, el snippet del README y `demo-check` usan `experimental_decide`.
 - **Covers:** R6, R15 · F3
 - **Files:** `package.json`, `package-lock.json`, `server.js`, `copy.js`, `scripts/demo-check.mjs`
 - **Depends on:** U11
 - **Status:** done
 - **Tests:**
-  - happy: el snippet copiado del último paso, con la key, corrido con node → imprime "Rutear a cuenta". Covers AE9.
+  - happy: el snippet del README, con la key, corrido con node → imprime "Route to account". Covers AE9.
   - happy: `npm test`, `python3 cases/small/checks.py` y `demo-check` → en verde con la versión nueva.
   - error: sin `AI_GATEWAY_API_KEY` → el snippet falla con el mensaje de autenticación del gateway.
 

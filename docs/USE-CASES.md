@@ -8,7 +8,7 @@ El sistema es el playground local (`index.html` + `copy.js` + `server.js` → AI
 
 | IDs | Funcionalidad | Actor | Prioridad (PLAN) | Criterio | ¿Se ve en el video? |
 |---|---|---|---|---|---|
-| R11, R12, R13, R14, R19 · F5 | Lección guiada de 15 pasos: el camino de una pregunta en cajas, práctica con llamadas reales, caso que duda con sus riesgos, Jev revisa a un LLM, el caso del equipo, parecidos, glosario, arquitectura y producción | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
+| R11, R12, R13, R14, R19 · F5 | Lección guiada de 12 pasos: el camino de una pregunta en cajas, práctica con llamadas reales, caso que duda con sus riesgos, Jev revisa a un LLM, el caso del equipo, parecidos y los campos de la llamada y de la respuesta | A1, A2 | must (U11, done) | Entienden qué es Jev y qué no; Costo y riesgos claros; Pueden integrarlo solos | Sí: es el recorrido |
 | R11 · F5 | Saltar a un paso para grabar cada toma del video | A1 | must (U12, done) | Entienden qué es Jev y qué no | No |
 | R11 · F5 | Caso del equipo: qué tan grave es un defecto | A1, A2 | must (U22, done) | Detectan un caso propio | Sí: "dónde usarlo" |
 | R16 · F5 | Probabilidad por opción, confianza de TypeSafe y costo de la llamada | A1, A2 | must (U14, done) | Costo y riesgos claros | Sí: el paso que duda |
@@ -35,29 +35,29 @@ Estado inicial para grabar: `PORT=3001 npm start` con `AI_GATEWAY_API_KEY` carga
 3. Paso 7, "Cuando Jev duda": los ejemplos de instrucciones escondidas, sumar cantidades y fechas en el borde.
 4. Impacto: slides antes y después, costo cada 1000 tickets y riesgos.
 5. Dónde usarlo: repaso del paso 5, paso 8 (el bot que inventa), paso 9 (el defecto crítico) y la slide de los tres casos.
-6. Paso 14, "Llevalo a tu código", con el snippet listo para copiar.
+6. El snippet del README (`## Use it in your code`), listo para copiar; el paso "Llevalo a tu código" se sacó el 2026-10-29.
 7. Consigna y cierre; después, preguntas en vivo.
 
 Criterios de aceptación:
 - AE7. Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla. — **How it is proven:** `node scripts/demo-check.mjs --check` (respuestas de los pasos 2 a 7) + `screenshot` de un paso de práctica.
 - AE8. Given el paso "Cuando Jev duda", when se pregunta, then la probabilidad de la opción elegida queda por debajo de 0,7 y las barras muestran el reparto entre opciones. — **How it is proven:** `node scripts/demo-check.mjs --check` (una corrida) + `python3 cases/medium/checks.py http://localhost:3001` (`check_doubt_stable`, tres corridas) + `screenshot` de las barras y la línea "la que sigue".
 - AE11. Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos. — **How it is proven:** `python3 cases/small/checks.py http://localhost:3001` (`check_confidence_and_cost`) + `screenshot` del paso 7.
-- AE12. Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la versión fija del modelo. — **How it is proven:** `npm test` (test de forma de `arch` y `prod`) + `screenshot` de los dos pasos.
+- AE12. Given el paso 2 y el snippet del README, then se ven el recorrido navegador → server → AI Gateway → Jev y el umbral que decide entre automatizar y revisión humana. — **How it is proven:** `npm test` (cajas del paso 2 y umbral del snippet del README) + `screenshot` del paso 2. Los pasos "Jev en tu sistema" y "Cómo está armado este playground" (las tres opciones y la versión fija) se sacaron el 2026-10-29.
 - AE10. Given el video final, then dura 21 minutos o menos. — **How it is proven:** `python3 cases/large/checks.py .` (`check_video`, falla hasta U9).
 - AE13. Given el guion, then la columna hablada de `video/script.tsv` suma entre 2.700 y 3.100 palabras, y `docs/GUION.md` tiene una entrada por cada paso de la lección, en el mismo orden, que dice en qué bloque del video aparece o que queda fuera. — **How it is proven:** `python3 cases/large/checks.py .` (`check_script` y `check_guion`).
 
 ### F3. De la charla al código — R6, R7, R15, R18
 
-Estado inicial: el navegador en el paso 14, con la key en el entorno de quien copia el snippet.
+Estado inicial: el README abierto, con la key en el entorno de quien copia el snippet.
 
-1. El asistente copia el snippet con el botón Copiar y lo guarda como `jev.mjs`.
-2. Corre `npm i ai@<versión del paso>` y `node jev.mjs`.
+1. El asistente copia el snippet del README y lo guarda como `jev.mjs`.
+2. Corre `npm i ai@<versión del README>` y `node jev.mjs`.
 3. La consola imprime la decisión de ruteo.
 4. (should, U17) El presentador muestra a Jev revisando la respuesta de un chatbot contra una política.
 5. La consigna pide nombrar un caso propio.
 
 Criterios de aceptación:
-- AE9. Given el snippet copiado del último paso (hoy, el 14) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-24 con `experimental_decide` y `ai@7.0.153`; sin la key falla con `GatewayAuthenticationError`) + `python3 cases/large/checks.py .` (`check_snippet_current_api`).
+- AE9. Given el snippet del README y la key en el entorno, when se corre con node, then imprime "Route to account". — **How it is proven:** `node jev.mjs` con el snippet copiado (verificado el 2026-10-24 con `experimental_decide` y `ai@7.0.153`; sin la key falla con `GatewayAuthenticationError`) + `python3 cases/large/checks.py .` (`check_snippet_current_api`).
 - proposed: Given una política de devoluciones de 30 días, then Jev marca la respuesta "90 días" como inventada (≥ 0,9) y la de "30 días" como fiel (≤ 0,1). — **How it is proven:** `python3 cases/medium/checks.py http://localhost:3001` (`check_guardrail_pair`). Sin ID: se puede sumar al BRIEF con `hackathon-brainstorm --revisar`.
 
 ## Test cases
@@ -97,8 +97,8 @@ Correr: `python3 cases/medium/checks.py http://localhost:3001` (12 llamadas real
 
 | Layer | Criterion | How it is proven |
 |---|---|---|
-| Producto | 15 pasos con los mismos ids en es y en, incluidos los 9 del video | `check_lesson_steps` |
-| Producto | El snippet usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
+| Producto | 12 pasos con los mismos ids en es y en, incluidos los 9 del video | `check_lesson_steps` |
+| Producto | El snippet del README usa `experimental_decide` y no `experimental_evaluate` | `check_snippet_current_api` |
 | Producto | El guion ubica cada paso en un bloque del video o fuera de él | `check_guion` |
 | Producto | La narración suma entre 2.700 y 3.100 palabras (~20 min) | `check_script` |
 | Producto | El deck lleva el título de la charla y existe en PDF | `check_deck` |

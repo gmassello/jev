@@ -16,12 +16,12 @@ Estado del codigo en una linea: <N tests verdes, que esta hecho, que falta>.
 | Superficie | Donde | Estado | Verificado |
 |---|---|---|---|
 | Repo y CI | `<owner>/<repo>` @ `<sha>` | | |
-| Sitio | https://jev-514702007876.us-central1.run.app (pide clave: `gcloud secrets versions access latest --secret jev-access --project jev-playground-2610`) | ok, 401 sin clave; caso chico 7/7 con clave | 2026-10-26 |
+| Sitio | https://jev-514702007876.us-central1.run.app (pide clave: `gcloud secrets versions access latest --secret jev-access --project jev-playground-2610`) | ok, revisión jev-00002-sr6 (commit c5980a6): 401 sin clave; con clave, título y copy nuevo; caso chico 7/7 | 2026-10-29 |
 | Submission | <URL publica, no /edit> | | |
 | Tarjeta en la galeria | <URL de la galeria> | | |
 | PR upstream | #<n> | | |
 | Segundo checkout | `~/<ruta>` rama `<rama>` | | |
-| Video | `<id>` | | |
+| Video | https://youtu.be/02vD79jJD0M (los 12 pasos, 7:46, voz sintética Diego; subtítulos es y en) | ok, público; oEmbed 200 | 2026-10-29 |
 | Deck | `docs/deck.pdf` sha256 `935b4f5b4bb3` | ok, 11 slides de 1920×1080 (impacto y dónde usarlo; portada en vivo), umbral 0,7 (el que sugiere TypeSafe), ticket ambiguo nuevo, riesgos sin la primera opción | 2026-10-29 |
 
 ## Hechos duplicados

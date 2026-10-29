@@ -45,26 +45,26 @@ Investigado el 2026-10-24.
 - R3. **Para después.** Una pregunta del set que pone a prueba una limitación documentada (contar), mostrada tal cual se midió. [criterion: Entienden qué es Jev y qué no]
 - R4. **Para después.** Un umbral deslizable que reparte el set entre automatizar y revisión humana. [criterion: Costo y riesgos claros]
 - R5. **Para después.** Costo y tiempo de cada corrida del desafío. [criterion: Costo y riesgos claros]
-- R6. Los asistentes tienen un camino para integrar Jev solos después de la charla: el snippet probado del último paso y el README. [criterion: Pueden integrarlo solos]
+- R6. Los asistentes tienen un camino para integrar Jev solos después de la charla: el snippet probado del README (`## Use it in your code`); el paso "Llevalo a tu código" se sacó el 2026-10-29. [criterion: Pueden integrarlo solos]
 - R7. La charla cierra con una consigna para que cada asistente nombre un caso de su trabajo donde usaría Jev, apoyada en el caso de guardrail y en los cookbooks de TypeSafe. [criterion: Detectan un caso propio]
 - R8. Un deck en español (HTML + PDF), con el título de la charla, aporta las slides que aparecen en el video: qué es Jev, Jev vs. LLMs, probabilidad, impacto, riesgos, dónde usarlo e integración. [criterion: Entienden qué es Jev y qué no]
 - R9. La demo publicada en una URL protegida. [criterion: Costo y riesgos claros]
 - R10. Hay un video de hasta 21 minutos, en español, con el mismo guion de la charla, narrado por un avatar con la voz clonada del presentador (HeyGen) y declarado como tal; es el respaldo si falla la red o el gateway en la sala y sirve para quien no pueda asistir. [criterion: Pueden integrarlo solos]
-- R11. La charla en vivo, y el video, recorren en el playground 9 pasos de la lección: qué es, sí/no, opción, opción con definición, todo junto, cuando Jev duda (con los riesgos), Jev revisa a un LLM, proponer severidad de un defecto y código; los mismos pasos existen en español y en inglés, y el resto queda en el playground. La charla en vivo suma, como paso 2, el camino de una pregunta en cajas (navegador → server → Vercel AI Gateway → Jev). [criterion: Entienden qué es Jev y qué no]
+- R11. La charla en vivo, y el video, recorren en el playground 9 pasos de la lección: qué es, sí/no, opción, opción con definición, todo junto, cuando Jev duda (con los riesgos), Jev revisa a un LLM y proponer severidad de un defecto; los mismos pasos existen en español y en inglés, y el resto queda en el playground. La charla en vivo suma, como paso 2, el camino de una pregunta en cajas (navegador → server → Vercel AI Gateway → Jev). [criterion: Entienden qué es Jev y qué no]
 - R12. Un caso ambiguo muestra la respuesta por debajo del umbral y la derivación a una persona. [criterion: Costo y riesgos claros]
 - R13. Un paso compara cuándo conviene Jev y cuándo otra herramienta, y nombra los proyectos parecidos. [criterion: Entienden qué es Jev y qué no]
-- R14. Un glosario repasa los conceptos de la lección. [criterion: Entienden qué es Jev y qué no]
+- R14. El paso 11, "Qué va y qué vuelve en la llamada", repasa cada campo que se manda y cada campo que vuelve (reemplazó al glosario el 2026-10-29). [criterion: Entienden qué es Jev y qué no]
 - R15. El snippet de integración usa la API vigente del AI SDK. [criterion: Pueden integrarlo solos]
 - R16. La lección distingue la probabilidad de cada opción de la confianza, como la define TypeSafe, y muestra los umbrales que sugiere. [criterion: Costo y riesgos claros]
 - R17. "Cuando Jev duda" muestra, además del texto ambiguo, tres riesgos para producción, cada uno con un ejemplo que se corre en vivo y qué hacer: instrucciones escondidas en el texto, sumar cantidades y fechas en el borde. [criterion: Costo y riesgos claros]
 - R18. Un caso muestra a Jev como guardrail de un LLM: si la respuesta de un chatbot afirma algo que la política no dice. [criterion: Detectan un caso propio]
-- R19. La lección muestra cómo está armado el playground, qué otras formas hay de llamar a Jev y cómo llevarlo a producción con una compuerta de decisión. [criterion: Pueden integrarlo solos]
+- R19. La lección muestra cómo está armado el playground (paso 2) y cómo llevarlo a producción con un umbral que decide entre automatizar y revisión humana (paso Sí / No y el snippet del README). Los pasos "Jev en tu sistema" y "Cómo está armado este playground", con las otras formas de llamar a Jev, se sacaron el 2026-10-29. [criterion: Pueden integrarlo solos]
 - R20. El video tiene un guion completo en español (`video/script.tsv`, una oración por fila) de unos 20 minutos hablados, en tres bloques: qué es, impacto y dónde usarlo; `docs/GUION.md` dice qué se ve en cada toma y de dónde sale cada cifra. [criterion: Entienden qué es Jev y qué no]
 
 ## Flujos principales
 - F1. **Para después.** Desafío en vivo con marcador. (A1, A2; R1, R2, R3)
 - F2. **Para después.** Calibrar el umbral sobre el set. (A1, A2; R4, R5)
-- F3. **De la charla al código** — último paso con el snippet → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
+- F3. **De la charla al código** — snippet del README → caso de guardrail → consigna de caso propio → cada asistente nombra un caso. (A2; R6, R7, R15, R18)
 - F4. Asíncrono sobre la demo deployada. (A3; R9, R10)
 - F5. **Sesión de unos 20 minutos + preguntas** — la charla en vivo sobre el playground y el deck (qué es → impacto → dónde usarlo → consigna) → preguntas; el video, de respaldo y para quien no asista. (A1, A2; R10, R11, R12, R13, R16, R17, R20)
 
@@ -77,9 +77,9 @@ Investigado el 2026-10-24.
 - AE6. **Covers R9.** Dada la URL publicada, alguien sin la clave la abre y recibe 401, sin que se llame a Jev.
 - AE7. **Covers R11.** Given un paso de práctica, when el presentador aprieta "Preguntar a Jev", then se ven la respuesta, la probabilidad de cada opción y la explicación de cómo leerla.
 - AE8. **Covers R12.** Given el paso "Cuando Jev duda", when se pregunta, then la probabilidad de la opción elegida queda por debajo de 0,7 y las barras muestran el reparto entre opciones.
-- AE9. **Covers R15.** Given el snippet copiado del último paso (hoy, el 14) y la key en el entorno, when se corre con node, then imprime "Rutear a cuenta".
+- AE9. **Covers R15.** Given el snippet del README y la key en el entorno, when se corre con node, then imprime "Route to account".
 - AE10. **Covers R10.** Given el video final, then dura 21 minutos o menos.
-- AE12. **Covers R19.** Given los pasos de arquitectura y de producción, then se ven el recorrido navegador → server → AI Gateway → Jev, las tres opciones para llamar a Jev, la compuerta de decisión y la versión fija del modelo.
+- AE12. **Covers R19.** Given el paso 2 y el snippet del README, then se ven el recorrido navegador → server → AI Gateway → Jev y el umbral que decide entre automatizar y revisión humana.
 - AE13. **Covers R20.** Given el guion, then la columna hablada de `video/script.tsv` suma entre 2.700 y 3.100 palabras, y `docs/GUION.md` tiene una entrada por cada paso de la lección, en el mismo orden, que dice en qué bloque del video aparece o que queda fuera.
 - AE11. **Covers R16.** Given la respuesta del paso "Cuando Jev duda", then la probabilidad de cada opción y la confianza se muestran como valores distintos.
 

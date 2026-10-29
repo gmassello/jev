@@ -41,7 +41,7 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 ## Tecnología obligatoria
 
 - **Jev en Vercel AI Gateway** (`typesafe-ai/jev`) con `experimental_decide` del AI SDK (`ai` v7, `7.0.153` exacta; `experimental_evaluate` es su alias deprecado).
-- **Cómo se demuestra:** llamados reales desde el playground, filmados en el video (`POST /evaluate`) y el snippet del último paso, «Llevalo a tu código», del playground.
+- **Cómo se demuestra:** llamados reales desde el playground, filmados en el video (`POST /evaluate`) y el snippet del README (antes el paso «Llevalo a tu código», del playground.
 
 ## Requisitos de entrega
 
@@ -50,7 +50,7 @@ No hay jurado. Son los criterios de éxito del presentador, que el resto del flu
 | Formato de la sesión | En vivo sobre el playground + preguntas | Unos 20 minutos en vivo en tres partes (qué es, impacto y dónde usarlo) y después preguntas; el video queda de respaldo (decidido el 2026-10-25; el 2026-10-24 era todo en video, antes eran 25 minutos (15 de lección en vivo, 6 de video y 4 de preguntas) |
 | Deck | HTML + PDF | Cantidad de slides / duración: not published |
 | Demo | En vivo en local (`PORT=3001 npm start`); publicada en Cloud Run con clave (PLAN U7) | Respaldo: el video |
-| Video | La charla con el mismo guion, narrada por un avatar con la voz clonada del presentador (HeyGen); respaldo si falla la red o el gateway, y para quien no pueda asistir | Hasta 21 minutos; formato: not published |
+| Video | La charla con el mismo guion, narrada por un avatar con la voz clonada del presentador (HeyGen); respaldo si falla la red o el gateway, y para quien no pueda asistir. Publicado el 2026-10-29 un recorrido de los 12 pasos del playground con voz sintética (https://youtu.be/02vD79jJD0M, 7:46) | Hasta 21 minutos; formato: not published |
 | Ejercicio guiado | Un caso real del equipo resuelto con Jev (por ejemplo, clasificar tickets o logs) | not published |
 
 ## Descalificadores

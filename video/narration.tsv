@@ -1,0 +1,81 @@
+beat	gap	caption	speak
+# Video de los 12 pasos del playground, voz sintética en español.
+# Una fila = un subtítulo = un clip de voz. Las cifras de Jev se ven en pantalla; la voz no las dice exactas.
+1:00 paso 1 · qué es	0.5	Jev evalúa, no conversa	Jev evalúa, no conversa.
+1:00 paso 1 · qué es	0.3	Texto y pregunta cerrada: devuelve probabilidades	Le das un texto y una pregunta cerrada, y te devuelve probabilidades: números entre cero y uno.
+1:00 paso 1 · qué es	0.4	En sí/no, un solo número	En sí o no es un solo número: la probabilidad de que sea sí.
+1:00 paso 1 · qué es	0.3	En lista o escala, uno por opción	En una lista o una escala, es uno por opción, y suman uno.
+1:00 paso 1 · qué es	0.5	TypeSafe lo llama "System One"	TypeSafe lo llama System One, por Kahneman.
+1:00 paso 1 · qué es	0.3	El Sistema 1 decide rápido	El Sistema 1 decide rápido; el Sistema 2 razona paso a paso.
+1:00 paso 1 · qué es	0.3	Jev: Sistema 1 para tu software	Jev es una opción de Sistema 1 para tu software.
+1:00 paso 1 · qué es	0.5	Rutear tickets, moderar, revisar a un LLM	Sirve, por ejemplo, para rutear tickets a un área, moderar contenido, o revisar si un LLM inventó datos.
+1:00 paso 1 · qué es	0.3	Priorizar urgencia, proponer severidad	También para priorizar por urgencia, o proponer la severidad de un defecto.
+2:00 paso 2 · el camino	1.2	Del navegador a Jev, y vuelta	Cada pregunta hace este camino: del navegador a Jev, y la respuesta vuelve por el mismo lado.
+2:00 paso 2 · el camino	0.4	El server guarda la key	El server es el intermediario: tiene la key en su configuración y nunca la manda al navegador.
+2:00 paso 2 · el camino	0.3	Llama a Jev con el AI SDK	Le pregunta a Jev con el AI SDK, la librería de Vercel que habla con modelos de inteligencia artificial.
+2:00 paso 2 · el camino	0.3	Vercel AI Gateway, después TypeSafe	La llamada pasa por el Vercel AI Gateway y llega a Jev, en TypeSafe.
+2:00 paso 2 · el camino	0.4	Nunca se llama a Jev desde el navegador	Por eso nunca se llama a Jev desde el navegador.
+3:00 paso 3 · sí o no	1.2	Sí / No: un número entre 0 y 1	En sí o no, Jev no devuelve sí ni no: devuelve un número entre cero y uno, la probabilidad de que sea sí.
+3:00 paso 3 · sí o no	0.4	¿Se resolvió el problema del cliente?	El texto es una conversación de soporte. La pregunta: ¿se resolvió el problema del cliente?
+3:00 paso 3 · sí o no	1.8	Alto: Jev dice que sí	Jev da un número alto: dice que sí.
+3:00 paso 3 · sí o no	0.4	Tu código decide con dos umbrales	Tu código decide con dos umbrales, que configurás según tu caso.
+3:00 paso 3 · sí o no	0.3	0,7 o más es sí; 0,3 o menos, no	Cero coma siete o más es sí, y cero coma tres o menos es no. Son los que sugiere TypeSafe para arrancar.
+3:00 paso 3 · sí o no	0.3	En el medio, lo revisa una persona	Lo que cae en el medio es no lo sé, y lo revisa una persona.
+4:00 paso 4 · elegir	1.2	Una opción de una lista tuya	Ahora la respuesta es una opción de una lista que definís vos.
+4:00 paso 4 · elegir	0.4	¿Qué tipo de mail es?	Un mail que dice que ganaste un iPhone. ¿Qué tipo de mail es: trabajo, personal, promoción o estafa?
+4:00 paso 4 · elegir	1.8	Jev elige estafa	Jev elige estafa, y reparte la probabilidad entre todas: el reparto suma cien por ciento.
+4:00 paso 4 · elegir	0.4	Opciones que no se pisen	Conviene que las opciones no se pisen: si dos significan casi lo mismo, Jev duda entre las dos.
+4:00 paso 4 · elegir	6.58		
+5:00 paso 5 · escala	1.2	Cuando la respuesta es un grado	Cuando la respuesta es un grado, usás una escala.
+5:00 paso 5 · escala	0.4	¿Cuántas estrellas le daría?	Una reseña de auriculares: buen sonido, poca batería. ¿Cuántas estrellas le daría?
+5:00 paso 5 · escala	1.8	Probabilidad por nivel y un score	Jev devuelve la probabilidad de cada nivel, y un score: la posición promedio, contando desde cero.
+5:00 paso 5 · escala	0.4	Score 3,2 de 5 niveles: cerca del cuarto	Un score de tres coma dos, en una escala de cinco niveles, cae cerca del cuarto nivel.
+5:00 paso 5 · escala	7.04		
+6:00 paso 6 · con definición	1.2	Un nombre suelto puede ser ambiguo	Un nombre suelto puede ser ambiguo: ¿un reintegro es facturación o envíos?
+6:00 paso 6 · con definición	0.4	Cada opción, con su descripción: criteria	Cada opción puede llevar una descripción corta de qué entra en ella. Viaja en el campo criteria.
+6:00 paso 6 · con definición	0.4	¿A qué área va este ticket?	Un cliente que no puede entrar a su cuenta. ¿A qué área va el ticket?
+6:00 paso 6 · con definición	1.8	Jev elige cuenta	Jev elige cuenta. Es la forma de rutear tickets a un equipo.
+6:00 paso 6 · con definición	14.46		
+7:00 paso 7 · todo junto	1.2	Varias preguntas en una llamada	En una sola llamada podés hacer varias preguntas sobre el mismo texto.
+7:00 paso 7 · todo junto	0.3	Cada una vuelve con su id	Cada una se evalúa por separado y vuelve con su id.
+7:00 paso 7 · todo junto	0.4	Reembolso, área y urgencia	Un cobro doble sin respuesta: ¿pide reembolso, a qué área va, qué tan urgente es?
+7:00 paso 7 · todo junto	1.8	Se clasifica, prioriza y marca en un paso	Así un mismo ticket se clasifica, se prioriza y se marca en un solo paso.
+7:00 paso 7 · todo junto	28.69		
+8:00 paso 8 · cuando duda	1.2	Cuando duda, reparte la probabilidad	Jev siempre contesta, pero cuando duda reparte la probabilidad, y tu código lo ve.
+8:00 paso 8 · cuando duda	0.3	Cuatro debilidades documentadas	Estos cuatro casos lo hacen dudar o equivocarse. TypeSafe los documenta como debilidades conocidas.
+8:00 paso 8 · cuando duda	1.7		
+8:10 paso 8 · ambiguo	0.8	Texto ambiguo: cancelar y reintegro	Primero, un texto ambiguo: cancelar un pedido que no llegó, y que le devuelvan la plata.
+8:10 paso 8 · ambiguo	1.8	Cerca de la mitad: duda	La probabilidad queda cerca de la mitad. Jev elige, pero el reparto avisa que duda.
+8:10 paso 8 · ambiguo	12.04		
+8:20 paso 8 · instrucciones	0.8	Instrucciones escondidas en el texto	Segundo, un ticket con una nota escondida para el sistema: marcar como urgente.
+8:20 paso 8 · instrucciones	1.8	La nota lo confunde	La nota lo confunde, y queda en la zona de duda.
+8:20 paso 8 · instrucciones	0.3	Preguntá por lo que dice el cliente	El arreglo: preguntar por lo que dice el cliente, no por el ticket.
+8:20 paso 8 · instrucciones	10.96		
+8:30 paso 8 · sumar	0.8	Sumar cantidades	Tercero, sumar: tres remeras, dos pantalones y cuatro pares de medias, contra ocho prendas.
+8:30 paso 8 · sumar	1.8	No sabe sumar: duda	Jev no suma bien, y duda. Sumá en código y preguntale solo lo que es leer.
+8:30 paso 8 · sumar	10.87		
+8:40 paso 8 · fechas	0.8	Fechas en el borde	Cuarto, fechas: del treinta y uno de enero al dos de marzo.
+8:40 paso 8 · fechas	1.8	Son 30 días: Jev se equivocó	Son treinta días, y Jev dice que pasaron más, con seguridad. Se equivocó.
+8:40 paso 8 · fechas	0.3	Calculá los días en código	Calculá los días en código; a Jev dejale entender.
+8:40 paso 8 · fechas	9.33		
+9:00 paso 9 · revisa a un LLM	1.2	Un chatbot puede inventar	Un chatbot puede inventar un plazo o una condición que la política no dice.
+9:00 paso 9 · revisa a un LLM	0.4	Política: 30 días. Bot: 90 días	La política dice treinta días con ticket. El bot contesta noventa días, sin ticket.
+9:00 paso 9 · revisa a un LLM	0.3	¿Afirma algo que la política no dice?	¿La respuesta afirma algo que la política no dice?
+9:00 paso 9 · revisa a un LLM	1.8	Jev dice que sí	Jev dice que sí.
+9:00 paso 9 · revisa a un LLM	0.3	La respuesta no sale	Entonces la respuesta no sale, y la revisa una persona.
+9:00 paso 9 · revisa a un LLM	6.54		
+10:00 paso 10 · severidad	1.2	Un defecto nuevo, descripción libre	Un defecto nuevo llega con una descripción libre, y alguien tiene que decidir su severidad.
+10:00 paso 10 · severidad	0.4	Cada severidad, definida una vez	Con la definición de cada severidad escrita una vez, Jev la propone y muestra qué tan seguro está.
+10:00 paso 10 · severidad	0.4	Transferencia exitosa que no salió	En iOS, la app dice transferencia exitosa, pero el dinero nunca sale.
+10:00 paso 10 · severidad	1.8	Jev propone crítica	Jev propone crítica: dinero que no se mueve.
+10:00 paso 10 · severidad	0.3	El equipo revisa los dudosos	El equipo revisa solo los que quedan debajo del umbral.
+10:00 paso 10 · severidad	12.33		
+11:00 paso 11 · campos	1.2	Qué va y qué vuelve	Qué va y qué vuelve en la llamada.
+11:00 paso 11 · campos	0.3	Va: state y questions	El navegador manda state, el texto, y questions: cada pregunta con su id, su tipo, sus instrucciones y su criteria.
+11:00 paso 11 · campos	0.3	El server suma el modelo	El server suma el modelo.
+11:00 paso 11 · campos	0.6	Vuelve: answers por id	Vuelve answers, una respuesta por id: la probabilidad, la opción elegida o el score.
+11:00 paso 11 · campos	0.3	Y los datos de la llamada	Y los datos de la llamada: tokens, modelo, cuánto tardó, la confianza y el costo.
+12:00 paso 12 · parecidos	1.2	Jev no es el único	Jev no es el único. Estos proyectos resuelven el mismo problema, o una parte.
+12:00 paso 12 · parecidos	0.4	Cloudflare Clef, AWS Strands Decider	Cloudflare Clef y AWS Strands Decider son modelos de decisión parecidos, que se pueden correr por tu cuenta.
+12:00 paso 12 · parecidos	0.3	Galileo Luna, Jina, Hugging Face	Galileo Luna evalúa salidas de LLM; Jina y Hugging Face clasifican con etiquetas.
+12:00 paso 12 · parecidos	0.3	OpenAI Moderation: solo moderar	Y OpenAI Moderation sirve solo para moderar contenido.

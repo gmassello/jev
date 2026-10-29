@@ -10,7 +10,7 @@ El server Node que ya existe guarda la key y llama a Jev por Vercel AI Gateway c
 |---|---|---|---|---|
 | QA-01 | Seguridad | Un asistente abre las herramientas del navegador durante la charla y busca la key | 0 apariciones de la key en lo que sirve el server (`index.html`, `copy.js`) | R6 |
 | QA-02 | Rendimiento | El presentador aprieta "Preguntarle a Jev" en un paso de práctica, en vivo | menos de 3 s por respuesta; medido: p50 292 ms, máx. 595 ms en 18 llamadas (S3) | R11, R12 |
-| QA-03 | Mantenibilidad | Un asistente copia el snippet del último paso y lo corre con la versión actual de `ai` | corre sin warnings de deprecación con `ai@7.0.153` (S1) | R15 |
+| QA-03 | Mantenibilidad | Un asistente copia el snippet del README y lo corre con la versión actual de `ai` | corre sin warnings de deprecación con `ai@7.0.153` (S1) | R15 |
 | QA-04 | Corrección | La lección muestra "confianza" en el paso que duda | el número coincide con `providerMetadata.typesafe.confidence` (0,52 contra probabilidad 0,68 en S2) | R16 |
 | QA-05 | Confiabilidad | El gateway responde con error de key o de saldo durante la charla | un mensaje entendible en la misma vista en menos de 1 s, y el video como respaldo | R10 |
 
@@ -64,9 +64,9 @@ graph TB
 | Componente | Responsabilidad | Tecnología | Cubre |
 |---|---|---|---|
 | `index.html` | Navega la lección, arma el request desde el paso, muestra respuesta, probabilidad, confianza y umbral | HTML + JS vanilla | R11, R12, R16 |
-| `copy.js` | Contenido de los pasos en es y en: teoría, ejemplos, tablas de cuándo usar, alternativas y arquitectura, glosario | módulo ES de datos | R7, R13, R14, R17, R18, R19 |
+| `copy.js` | Contenido de los pasos en es y en: teoría, ejemplos, tablas de cuándo usar, alternativas, y los campos de la llamada y de la respuesta | módulo ES de datos | R7, R13, R14, R17, R18, R19 |
 | `server.js` | Sirve la página y los módulos permitidos; `/evaluate` llama a Jev con la key del entorno | Node 24, `ai` | R6, R15, R16 |
-| Snippet del último paso | Ejemplo mínimo para llevar a un proyecto propio | `ai` + Node | R6, R15 |
+| Snippet del README | Ejemplo mínimo para llevar a un proyecto propio | `ai` + Node | R6, R15 |
 | `scripts/demo-check.mjs` | Antes de grabar o presentar, corre los pasos de práctica y verifica lo que el guion afirma | Node | R10, R12 |
 
 ### Contracts
@@ -82,7 +82,7 @@ Respuesta 200: `{ answers, usage, warnings, modelId, ms, confidence, cost }`: `c
 Nada persistente. En el navegador, `localStorage` guarda el paso actual y el idioma. El server no guarda requests ni respuestas.
 
 ## Llevarlo a producción
-La lección lo enseña en el paso "Jev en tu sistema":
+La lección ya no tiene un paso propio para esto (se sacó el 2026-10-29): el umbral aparece en el paso Sí / No y en el snippet del README. El diseño de referencia:
 
 - **Compuerta de decisión:** evento → Jev decide → si la probabilidad supera el umbral, acción automática; si no, revisión humana → log de la decisión para recalibrar el umbral.
 - **Checklist:**

@@ -9,7 +9,7 @@ Es la entrega que se juzga: la lección del playground, el snippet, el guion del
 
 ## Requerimientos (de `docs/BRIEF.md`)
 - R11: la lección tiene los mismos pasos en español y en inglés, e incluye los 10 que muestra el video.
-- R15: el snippet del paso de código usa la API vigente del AI SDK.
+- R15: el snippet del README usa la API vigente del AI SDK.
 - R20: el guion del video dura unos 20 minutos hablados, y `docs/GUION.md` ubica cada paso en un bloque del video o fuera de él.
 - R8: el deck lleva el título de la charla y existe en HTML y PDF.
 - R10: el video dura 21 minutos o menos.
@@ -21,8 +21,8 @@ Es la entrega que se juzga: la lección del playground, el snippet, el guion del
 - **Guion:** `video/script.tsv` (`beat`, `en` = subtítulo, `es` = lo que se dice) y `docs/GUION.md`, con un encabezado `### <id del paso>` por paso, en el orden de `copy.js`; los pasos del video llevan una línea `Bloque:` y el resto una `Fuera del video:`.
 
 ## Ejemplos de aceptación
-- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 15 pasos con los mismos `id` en el mismo orden, y entre ellos están los 9 pasos del video.
-- AE2. **Covers R15.** Given el paso `code`, then su campo `code` importa `experimental_decide` y no contiene `experimental_evaluate`.
+- AE1. **Covers R11.** Given `copy.js`, then `es` y `en` tienen 12 pasos con los mismos `id` en el mismo orden, y entre ellos están los 9 pasos del video.
+- AE2. **Covers R15.** Given `README.md`, then su snippet importa `experimental_decide` y no contiene `experimental_evaluate`.
 - AE3. **Covers R20.** Given `docs/GUION.md`, then hay un `### <id>` por cada paso de `copy.js`, en el mismo orden, cada paso del video con su línea `Bloque:` y el resto con `Fuera del video:`; y la columna `es` de `video/script.tsv` suma entre 2.700 y 3.100 palabras.
 - AE4. **Covers R8.** Given `docs/deck.html`, then contiene el título de la charla, y existe `docs/deck.pdf` no vacío.
 - AE5. **Covers R10.** Given `video/out/demo.mp4`, then existe y `ffprobe` informa una duración de 1260 s o menos.
