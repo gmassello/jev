@@ -124,7 +124,7 @@ export const I18N = {
         id: 'criteria', kind: 'ask', title: 'Opciones con definición',
         theory: [
           'Un nombre suelto puede ser ambiguo: ¿un reintegro es "facturación" o "envíos"?',
-          'Cada opción puede llevar una descripción corta de qué entra en ella; viaja en el campo criteria.',
+          'Cada opción puede llevar una descripción corta de qué entra en ella.',
           'Es la forma de rutear tickets a un equipo.',
         ],
         state: 'Hace dos días que no puedo entrar a mi cuenta: me dice que la contraseña es incorrecta aunque ya la cambié.',
@@ -137,7 +137,7 @@ export const I18N = {
       {
         id: 'multi', kind: 'multi', title: 'Todo junto',
         theory: [
-          'En una sola llamada podés hacer varias preguntas sobre el mismo texto. Cada una se evalúa por separado y vuelve con su id.',
+          'En una sola llamada podés hacer varias preguntas sobre el mismo texto. Cada una se evalúa por separado.',
           'Así un mismo ticket se clasifica, se prioriza y se marca en un solo paso.',
         ],
         state: 'Me cobraron dos veces la suscripción y nadie me responde hace una semana. Quiero que me devuelvan la plata ya.',
@@ -150,7 +150,7 @@ export const I18N = {
       {
         id: 'doubt', kind: 'ask', title: "Cuando Jev duda",
         theory: [
-          "Jev siempre contesta, pero cuando duda reparte la probabilidad, y tu código lo ve.",
+          "Jev siempre contesta, pero cuando duda reparte la probabilidad.",
           "Estos cuatro casos lo hacen dudar o equivocarse; TypeSafe los documenta como debilidades conocidas de Jev. Elegí uno y preguntale a Jev.",
         ],
         state: "Quiero cancelar el pedido que todavía no llegó y que me devuelvan la plata.",
@@ -366,7 +366,7 @@ export const I18N = {
         id: 'criteria', kind: 'ask', title: 'Options with a definition',
         theory: [
           'A bare name can be ambiguous: is a refund "billing" or "shipping"?',
-          'Each option can carry a short description of what belongs in it; it travels in the criteria field.',
+          'Each option can carry a short description of what belongs in it.',
           'It is the shape for routing tickets to a team.',
         ],
         state: 'For two days I have not been able to log into my account: it says the password is wrong even though I already changed it.',
@@ -379,7 +379,7 @@ export const I18N = {
       {
         id: 'multi', kind: 'multi', title: 'All together',
         theory: [
-          'In a single call you can ask several questions about the same text. Each one is evaluated on its own and comes back under its id.',
+          'In a single call you can ask several questions about the same text. Each one is evaluated on its own.',
           'That way one ticket gets classified, prioritized and flagged in a single step.',
         ],
         state: 'I was charged twice for the subscription and nobody has answered me for a week. I want my money back now.',
@@ -392,7 +392,7 @@ export const I18N = {
       {
         id: 'doubt', kind: 'ask', title: "When Jev hesitates",
         theory: [
-          "Jev always answers, but when it hesitates it splits the probability, and your code sees it.",
+          "Jev always answers, but when it hesitates it splits the probability.",
           "These four cases make it hesitate or get it wrong; TypeSafe documents them as known weaknesses of Jev. Pick one and ask Jev.",
         ],
         state: "I want to cancel the order that has not arrived yet and get my money back.",

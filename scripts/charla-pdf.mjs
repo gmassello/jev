@@ -55,7 +55,7 @@ const run = async (state, qs, label, fix) => {
     h += `<div class="k">La respuesta de Jev · answers</div>${answerHtml(q, res.answers[q.id])}`;
   }
   if (fix) h += `<div class="k">Qué hacer</div><p>${esc(fix)}</p>`;
-  h += `<p class="foot" style="white-space:pre-line">${esc(I18N.es.footer({ input: res.usage?.inputTokens, output: res.usage?.outputTokens, ...costSplit(res.usage, res.cost ?? null), cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }))}</p>${res.cost != null ? `<p style="font-weight:700;color:#2a62d9;margin:.2em 0 0">${esc(I18N.es.costScale(res.cost))}</p>` : ''}</div>`;
+  h += `${res.cost != null ? `<p style="font-weight:700;color:#2a62d9;margin:.6em 0 0">${esc(I18N.es.costScale(res.cost))}</p>` : ''}<p class="foot" style="white-space:pre-line">${esc(I18N.es.footer({ input: res.usage?.inputTokens, output: res.usage?.outputTokens, ...costSplit(res.usage, res.cost ?? null), cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }))}</p></div>`;
   const shown = { answers: res.answers, usage: res.usage, modelId: res.modelId, ms: res.ms, confidence: res.confidence, cost: res.cost };
   return h + `<div class="call"><div class="k">La llamada al modelo</div><pre>POST /evaluate\n${esc(compact(body))}</pre><div class="k">Lo que devolvió</div><pre>${esc(compact(shown))}</pre></div>`;
 };
@@ -89,7 +89,7 @@ section { break-before: page; } section:first-of-type { break-before: auto; }
 .n { color: #666; font-size: 9pt; } .k { font-weight: 600; font-size: 9pt; color: #666; margin-top: 8pt; }
 .ex { font-weight: 700; color: #2a62d9; margin-top: 2pt; }
 .box { border: 1px solid #ddd; border-radius: 8px; padding: 6pt 10pt; margin: 8pt 0; break-inside: avoid; }
-.state { margin: 2pt 0; } .raw { color: #666; font-size: 9pt; } .foot { color: #666; font-size: 8.5pt; margin: 8pt 0 0; }
+.state { margin: 2pt 0; } .raw { color: #666; font-size: 9pt; } .foot { color: #666; font-size: 8.5pt; margin: 3pt 0 0; }
 .verdict { color: #157a40; font-weight: 700; margin: 2pt 0 4pt; }
 .bar { display: grid; grid-template-columns: 30% 1fr 3em; gap: 6pt; align-items: center; font-size: 9.5pt; margin: 2pt 0; }
 .bar .t { background: #eee; height: 7pt; border-radius: 4pt; overflow: hidden; } .bar i { display: block; height: 100%; background: #9bb5ee; }

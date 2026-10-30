@@ -40,3 +40,9 @@ test('a subtle timer in the header shows on every step and can start, pause and 
   assert.match(html, /running\(\) \? t\(\)\.timerPause : t\(\)\.timerStart/);
   assert.match(html, /Date\.now\(\)/);
 });
+
+test('the cost of 10,000 calls sits above the tokens footer, in the page and the PDF', () => {
+  assert.ok(html.indexOf("className: 'cost-scale'") < html.indexOf("className: 'footer'"));
+  const pdf = readFileSync(new URL('../scripts/charla-pdf.mjs', import.meta.url), 'utf8');
+  assert.ok(pdf.indexOf('I18N.es.costScale(') < pdf.indexOf('I18N.es.footer('));
+});

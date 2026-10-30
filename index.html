@@ -92,8 +92,8 @@
   .timer { display: flex; align-items: center; gap: .3rem; margin-left: auto; color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
   .timer button { font-size: var(--fs-xs); padding: .15rem .45rem; border-color: transparent; background: transparent; color: var(--muted); white-space: nowrap; }
   .timer button:hover { border-color: var(--line); color: var(--text); }
-  .cost-scale { color: var(--accent); font-weight: 600; font-size: var(--fs-sm); margin: .3rem 0 0; }
-  .footer { color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; margin: .8rem 0 0; white-space: pre-line; line-height: 1.6; }
+  .cost-scale { color: var(--accent); font-weight: 600; font-size: var(--fs-sm); margin: .8rem 0 0; }
+  .footer { color: var(--muted); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; margin: .3rem 0 0; white-space: pre-line; line-height: 1.6; }
   .fail { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
   details { margin-top: 2rem; }
   summary { cursor: pointer; color: var(--muted); }
@@ -349,8 +349,8 @@
         h('h3', { textContent: q.instructions }),
         res.answers?.[id] ? [renderAnswer(q, res.answers[id]), h('p', { className: 'explain', textContent: explainFor(q, res.answers[id]) }), confidenceLine(res.confidence?.[id])] : null)),
       ...(isMulti() ? [h('p', { className: 'explain outro', textContent: t().multiOutro })] : []),
-      ...(res.usage ? [h('p', { className: 'footer', textContent: t().footer({ input: res.usage.inputTokens, output: res.usage.outputTokens, ...costSplit(res.usage, res.cost ?? null), cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }) })] : []),
       ...(res.cost != null ? [h('p', { className: 'cost-scale', textContent: t().costScale(res.cost) })] : []),
+      ...(res.usage ? [h('p', { className: 'footer', textContent: t().footer({ input: res.usage.inputTokens, output: res.usage.outputTokens, ...costSplit(res.usage, res.cost ?? null), cost: res.cost ?? null, modelId: res.modelId, ms: res.ms }) })] : []),
     );
   };
 
