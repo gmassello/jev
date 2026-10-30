@@ -16,7 +16,7 @@ Estado del codigo en una linea: <N tests verdes, que esta hecho, que falta>.
 | Superficie | Donde | Estado | Verificado |
 |---|---|---|---|
 | Repo y CI | `<owner>/<repo>` @ `<sha>` | | |
-| Sitio | https://jev-514702007876.us-central1.run.app (pide clave: `gcloud secrets versions access latest --secret jev-access --project jev-playground-2610`) | ok, revisión jev-00003-864 (commit 1369987): 401 sin clave; con clave, título y copy de 12 pasos; caso chico 7/7 | 2026-10-29 |
+| Sitio | https://jev-514702007876.us-central1.run.app (pide clave: `gcloud secrets versions access latest --secret jev-access --project jev-playground-2610`) | ok, revisión jev-00007-wmv (commit e7b096b): 401 sin clave; con clave, copy nuevo; caso chico 7/7 | 2026-10-30 |
 | Submission | <URL publica, no /edit> | | |
 | Tarjeta en la galeria | <URL de la galeria> | | |
 | PR upstream | #<n> | | |
