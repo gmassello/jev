@@ -56,7 +56,7 @@ export const I18N = {
     jsonResponse: 'Lo que respondió Jev',
     arch: [
       { name: 'Navegador (esta página)', detail: 'Arma el request y se lo manda al server.' },
-      { name: 'Server', detail: 'El intermediario: recibe el texto y la pregunta, tiene la key (AI_GATEWAY_API_KEY) en su configuración, y le pregunta a Jev con el AI SDK, la librería de Vercel que habla con modelos de IA.' },
+      { name: 'Server', detail: 'El intermediario: recibe el request, tiene la key (AI_GATEWAY_API_KEY) en su configuración, y le pregunta a Jev con el AI SDK, la librería de Vercel que habla con modelos de IA.' },
       { name: 'Vercel AI Gateway', detail: 'Revisa la key y pasa la pregunta a TypeSafe.' },
       { name: 'TypeSafe · Jev', detail: 'El modelo typesafe-ai/jev: evalúa el texto y devuelve las probabilidades.' },
     ],
@@ -298,7 +298,7 @@ export const I18N = {
     jsonResponse: 'What Jev answered',
     arch: [
       { name: 'Browser (this page)', detail: 'Builds the request and sends it to the server.' },
-      { name: 'Server', detail: 'The middleman: it takes the text and the question, has the key (AI_GATEWAY_API_KEY) in its own settings, and asks Jev with the AI SDK, the Vercel library that talks to AI models.' },
+      { name: 'Server', detail: 'The middleman: it takes the request, has the key (AI_GATEWAY_API_KEY) in its own settings, and asks Jev with the AI SDK, the Vercel library that talks to AI models.' },
       { name: 'Vercel AI Gateway', detail: 'Checks the key and passes the question to TypeSafe.' },
       { name: 'TypeSafe · Jev', detail: 'The typesafe-ai/jev model: it evaluates the text and returns the probabilities.' },
     ],
