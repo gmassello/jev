@@ -151,7 +151,7 @@ export const I18N = {
         id: 'doubt', kind: 'ask', title: "Cuando Jev duda",
         theory: [
           "Jev siempre contesta, pero cuando duda reparte la probabilidad.",
-          "Estos cuatro casos lo hacen dudar o equivocarse; TypeSafe los documenta como debilidades conocidas de Jev. Elegí uno y preguntale a Jev.",
+          "Estos cuatro casos lo hacen dudar o equivocarse; TypeSafe los documenta como debilidades conocidas de Jev.",
         ],
         state: "Quiero cancelar el pedido que todavía no llegó y que me devuelvan la plata.",
         question: { type: 'choice', text: "¿A qué área va este ticket?", options: ["facturacion", "envios", "tecnica"] },
@@ -393,7 +393,7 @@ export const I18N = {
         id: 'doubt', kind: 'ask', title: "When Jev hesitates",
         theory: [
           "Jev always answers, but when it hesitates it splits the probability.",
-          "These four cases make it hesitate or get it wrong; TypeSafe documents them as known weaknesses of Jev. Pick one and ask Jev.",
+          "These four cases make it hesitate or get it wrong; TypeSafe documents them as known weaknesses of Jev.",
         ],
         state: "I want to cancel the order that has not arrived yet and get my money back.",
         question: { type: 'choice', text: "Which team does this ticket go to?", options: ["billing", "shipping", "tech"] },
