@@ -193,7 +193,7 @@ test('the first step frames Jev as the System One model, with prose and a list o
   for (const lang of ['es', 'en']) {
     const step = I18N[lang].lessons.find((l) => l.id === 'what');
     const text = step.theory.join(' ');
-    assert.ok(text.includes('Kahneman') && text.includes('System One'), lang);
+    assert.ok(/Sistema 1|System 1/.test(text) && !text.includes('Kahneman') && !text.includes('System One'), lang);
     assert.equal(step.table, undefined, lang);
     assert.equal(step.list.length, 5, lang);
   }
@@ -258,4 +258,10 @@ test('only the choice step suggests adding Phishing live, in both languages', ()
     assert.deepEqual(withTry.map((l) => l.id), ['choice'], lang);
     assert.ok(withTry[0].tryIt.includes('Phishing'), lang);
   }
+});
+
+test('the three question type steps say so in their title', () => {
+  const titles = (lang) => ['boolean', 'choice', 'score'].map((id) => I18N[lang].lessons.find((l) => l.id === id).title);
+  for (const t of titles('es')) assert.match(t, /^Pregunta de /, t);
+  for (const t of titles('en')) assert.match(t, / question$/, t);
 });

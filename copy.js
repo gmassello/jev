@@ -73,7 +73,7 @@ export const I18N = {
         theory: [
           'Jev evalúa, no conversa: le das un texto y una pregunta cerrada, y te devuelve un número entre 0 y 1.',
           'Ese número es la probabilidad de que sea sí.',
-          'TypeSafe lo llama "System One", por Kahneman: el Sistema 1 decide rápido; el Sistema 2 razona paso a paso.',
+          'TypeSafe lo llama Sistema 1: decide rápido; el Sistema 2 razona paso a paso.',
           'Para qué sirve, por ejemplo:',
         ],
         list: [
@@ -88,33 +88,33 @@ export const I18N = {
         id: 'flow', kind: 'theory', title: 'Cómo llega la pregunta a Jev en este playground', boxes: true,
         theory: [],
         list: [
-          'Frontend: un solo index.html con módulos JS nativos, sin framework ni build; los textos en copy.js, en inglés y español.',
+          'Frontend: un solo index.html con módulos JS nativos, sin framework.',
           'Backend: server.js en Node 24, sin framework; sirve la página y expone POST /evaluate.',
         ],
       },
       {
-        id: 'boolean', kind: 'ask', title: 'Sí / No',
+        id: 'boolean', kind: 'ask', title: 'Pregunta de sí / no',
         theory: [
-          'Tu código decide con dos umbrales. Los umbrales los configurás vos según tu caso. Por ejemplo, en este caso: 0,7 o más es sí, y 0,3 o menos es no; son los que sugiere TypeSafe para arrancar.',
+          'Tu código decide con dos umbrales. Por ejemplo, en este caso: 0,7 o más es sí, y 0,3 o menos es no; son los que sugiere TypeSafe para arrancar.',
           'Lo que cae entre 0,3 y 0,7 es no lo sé, lo revisa una persona.',
         ],
         state: 'El cliente no podía pagar con su tarjeta. Se le explicó cómo utilizarla, el pago pasó y el cliente respondió: ¡genial, gracias!',
         question: { type: 'boolean', text: '¿Se resolvió el problema del cliente?', options: [] },
       },
       {
-        id: 'choice', kind: 'ask', title: 'Elegir una opción',
+        id: 'choice', kind: 'ask', title: 'Pregunta de opción',
         theory: [
           'Ahora la respuesta es una opción de una lista que definimos.',
           'Jev reparte la probabilidad entre todas: el reparto suma 1.',
         ],
-        state: '¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya',
+        state: 'Te llegó este mail: ¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya',
         question: { type: 'choice', text: '¿Qué tipo de mail es?', options: ['Trabajo', 'Personal', 'Promoción', 'Estafa'] },
         tryIt: 'Probá: agregá la opción «Phishing» y volvé a preguntar. ¿Entre cuáles duda Jev?',
       },
       {
-        id: 'score', kind: 'ask', title: 'Escala',
+        id: 'score', kind: 'ask', title: 'Pregunta de escala',
         theory: [
-          'Cuando la respuesta es un grado, como de 1 a 5 estrellas, Jev dice qué tan probable es cada nivel.',
+          'Cuando la respuesta va de menos a más, como de 1 a 5 estrellas, Jev dice qué tan probable es cada nivel.',
           'También devuelve un score: el nivel promedio.',
         ],
         state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
@@ -315,7 +315,7 @@ export const I18N = {
         theory: [
           'Jev evaluates, it does not chat: you give it a text and a closed question, and it returns a number between 0 and 1.',
           'That number is the probability that the answer is yes.',
-          'TypeSafe calls it "System One", after Kahneman: System 1 decides fast; System 2 reasons step by step.',
+          'TypeSafe calls it System 1: it decides fast; System 2 reasons step by step.',
           'What it is good for, for example:',
         ],
         list: [
@@ -330,33 +330,33 @@ export const I18N = {
         id: 'flow', kind: 'theory', title: 'How the question reaches Jev in this playground', boxes: true,
         theory: [],
         list: [
-          'Frontend: a single index.html with native JS modules, no framework and no build; the texts live in copy.js, in English and Spanish.',
+          'Frontend: a single index.html with native JS modules, no framework.',
           'Backend: server.js on Node 24, no framework; it serves the page and exposes POST /evaluate.',
         ],
       },
       {
-        id: 'boolean', kind: 'ask', title: 'Yes / No',
+        id: 'boolean', kind: 'ask', title: 'Yes / no question',
         theory: [
-          'Your code decides with two thresholds. You set the thresholds for your own case. For example, in this case: 0.7 or more is yes, and 0.3 or less is no; these are the ones TypeSafe suggests to start with.',
+          'Your code decides with two thresholds. For example, in this case: 0.7 or more is yes, and 0.3 or less is no; these are the ones TypeSafe suggests to start with.',
           "Anything between 0.3 and 0.7 is an I don't know, a person reviews it.",
         ],
         state: 'The customer could not pay with their card. Someone explained how to use it, the payment went through and the customer replied: great, thanks!',
         question: { type: 'boolean', text: 'Was the customer\'s problem solved?', options: [] },
       },
       {
-        id: 'choice', kind: 'ask', title: 'Pick one option',
+        id: 'choice', kind: 'ask', title: 'Choice question',
         theory: [
           'Now the answer is one option from a list we define.',
           'Jev splits the probability across all of them: the split adds up to 1.',
         ],
-        state: 'CONGRATULATIONS! You won an iPhone. Click here within the next 24 hours to claim your prize: bit.ly/prize-now',
+        state: 'You got this email: CONGRATULATIONS! You won an iPhone. Click here within the next 24 hours to claim your prize: bit.ly/prize-now',
         question: { type: 'choice', text: 'What kind of email is it?', options: ['Work', 'Personal', 'Promotion', 'Scam'] },
         tryIt: 'Try it: add the option “Phishing” and ask again. Which ones does Jev hesitate between?',
       },
       {
-        id: 'score', kind: 'ask', title: 'Scale',
+        id: 'score', kind: 'ask', title: 'Scale question',
         theory: [
-          'When the answer is a degree, like 1 to 5 stars, Jev says how likely each level is.',
+          'When the answer goes from less to more, like 1 to 5 stars, Jev says how likely each level is.',
           'It also returns a score: the average level.',
         ],
         state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
