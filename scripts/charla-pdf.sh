@@ -13,4 +13,6 @@ for _ in $(seq 1 60); do grep -q "bytes written" "$TMP/chrome.log" && break; sle
 kill "$PID" 2>/dev/null || true
 grep -q "bytes written" "$TMP/chrome.log" || { echo "Chrome no imprimió el PDF" >&2; exit 1; }
 cp "$TMP/charla.pdf" docs/charla.pdf
+OUT="${CHARLA_COPY-$HOME/Downloads/Jev · Pulso IA - Playground paso a paso.pdf}"
+[ -z "$OUT" ] || cp docs/charla.pdf "$OUT"
 pdfinfo docs/charla.pdf | grep -E "Pages|Page size"
