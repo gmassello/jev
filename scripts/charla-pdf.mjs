@@ -15,7 +15,6 @@ const compact = (v, pad = '') => {
   const items = Array.isArray(v) ? v.map((x) => inner + compact(x, inner)) : Object.entries(v).map(([k, x]) => `${inner}${JSON.stringify(k)}: ${compact(x, inner)}`);
   return `${Array.isArray(v) ? '[' : '{'}\n${items.join(',\n')}\n${pad}${Array.isArray(v) ? ']' : '}'}`;
 };
-const pct = (p) => `${Math.round(p * 100)}%`;
 const num = (p) => p.toFixed(2).replace('.', ',');
 
 const toQuestion = (q) => {
@@ -34,10 +33,10 @@ const ask = async (state, qs) => {
   return { res, body };
 };
 
-const bars = (rows) => `<div class="bars">${rows.map(([label, p, on]) => `<div class="bar${on ? ' on' : ''}"><span class="l">${esc(label)}</span><span class="t"><i style="width:${Math.round(p * 100)}%"></i></span><span class="v">${pct(p)}</span></div>`).join('')}</div>`;
+const bars = (rows) => `<div class="bars">${rows.map(([label, p, on]) => `<div class="bar${on ? ' on' : ''}"><span class="l">${esc(label)}</span><span class="t"><i style="width:${Math.round(p * 100)}%"></i></span><span class="v">${num(p)}</span></div>`).join('')}</div>`;
 
 const answerHtml = (q, a) => {
-  if (q.type === 'boolean') return `<p class="verdict">${pct(a.probability)} de probabilidad de «sí» <span class="raw">(probability ${num(a.probability)})</span></p>${bars([['Sí', a.probability, true]])}`;
+  if (q.type === 'boolean') return `<p class="verdict">${esc(I18N.es.sure(a.probability))}</p>${bars([['Sí', a.probability, true]])}`;
   if (q.type === 'choice') {
     const rows = q.options.map((o) => [o, a.probabilities[o] ?? 0, o === a.choice]);
     return `<p class="verdict">Elige «${esc(a.choice)}» con ${num(a.probabilities[a.choice])}</p>${bars(rows)}`;
@@ -66,7 +65,7 @@ for (const [i, L] of lessons.entries()) {
   let h = `<section><div class="n">Paso ${i + 1} de ${lessons.length}</div><h2>${esc(L.title)}${typeTag(L) ? ` <code style="font-size:.6em;background:#2a62d922;padding:.1em .4em;border-radius:4px">${esc(typeTag(L))}</code>` : ''}</h2>`;
   h += (L.theory ?? []).map((p) => `<p>${esc(p)}</p>`).join('');
   for (const t of L.tables ?? (L.table ? [L.table] : [])) h += table(t);
-  if (L.boxes) { const E = I18N.es; h += `<pre>${esc(E.arch.map((b, i) => `${i ? `   ↓ ${E.archLinks[i - 1]}\n` : ''}[${b.name}]\n  ${b.detail}`).join('\n') + `\n   ↑ ${E.archBack}`)}</pre>`; }
+  if (L.boxes) { const E = I18N.es; h += `<pre>${esc(E.arch.map((b, i) => `${i ? `   ↓ ${E.archLinks[i - 1]}\n` : ''}[${b.name}]\n  ${b.detail}`).join('\n'))}</pre>`; }
   if (L.diagram) h += `<pre>${esc(L.diagram)}</pre>`;
   if (L.list) h += `<ul>${L.list.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
   if (L.commands) h += `<pre>${esc(L.commands.join('\n'))}</pre>`;

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { timingSafeEqual } from 'node:crypto';
 import { experimental_decide as decide } from 'ai';
 
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT ?? 3001;
 const MODEL = process.env.JEV_MODEL ?? 'typesafe-ai/jev';
 
 const MODULES = new Set(['/copy.js']);

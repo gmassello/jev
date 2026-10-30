@@ -46,7 +46,7 @@ Medido el 2026-10-24, 3 corridas: A 0,98/0,98/0,98; B 0,07/0,06/0,07; ambiguo 0,
 - AE7. **Covers R7.** Given las 5 respuestas de la tanda, then cada una trae `cost` (número ≥ 0, en US$) y la suma es menor a US$0,001.
 
 ## Contrato de runtime
-- **URL base:** la del server (`npm start` usa el puerto 3000; la charla, `PORT=3001`).
+- **URL base:** la del server (`npm start` usa el puerto 3001).
 - **Health / reset:** no hay; el server no tiene estado.
 - **`POST /evaluate`:** el mismo contrato que el caso chico (`cases/small/SPEC.md`).
 - **Requiere:** `AI_GATEWAY_API_KEY` en el entorno del server. Cada corrida hace 12 llamadas reales a Jev (5 de la tanda, 3 del ambiguo, 2 del mail, 2 del guardrail).

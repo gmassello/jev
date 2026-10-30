@@ -32,17 +32,18 @@ test('a key missing in a language falls back to english without breaking', () =>
 test('the UI says probabilidad, never "de seguridad", for a probability', () => {
   const values = Object.values(I18N.es).map((v) => (typeof v === 'function' ? v(98) : String(v)));
   assert.ok(!values.some((v) => v.includes('de seguridad')), 'found "de seguridad" in the es table');
-  assert.equal(I18N.es.sure(98), '98% de probabilidad de «sí»');
+  assert.equal(I18N.es.sure(0.98), 'Probabilidad de «sí»: 0,98');
+  assert.equal(I18N.en.sure(0.98), 'Probability of “yes”: 0.98');
 });
 
 test('the playground explains a yes/no answer and a scale answer in plain words', () => {
   for (const lang of ['es', 'en']) {
     const lines = ['yes', 'no', 'review'].map((zone) => I18N[lang].explain.boolean(0.97, zone));
-    for (const line of lines) assert.ok(line.includes('probability: 0.97'), `${lang}: ${line}`);
+    for (const line of lines) assert.ok(line.includes('probability: 0.97') && !line.includes('%'), `${lang}: ${line}`);
     assert.equal(new Set(lines).size, 3, `${lang}: one reading per zone`);
   }
   assert.match(I18N.es.explain.score('Enojado', 3, 4), /«Enojado» \(nivel 3 de 4\)/);
-  assert.match(I18N.en.explain.choice('Shipping', 81, 'Billing', 12), /“Shipping”/);
+  assert.match(I18N.en.explain.choice('Shipping', 0.81, 'Billing', 0.12), /“Shipping”/);
 });
 
 test('the lesson has the same steps in es and en, from theory to one call with several questions and a doubtful case', () => {
@@ -59,8 +60,10 @@ test('the lesson has the same steps in es and en, from theory to one call with s
 
 test('a choice answer is explained with what Jev returned: the pick and the runner-up, no threshold', () => {
   for (const lang of ['es', 'en']) {
-    const line = I18N[lang].explain.choice('facturacion', 68, 'envios', 24);
-    for (const part of ['choice', 'facturacion', '68%', 'envios', '24%']) assert.ok(line.includes(part), `${lang}: ${part} in ${line}`);
+    const line = I18N[lang].explain.choice('facturacion', 0.68, 'envios', 0.24);
+    const sep = lang === 'es' ? ',' : '.';
+    for (const part of ['choice', 'facturacion', `0${sep}68`, 'envios', `0${sep}24`]) assert.ok(line.includes(part), `${lang}: ${part} in ${line}`);
+    assert.ok(!line.includes('%'), `${lang}: ${line}`);
     assert.ok(!/umbral|threshold/i.test(line), `${lang}: ${line}`);
   }
   assert.ok(!('thresholdNote' in I18N.es) && !('thresholdNote' in I18N.en));
@@ -106,8 +109,8 @@ test('the architecture, production and code steps are gone', () => {
 test('confidence has its own line, separate from the choice explanation', () => {
   for (const lang of ['es', 'en']) {
     const t = I18N[lang];
-    assert.ok(t.confidenceNote(52).includes('52'), `${lang}: confidenceNote`);
-    assert.notEqual(t.confidenceNote(52), t.explain.choice('facturacion', 52, 'envios', 30));
+    assert.ok(t.confidenceNote(0.52).includes(t.prob(0.52)) && !t.confidenceNote(0.52).includes('%'), `${lang}: confidenceNote`);
+    assert.notEqual(t.confidenceNote(0.52), t.explain.choice('facturacion', 0.52, 'envios', 0.3));
   }
 });
 
@@ -213,6 +216,7 @@ test('the architecture dropdown has four boxes joined by three links in both lan
     assert.deepEqual(I18N[lang].lessons.filter((l) => l.boxes).map((l) => l.id), ['flow'], lang);
     assert.equal(I18N[lang].lessons.findIndex((l) => l.id === 'flow'), 1, lang);
     assert.ok(!I18N[lang].lessons.some((l) => l.arch) && !('archToggle' in I18N[lang]), lang);
+    assert.equal(I18N[lang].lessons.find((l) => l.id === 'flow').list.length, 2, lang);
   }
 });
 
@@ -245,5 +249,13 @@ test('practice steps show the question type next to the title, taken from the qu
   for (const lang of ['es', 'en']) {
     const tags = Object.fromEntries(I18N[lang].lessons.map((l) => [l.id, typeTag(l)]).filter(([, tag]) => tag));
     assert.deepEqual(tags, want, lang);
+  }
+});
+
+test('only the choice step suggests adding Phishing live, in both languages', () => {
+  for (const lang of ['es', 'en']) {
+    const withTry = I18N[lang].lessons.filter((l) => l.tryIt);
+    assert.deepEqual(withTry.map((l) => l.id), ['choice'], lang);
+    assert.ok(withTry[0].tryIt.includes('Phishing'), lang);
   }
 });

@@ -16,10 +16,10 @@ Requires Node 24+ and a [Vercel AI Gateway](https://vercel.com/ai-gateway) API k
 ```bash
 cp .env.example .env   # set AI_GATEWAY_API_KEY
 npm ci
-npm start              # http://localhost:3000
+npm start              # http://localhost:3001
 ```
 
-Optional: `PORT` (default `3000`) and `JEV_MODEL` (default `typesafe-ai/jev`). Run the tests with `npm test`.
+Optional: `PORT` (default `3001`) and `JEV_MODEL` (default `typesafe-ai/jev`). Run the tests with `npm test`.
 
 ## Deploy
 

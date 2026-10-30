@@ -27,7 +27,7 @@ Caso propio y trivial: un solo ticket de soporte recorre todo el sistema una vez
 - AE5. **Covers R5.** Given un body que no es JSON, when se hace `POST /evaluate`, then responde 500 con `{ "error": "<texto no vacío>" }`; given una ruta inexistente, then responde 404 con `{ "error": "not found" }`.
 
 ## Contrato de runtime
-- **URL base:** la del server (`npm start` usa el puerto 3000; la charla, `PORT=3001`).
+- **URL base:** la del server (`npm start` usa el puerto 3001).
 - **Health / reset:** no hay; el server no tiene estado.
 - **Acceso:** con `ACCESS_PASSWORD` en el server, todo pide basic auth y sin la clave responde 401; los checks la mandan si existe `JEV_ACCESS_PASSWORD`.
 - **`POST /evaluate`:** body `{ "state": string | object, "questions": { "<id>": Question } }` → 200 `{ answers, usage, warnings, modelId, ms, confidence, cost }`.

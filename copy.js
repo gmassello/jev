@@ -34,13 +34,14 @@ export const I18N = {
     run: 'Preguntarle a Jev',
     running: 'Pensando…',
     yes: 'Sí',
-    sure: (p) => `${p}% de probabilidad de «sí»`,
+    prob: (p) => p.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    sure: (p) => `Probabilidad de «sí»: ${I18N.es.prob(p)}`,
     explain: {
-      boolean: (p, zone) => `Jev devolvió un solo número, probability: ${p}: la probabilidad de que la respuesta sea sí. ${{ yes: 'Con 70% o más, tu código lo trata como sí.', no: 'Con 30% o menos, tu código lo trata como no.', review: 'Está entre 30% y 70%: que lo mire una persona.' }[zone]}`,
-      choice: (option, p, next, pNext) => `Jev devolvió choice: «${option}» y la probabilidad de cada opción. La elegida tiene ${p}%; la que sigue, «${next}», ${pNext}%.`,
+      boolean: (p, zone) => `Jev devolvió un solo número, probability: ${p}: la probabilidad de que la respuesta sea sí. ${{ yes: 'Con 0,7 o más, tu código lo trata como sí.', no: 'Con 0,3 o menos, tu código lo trata como no.', review: 'Está entre 0,3 y 0,7: que lo mire una persona.' }[zone]}`,
+      choice: (option, p, next, pNext) => `Jev devolvió choice: «${option}» y la probabilidad de cada opción. La elegida tiene ${I18N.es.prob(p)}; la que sigue, «${next}», ${I18N.es.prob(pNext)}.`,
       score: (level, n, total) => `Lo ubicó en «${level}» (nivel ${n} de ${total}). Las barras muestran qué tan seguro está de cada nivel.`,
     },
-    confidenceNote: (c) => `Confianza de TypeSafe ${c}%: mide qué tan concentrada está la distribución, no la probabilidad de la opción elegida.`,
+    confidenceNote: (c) => `Confianza de TypeSafe ${I18N.es.prob(c)}: mide qué tan concentrada está la distribución, no la probabilidad de la opción elegida.`,
     usd: (v) => (v == null ? '—' : `US$${v.toLocaleString('es-AR', { maximumSignificantDigits: 3 })}`),
     footer: ({ input, output, inputCost, outputCost, cost, modelId, ms }) => {
       const { usd } = I18N.es;
@@ -54,13 +55,12 @@ export const I18N = {
     jsonRequest: 'Lo que le mandamos a Jev',
     jsonResponse: 'Lo que respondió Jev',
     arch: [
-      { name: 'Navegador (esta página)', detail: 'Arma el texto y la pregunta y se los manda al server. No tiene la key.' },
-      { name: 'Server', detail: 'El intermediario: recibe el texto y la pregunta, tiene la key (AI_GATEWAY_API_KEY) en su configuración, nunca la manda al navegador, y le pregunta a Jev con el AI SDK, la librería de Vercel que habla con modelos de IA. Es server.js en Node 24; corre en tu compu o en Cloud Run, con contraseña.' },
-      { name: 'Vercel AI Gateway', detail: 'La puerta de entrada a los modelos: revisa la key, descuenta el costo de tu saldo y pasa la pregunta a TypeSafe.' },
+      { name: 'Navegador (esta página)', detail: 'Arma el request y se lo manda al server.' },
+      { name: 'Server', detail: 'El intermediario: recibe el texto y la pregunta, tiene la key (AI_GATEWAY_API_KEY) en su configuración, y le pregunta a Jev con el AI SDK, la librería de Vercel que habla con modelos de IA.' },
+      { name: 'Vercel AI Gateway', detail: 'Revisa la key y pasa la pregunta a TypeSafe.' },
       { name: 'TypeSafe · Jev', detail: 'El modelo typesafe-ai/jev: evalúa el texto y devuelve las probabilidades.' },
     ],
     archLinks: ['POST /evaluate: el texto y las preguntas', 'AI SDK + key', 'typesafe-ai/jev'],
-    archBack: 'Vuelve por el mismo camino: answers, usage, modelId, ms, confidence y cost.',
     errNoState: 'Escribí una situación primero.',
     errNoText: 'Falta escribir la pregunta.',
     errOptions: 'Necesita al menos 2 opciones con texto.',
@@ -71,10 +71,9 @@ export const I18N = {
       {
         id: 'what', kind: 'theory', title: '¿Qué es Jev?',
         theory: [
-          'Jev evalúa, no conversa: le das un texto y una pregunta cerrada, y te devuelve probabilidades, números entre 0 y 1.',
-          'En sí/no es un solo número: la probabilidad de que sea sí. En una lista o una escala, es uno por opción y suman 1.',
+          'Jev evalúa, no conversa: le das un texto y una pregunta cerrada, y te devuelve un número entre 0 y 1.',
+          'Ese número es la probabilidad de que sea sí.',
           'TypeSafe lo llama "System One", por Kahneman: el Sistema 1 decide rápido; el Sistema 2 razona paso a paso.',
-          'Jev es una opción de Sistema 1 para tu software.',
           'Para qué sirve, por ejemplo:',
         ],
         list: [
@@ -87,37 +86,36 @@ export const I18N = {
       },
       {
         id: 'flow', kind: 'theory', title: 'Cómo llega la pregunta a Jev en este playground', boxes: true,
-        theory: [
-          'Cada pregunta hace este camino: del navegador a Jev, y la respuesta vuelve por el mismo lado.',
-          'La key vive solo en el server: por eso nunca se llama a Jev desde el navegador.',
+        theory: [],
+        list: [
+          'Frontend: un solo index.html con módulos JS nativos, sin framework ni build; los textos en copy.js, en inglés y español.',
+          'Backend: server.js en Node 24, sin framework; sirve la página y expone POST /evaluate.',
         ],
       },
       {
         id: 'boolean', kind: 'ask', title: 'Sí / No',
         theory: [
-          'Jev no devuelve "sí" ni "no": devuelve un número entre 0 y 1, la probabilidad de que la respuesta sea sí.',
           'Tu código decide con dos umbrales. Los umbrales los configurás vos según tu caso. Por ejemplo, en este caso: 0,7 o más es sí, y 0,3 o menos es no; son los que sugiere TypeSafe para arrancar.',
           'Lo que cae entre 0,3 y 0,7 es no lo sé, lo revisa una persona.',
         ],
-        state: 'El cliente no podía pagar con su tarjeta. El agente le explicó cómo utilizarla, el pago pasó y el cliente respondió: ¡genial, gracias!',
+        state: 'El cliente no podía pagar con su tarjeta. Se le explicó cómo utilizarla, el pago pasó y el cliente respondió: ¡genial, gracias!',
         question: { type: 'boolean', text: '¿Se resolvió el problema del cliente?', options: [] },
       },
       {
         id: 'choice', kind: 'ask', title: 'Elegir una opción',
         theory: [
-          'Ahora la respuesta es una opción de una lista que definís vos.',
-          'Jev elige la que mejor encaja y reparte la probabilidad entre todas: el reparto suma 100%.',
-          'Conviene que las opciones no se pisen entre sí; si dos significan casi lo mismo, Jev duda entre las dos.',
+          'Ahora la respuesta es una opción de una lista que definimos.',
+          'Jev reparte la probabilidad entre todas: el reparto suma 1.',
         ],
         state: '¡FELICITACIONES! Ganaste un iPhone. Hacé clic acá en las próximas 24 horas para reclamar tu premio: bit.ly/premio-ya',
         question: { type: 'choice', text: '¿Qué tipo de mail es?', options: ['Trabajo', 'Personal', 'Promoción', 'Estafa'] },
+        tryIt: 'Probá: agregá la opción «Phishing» y volvé a preguntar. ¿Entre cuáles duda Jev?',
       },
       {
         id: 'score', kind: 'ask', title: 'Escala',
         theory: [
-          'Cuando la respuesta es un grado, usás una escala.',
-          'Jev devuelve la probabilidad de cada nivel y un score: la posición promedio, contando desde 0.',
-          'Un score de 3,2 en una escala de cinco niveles cae cerca del cuarto nivel.',
+          'Cuando la respuesta es un grado, como de 1 a 5 estrellas, Jev dice qué tan probable es cada nivel.',
+          'También devuelve un score: el nivel promedio.',
         ],
         state: 'Compré estos auriculares hace un mes. El sonido es excelente, pero la batería dura la mitad de lo que prometen.',
         question: { type: 'score', text: '¿Cuántas estrellas le daría?', options: ['1 estrella', '2 estrellas', '3 estrellas', '4 estrellas', '5 estrellas'] },
@@ -278,13 +276,14 @@ export const I18N = {
     run: 'Ask Jev',
     running: 'Thinking…',
     yes: 'Yes',
-    sure: (p) => `${p}% probability of “yes”`,
+    prob: (p) => p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    sure: (p) => `Probability of “yes”: ${I18N.en.prob(p)}`,
     explain: {
-      boolean: (p, zone) => `Jev returned a single number, probability: ${p}: the probability that the answer is yes. ${{ yes: 'At 70% or more, your code treats it as yes.', no: 'At 30% or less, your code treats it as no.', review: 'It is between 30% and 70%: have a person look at it.' }[zone]}`,
-      choice: (option, p, next, pNext) => `Jev returned choice: “${option}” and the probability of each option. The pick has ${p}%; the runner-up, “${next}”, ${pNext}%.`,
+      boolean: (p, zone) => `Jev returned a single number, probability: ${p}: the probability that the answer is yes. ${{ yes: 'At 0.7 or more, your code treats it as yes.', no: 'At 0.3 or less, your code treats it as no.', review: 'It is between 0.3 and 0.7: have a person look at it.' }[zone]}`,
+      choice: (option, p, next, pNext) => `Jev returned choice: “${option}” and the probability of each option. The pick has ${I18N.en.prob(p)}; the runner-up, “${next}”, ${I18N.en.prob(pNext)}.`,
       score: (level, n, total) => `It placed it at “${level}” (level ${n} of ${total}). The bars show how sure it is of each level.`,
     },
-    confidenceNote: (c) => `TypeSafe confidence ${c}%: it measures how concentrated the distribution is, not the probability of the picked option.`,
+    confidenceNote: (c) => `TypeSafe confidence ${I18N.en.prob(c)}: it measures how concentrated the distribution is, not the probability of the picked option.`,
     usd: (v) => (v == null ? '—' : `US$${v.toLocaleString('en-US', { maximumSignificantDigits: 3 })}`),
     footer: ({ input, output, inputCost, outputCost, cost, modelId, ms }) => {
       const { usd } = I18N.en;
@@ -298,13 +297,12 @@ export const I18N = {
     jsonRequest: 'What we sent to Jev',
     jsonResponse: 'What Jev answered',
     arch: [
-      { name: 'Browser (this page)', detail: 'Builds the text and the question and sends them to the server. It does not have the key.' },
-      { name: 'Server', detail: 'The middleman: it takes the text and the question, has the key (AI_GATEWAY_API_KEY) in its own settings, never sends it to the browser, and asks Jev with the AI SDK, the Vercel library that talks to AI models. It is server.js on Node 24; it runs on your machine or on Cloud Run, behind a password.' },
-      { name: 'Vercel AI Gateway', detail: 'The front door to the models: it checks the key, takes the cost from your balance and passes the question to TypeSafe.' },
+      { name: 'Browser (this page)', detail: 'Builds the request and sends it to the server.' },
+      { name: 'Server', detail: 'The middleman: it takes the text and the question, has the key (AI_GATEWAY_API_KEY) in its own settings, and asks Jev with the AI SDK, the Vercel library that talks to AI models.' },
+      { name: 'Vercel AI Gateway', detail: 'Checks the key and passes the question to TypeSafe.' },
       { name: 'TypeSafe · Jev', detail: 'The typesafe-ai/jev model: it evaluates the text and returns the probabilities.' },
     ],
     archLinks: ['POST /evaluate: the text and the questions', 'AI SDK + key', 'typesafe-ai/jev'],
-    archBack: 'It comes back the same way: answers, usage, modelId, ms, confidence and cost.',
     errNoState: 'Write a situation first.',
     errNoText: 'The question is missing.',
     errOptions: 'Needs at least 2 options with text.',
@@ -315,10 +313,9 @@ export const I18N = {
       {
         id: 'what', kind: 'theory', title: 'What is Jev?',
         theory: [
-          'Jev evaluates, it does not chat: you give it a text and a closed question, and it returns probabilities, numbers between 0 and 1.',
-          'For yes/no it is a single number: the probability that the answer is yes. For a list or a scale, there is one per option and they add up to 1.',
+          'Jev evaluates, it does not chat: you give it a text and a closed question, and it returns a number between 0 and 1.',
+          'That number is the probability that the answer is yes.',
           'TypeSafe calls it "System One", after Kahneman: System 1 decides fast; System 2 reasons step by step.',
-          'Jev is one System 1 option for your software.',
           'What it is good for, for example:',
         ],
         list: [
@@ -331,37 +328,36 @@ export const I18N = {
       },
       {
         id: 'flow', kind: 'theory', title: 'How the question reaches Jev in this playground', boxes: true,
-        theory: [
-          'Every question takes this path: from the browser to Jev, and the answer comes back the same way.',
-          'The key lives only on the server: that is why you never call Jev from the browser.',
+        theory: [],
+        list: [
+          'Frontend: a single index.html with native JS modules, no framework and no build; the texts live in copy.js, in English and Spanish.',
+          'Backend: server.js on Node 24, no framework; it serves the page and exposes POST /evaluate.',
         ],
       },
       {
         id: 'boolean', kind: 'ask', title: 'Yes / No',
         theory: [
-          'Jev does not return "yes" or "no": it returns a number between 0 and 1, the probability that the answer is yes.',
           'Your code decides with two thresholds. You set the thresholds for your own case. For example, in this case: 0.7 or more is yes, and 0.3 or less is no; these are the ones TypeSafe suggests to start with.',
           "Anything between 0.3 and 0.7 is an I don't know, a person reviews it.",
         ],
-        state: 'The customer could not pay with their card. The agent explained how to use it, the payment went through and the customer replied: great, thanks!',
+        state: 'The customer could not pay with their card. Someone explained how to use it, the payment went through and the customer replied: great, thanks!',
         question: { type: 'boolean', text: 'Was the customer\'s problem solved?', options: [] },
       },
       {
         id: 'choice', kind: 'ask', title: 'Pick one option',
         theory: [
-          'Now the answer is one option from a list you define.',
-          'Jev picks the one that fits best and splits the probability across all of them: the split adds up to 100%.',
-          'Keep the options from overlapping; if two mean almost the same, Jev hesitates between them.',
+          'Now the answer is one option from a list we define.',
+          'Jev splits the probability across all of them: the split adds up to 1.',
         ],
         state: 'CONGRATULATIONS! You won an iPhone. Click here within the next 24 hours to claim your prize: bit.ly/prize-now',
         question: { type: 'choice', text: 'What kind of email is it?', options: ['Work', 'Personal', 'Promotion', 'Scam'] },
+        tryIt: 'Try it: add the option “Phishing” and ask again. Which ones does Jev hesitate between?',
       },
       {
         id: 'score', kind: 'ask', title: 'Scale',
         theory: [
-          'When the answer is a degree, you use a scale.',
-          'Jev returns the probability of each level and a score: the average position, counting from 0.',
-          'A score of 3.2 on a five-level scale lands near the fourth level.',
+          'When the answer is a degree, like 1 to 5 stars, Jev says how likely each level is.',
+          'It also returns a score: the average level.',
         ],
         state: 'I bought these headphones a month ago. The sound is excellent, but the battery lasts half of what they promise.',
         question: { type: 'score', text: 'How many stars would they give?', options: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'] },
