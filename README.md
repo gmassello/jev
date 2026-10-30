@@ -31,6 +31,14 @@ gcloud run deploy jev --source . --region us-central1 --project jev-playground-2
 
 Both the gateway key and the password live in Secret Manager, never in the repo.
 
+To read the current password (needs access to the GCP project):
+
+```bash
+gcloud secrets versions access latest --secret jev-access --project jev-playground-2610
+```
+
+In the browser prompt, leave the user empty and paste it as the password.
+
 ## Use it in your code
 
 Save this as `jev.mjs` and run:
